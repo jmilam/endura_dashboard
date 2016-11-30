@@ -1,0 +1,49 @@
+<script type="text/javascript">
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawVisualization);
+
+  function drawVisualization(){
+    var data = google.visualization.arrayToDataTable(<%= raw @performance_data %>);
+    
+    var options = {
+	vAxis: {title: 'Total Count'},
+	hAxis: {title: 'Entry  Method'},
+	seriesType: 'bars'
+    };
+
+    var chart = new google.visualization.ComboChart(document.getElementById('performance_chart'));
+    chart.draw(data, options);
+  }
+</script>
+
+<div class="container">
+  <div id="performance_chart"  class="col-md-12" style="height:500px;"></div>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Total Orders</th>
+      <th>Manual Orders</th>
+      <th>Auto Orders</th>
+      <th>Total Lines</th>
+      <th>Manual Lines</th>
+      <th>Auto Lines</th>
+      <th>SROs</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @user_stats.each do |user_stat| %>
+      <tr>
+        <td><%= user_stat["t_userid"] %></td>
+	<td><%= user_stat["t_edi_ord"] + user_stat["t_scn_ord"] + user_stat["t_man_ord"] %></td>
+	<td><%= user_stat["t_man_ord"] %></td>
+	<td><%= user_stat["t_edi_ord"] + user_stat["t_scn_ord"] %></td>
+	<td><%= user_stat["t_edi_line"] + user_stat["t_scn_line"] + user_stat["t_man_line"] %></td>
+	<td><%= user_stat["t_man_line"] %></td>
+	<td><%= user_stat["t_edi_line"] + user_stat["t_scn_line"] %></td>
+	<td><%= user_stat["t_edi_sro"] + user_stat["t_scn_sro"] + user_stat["t_man_sro"] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
