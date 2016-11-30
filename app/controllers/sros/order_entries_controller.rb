@@ -1,12 +1,9 @@
 class Sros::OrderEntriesController < ApplicationController
 	def index
 	  #Initial Values set for variables
-	  @current_yr_summary = Hash.new
-	  @previous_yr_summary = Hash.new
+	  @sro_overview = Hash.new
 	  @current_year = Date.today.year
 	  @previous_year = Date.today.last_year.year
-	  @current_year_total = 0
-          @previous_year_total = 0
 	  @performance_data = Array.new
 	  @user_names = ['Order Type']
 	  @auto_orders = ['Auto Orders']
@@ -24,29 +21,34 @@ class Sros::OrderEntriesController < ApplicationController
           #This cycles the returned JSON data from QAD and builds an Array for Google Chart Visualization for the Summary Data
 	  @sro_summary.each do |summary|
 	    if @current_year == summary["sro-due-date"].to_date.year
-	      if @current_yr_summary.key?(summary["sro-taken"])
-                @current_yr_summary[summary["sro-taken"]].key?(summary["sro-type"]) ? @current_yr_summary[summary["sro-taken"]][summary["sro-type"]] += summary["sro-line-total"] : @current_yr_summary[summary["sro-taken"]] = {summary["sro-type"] => summary["sro-line-total"]}
-	        #@current_yr_summary[summary["sro-taken"]]["total"] += summary["sro-line-total"]
+	      if @sro_overview.key?(summary["sro-taken"])
+		if @sro_overview[summary["sro-taken"]].key?(summary["sro-type"]) 
+		  if @sro_overview[summary["sro-taken"]][summary["sro-type"]]["current_ytd"].nil?
+		    @sro_overview[summary["sro-taken"]][summary["sro-type"]]["current_ytd"] = summary["sro-line-total"]
+		  else 
+		    @sro_overview[summary["sro-taken"]][summary["sro-type"]]["current_ytd"] += summary["sro-line-total"]
+		  end
+		else
+		  @sro_overview[summary["sro-taken"]][summary["sro-type"]] =  {"current_ytd" => summary["sro-line-total"]}
+	        end
 	      else
-	        @current_yr_summary[summary["sro-taken"]] = summary["sro-taken"]
-	        @current_yr_summary[summary["sro-taken"]] = {summary["sro-type"] => summary["sro-line-total"]}
-		
+		@sro_overview[summary["sro-taken"]] = summary["sro-taken"]
+		if summary["sro-due-date"].to_date.month == Date.today.month
+		  @sro_overview[summary["sro-taken"]] = {summary["sro-type"] => {"current_ytd" => summary["sro-line-total"], "current_month" => summary["sro-line-total"]}}
+		else
+		  @sro_overview[summary["sro-taken"]] = {summary["sro-type"] => {"current_ytd" => summary["sro-line-total"]}}
+		end
 	      end
-	      #Add calculations to current Year totals
-	      @current_year_total += summary["sro-line-total"]
-	    else 
-	      if @previous_yr_summary.key?(summary["sro-taken"])
-                @previous_yr_summary[summary["sro-taken"]].key?(summary["sro-type"]) ? @previous_yr_summary[summary["sro-taken"]][summary["sro-type"]] += summary["sro-line-total"] : @previous_yr_summary[summary["sro-taken"]] = {summary["sro-type"] => summary["sro-line-total"]}
-                #@previous_yr_summary[summary["sro-taken"]]["total"] += summary["sro-line-total"]
+	    else
+	      if @sro_overview.key?(summary["sro-taken"]) 
+		@sro_overview[summary["sro-taken"]].key?(summary["sro-type"]) ? @sro_overview[summary["sro-taken"]][summary["sro-type"]]["previous_year"].nil? ? @sro_overview[summary["sro-taken"]][summary["sro-type"]]["previous_year"] = summary["sro-line-total"] : @sro_overview[summary["sro-taken"]][summary["sro-type"]]["previous_year"] += summary["sro-line-total"] : @sro_overview[summary["sro-taken"]] = {summary["sro-type"] => {"previous_year" => summary["sro-line-total"]}} 
               else
-                @previous_yr_summary[summary["sro-taken"]] = summary["sro-taken"]
-                @previous_yr_summary[summary["sro-taken"]] = {summary["sro-type"] => summary["sro-line-total"]}
+		@sro_overview[summary["sro-taken"]] = summary["sro-taken"]
+		@sro_overview[summary["sro-taken"]] = {summary["sro-type"] => {"previous_year" => summary["sro-line-total"]}}
               end
-
-	      #Add calculations to previous Year totals
-	      @previous_year_total += summary["sro-line-total"]
             end
 	  end
+	  p @sro_overview
 	  
 	  #This cycles the returned JSON data from QAD and builds an Array for Google Chart Visualization for the Performance Snapshot
 	  @user_stats.each do |stats|
