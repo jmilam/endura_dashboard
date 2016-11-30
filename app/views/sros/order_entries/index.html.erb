@@ -17,6 +17,34 @@
 </script>
 
 <div class="container">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <td>Name</td>
+        <td>Type</td>
+        <td>Current YTD $</td>
+        <td>Previous YTD $</td>
+        <td>Previous Year $</td>
+        <td>Current Month $</td>
+      </tr>
+    </thead>
+    <tbody>
+      <% @current_yr_summary.each do |key, value| %>
+        <tr>
+          <td><%= key %></td>
+	  <% value.each do |key, value| %>
+            <td><%= key %></td>
+            <td><%= value %></td>
+          <% end %>
+	  <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= @current_yr_summary %>
+  <%= @previous_yr_summary %>
   <div id="performance_chart"  class="col-md-12" style="height:500px;"></div>
 <table class="table table-striped">
   <thead>
