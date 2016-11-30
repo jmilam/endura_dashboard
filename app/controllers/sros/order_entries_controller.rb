@@ -1,5 +1,6 @@
 class Sros::OrderEntriesController < ApplicationController
 	def index
+	  @title = "SRO OE Dashboard"
 	  #Initial Values set for variables
 	  @sro_overview = Hash.new
 	  @current_year = Date.today.year
@@ -10,9 +11,11 @@ class Sros::OrderEntriesController < ApplicationController
 	  @manual_orders = ['Manual Orders']
 	  @auto_lines = ['Auto Lines']
 	  @manual_lines = ['Manual Lines']
-	
+	  @start_date = (Date.today.beginning_of_week - 1.week).strftime("%D")
+	  @end_date = (Date.today.end_of_week - 1.week).strftime("%D")
+
 	  #URI call to QAD API to receive JSON data
-	  uri = URI("http://qadprod.endura.enduraproducts.com/cgi-bin/prodapi/xxapioesrodashboard.p?start=#{params[:start_date]}&end=#{params[:end_date]}")
+	  uri = URI("http://qadprod.endura.enduraproducts.com/cgi-bin/prodapi/xxapioesrodashboard.p?start=#{@start_date}&end=#{@end_date}")
 	  response = Net::HTTP.get(uri)
 	  json_response =  JSON.parse(response)
 	  @user_stats = json_response["userstats"]
@@ -48,9 +51,9 @@ class Sros::OrderEntriesController < ApplicationController
               end
             end
 	  end
-	  p @sro_overview
 	  
 	  #This cycles the returned JSON data from QAD and builds an Array for Google Chart Visualization for the Performance Snapshot
+	  @sro_month = @user_stats.first["t_month"].to_date.strftime("%b '%y")
 	  @user_stats.each do |stats|
 	    @user_names << stats["t_userid"]
 	    @auto_orders << (stats["t_edi_ord"] + stats["t_scn_ord"])
