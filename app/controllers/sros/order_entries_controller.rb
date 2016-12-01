@@ -6,7 +6,8 @@ class Sros::OrderEntriesController < ApplicationController
 	  @current_year = Date.today.year
 	  @previous_year = Date.today.last_year.year
 	  @performance_data = Array.new
-	  @user_names = ['Order Type']
+	  @overview_data = Array.new
+	  @user_names = ['User Name']
 	  @auto_orders = ['Auto Orders']
 	  @manual_orders = ['Manual Orders']
 	  @auto_lines = ['Auto Lines']
@@ -20,6 +21,7 @@ class Sros::OrderEntriesController < ApplicationController
 	  json_response =  JSON.parse(response)
 	  @user_stats = json_response["userstats"]
 	  @sro_summary = json_response["sros"]
+	  @sro_type_by_month = json_response["srotype"]
 
           #This cycles the returned JSON data from QAD and builds an Array for Google Chart Visualization for the Summary Data
 	  @sro_summary.each do |summary|
@@ -67,5 +69,31 @@ class Sros::OrderEntriesController < ApplicationController
 	  @performance_data << @manual_orders
 	  @performance_data << @auto_lines
 	  @performance_data << @manual_lines
+
+	  @sro_overview = Hash.new
+	  @year_overview = [["Month", "CR", "DF", "RT"]]
+	  @sro_type_by_month.each do |sro_by_mth|
+	    if @sro_overview.has_key?(sro_by_mth["ttmonth"])
+	      @sro_overview[sro_by_mth["ttmonth"]] << [sro_by_mth["tttype"],  sro_by_mth["ttamt"]]
+	    else
+ 	      #Move to next array of data
+	      @sro_overview[sro_by_mth["ttmonth"]] = [[sro_by_mth["tttype"], sro_by_mth["ttamt"]]]
+	    end
+	  end
+	  @sro_overview.each do |key, value|
+	    working_array = [key]
+
+	    value.each do |v|
+	      case v[0]
+	      when "CR"
+	        working_array[1] = v[1]
+	      when "DF"
+		working_array[2] = v[1]
+	      when "RT"
+		working_array[3] = v[1]
+	      end
+	    end
+	    @year_overview << working_array
+	  end
 	end
 end

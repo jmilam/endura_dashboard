@@ -13,18 +13,22 @@
 
     var chart = new google.visualization.ComboChart(document.getElementById('performance_chart'));
     chart.draw(data, options);
+
+    var data2 = google.visualization.arrayToDataTable(<%= raw @year_overview %>);    
+    var chart2 = new google.visualization.ComboChart(document.getElementById('sro_overview_chart'));
+    chart2.draw(data2, options);
   }
 </script>
 
 <div class="container" style="margin-top:65px;">
   <ul class="nav nav-pills nav-justified">
     <li class="active"><a href="#current_snap" data-toggle="tab">Performance Snapshot - <%= @sro_month %></a></li>
-    <li><a href="#sro_summary" data-toggle="tab">SRO Summary</a></li>
+    <li><a href="#sro_summary" data-toggle="tab" id="sroTab">SRO Summary</a></li>
   </ul>
 
   <div class="tab-content" style="margin-top:20px;">
     <div class="tab-pane" id="sro_summary">
-      <div id="sro_overview_chart" class="col-md-12 style=height: 400px;"></div>
+      <div id="sro_overview_chart" class="col-md-12" style="height:400px;"></div>
       <table class="table table-condensed">
         <thead>
           <tr>
@@ -42,10 +46,10 @@
 	    <tr>
 	      <% value.each do |type, value| %>
 	        <tr rowspan="4">
-	          <td><%= type %></td>
-                  <td><%= value["current_ytd"].nil? ? "0.00" : value["current_ytd"].round(2) %></td>
-	          <td><%= value["previous_year"].nil? ? "0.00" : value["previous_year"].round(2) %></td>
-	          <td><%= value["current_month"].nil? ? "0.00" : value["current_month"].round(2) %></td>
+	          <td><%#= type %></td>
+                  <td><%#= value["current_ytd"].nil? ? "0.00" : value["current_ytd"].round(2) %></td>
+	          <td><%#= value["previous_year"].nil? ? "0.00" : value["previous_year"].round(2) %></td>
+	          <td><%#= value["current_month"].nil? ? "0.00" : value["current_month"].round(2) %></td>
 	        </tr>	      
 	      <% end %>
             </tr>
