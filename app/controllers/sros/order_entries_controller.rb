@@ -14,6 +14,15 @@ class Sros::OrderEntriesController < ApplicationController
 	  @manual_lines = ['Manual Lines']
 	  @start_date = (Date.today.beginning_of_week - 1.week).strftime("%D")
 	  @end_date = (Date.today.end_of_week - 1.week).strftime("%D")
+          @total_edi_orders = 0
+	  @total_manual_orders = 0
+	  @total_scn_orders = 0
+	  @total_edi_lines = 0
+	  @total_manual_lines = 0
+	  @total_scn_lines = 0
+	  @total_scn_sros = 0
+	  @total_edi_sros = 0
+	  @total_manual_sros = 0
 
 	  #URI call to QAD API to receive JSON data
 	  uri = URI("http://qadprod.endura.enduraproducts.com/cgi-bin/prodapi/xxapioesrodashboard.p?start=#{@start_date}&end=#{@end_date}")
@@ -56,31 +65,45 @@ class Sros::OrderEntriesController < ApplicationController
 	  
 	  #This cycles the returned JSON data from QAD and builds an Array for Google Chart Visualization for the Performance Snapshot
 	  @sro_month = @user_stats.first["t_month"].to_date.strftime("%b '%y")
+          @total = @user_stats.inject(1.0){|sum, hash| sum + (hash["t_edi_ord"] + hash["t_scn_ord"] + hash["t_man_ord"])}
 	  @user_stats.each do |stats|
-	    @user_names << stats["t_userid"]
+	   
 	    @auto_orders << (stats["t_edi_ord"] + stats["t_scn_ord"])
-            @manual_orders << stats["t_man_ord"]
+            @manual_orders <<  stats["t_man_ord"]
 	    @auto_lines << (stats["t_edi_line"] + stats["t_scn_line"])
 	    @manual_lines << stats["t_man_line"]
+	    @user_names << stats["t_userid"]
+	    stats["percent"] = (((stats["t_edi_ord"] + stats["t_scn_ord"] + stats["t_man_ord"]) / @total) * 100).round.to_s + "%"
+	    
+            @total_manual_orders += stats["t_man_ord"]
+	    @total_edi_orders += stats["t_edi_ord"]
+	    @total_scn_orders += stats["t_scn_ord"]
+	    @total_edi_lines += stats["t_edi_line"]
+	    @total_scn_lines += stats["t_scn_line"]
+	    @total_manual_lines += (stats["t_man_line"])
+	    @total_edi_sros += stats["t_edi_sro"]
+	    @total_scn_sros += stats["t_scn_sro"]
+ 	    @total_manual_sros += stats["t_man_sro"]
 	  end
-	  
-	  @performance_data << @user_names
+          @user_stats << {"t_userid":"total", "t_edi_sro": @total_edi_sros, "t_scn_sro": @total_scn_sros, "t_man_sro": @total_manual_sros,"t_edi_ord": @total_edi_orders, "t_scn_ord":@total_scn_orders, "t_man_ord":@total_manual_orders, "t_edi_line":@total_edi_lines, "t_scn_line":@total_scn_lines, "t_man_line":@total_manual_lines, "percent":"100%"}.stringify_keys	  
+
+          @performance_data << @user_names
 	  @performance_data << @auto_orders
 	  @performance_data << @manual_orders
 	  @performance_data << @auto_lines
 	  @performance_data << @manual_lines
 
-	  @sro_overview = Hash.new
+	  @sro_chart_data = Hash.new
 	  @year_overview = [["Month", "CR", "DF", "RT"]]
 	  @sro_type_by_month.each do |sro_by_mth|
-	    if @sro_overview.has_key?(sro_by_mth["ttmonth"])
-	      @sro_overview[sro_by_mth["ttmonth"]] << [sro_by_mth["tttype"],  sro_by_mth["ttamt"]]
+	    if @sro_chart_data.has_key?(sro_by_mth["ttmonth"].to_date.strftime("%b '%y"))
+	      @sro_chart_data[sro_by_mth["ttmonth"].to_date.strftime("%b '%y")] << [sro_by_mth["tttype"],  sro_by_mth["ttamt"]]
 	    else
  	      #Move to next array of data
-	      @sro_overview[sro_by_mth["ttmonth"]] = [[sro_by_mth["tttype"], sro_by_mth["ttamt"]]]
+	      @sro_chart_data[sro_by_mth["ttmonth"].to_date.strftime("%b '%y")] = [[sro_by_mth["tttype"], sro_by_mth["ttamt"]]]
 	    end
 	  end
-	  @sro_overview.each do |key, value|
+	  @sro_chart_data.each do |key, value|
 	    working_array = [key]
 
 	    value.each do |v|

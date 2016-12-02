@@ -1,22 +1,38 @@
 <script type="text/javascript">
+  $(window).load(function(){
+    $('table tr:last').css('background-color','#428bca');
+  });
+
   google.charts.load('current', {'packages':['corechart']});
   google.charts.setOnLoadCallback(drawVisualization);
 
   function drawVisualization(){
     var data = google.visualization.arrayToDataTable(<%= raw @performance_data %>);
     
-    var options = {
+    var options1 = {
 	vAxis: {title: 'Total Count'},
 	hAxis: {title: 'Entry  Method'},
 	seriesType: 'bars'
     };
 
     var chart = new google.visualization.ComboChart(document.getElementById('performance_chart'));
-    chart.draw(data, options);
+    chart.draw(data, options1);
+
+    var options2 = {
+      vAxis: {title: '$ SRO Amt.'},
+      hAxis: {title: 'Month'},
+      seriesType: 'bars'
+    };
 
     var data2 = google.visualization.arrayToDataTable(<%= raw @year_overview %>);    
     var chart2 = new google.visualization.ComboChart(document.getElementById('sro_overview_chart'));
-    chart2.draw(data2, options);
+    chart2.draw(data2, options2);
+
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+      
+      chart.draw(data, options1);
+      chart2.draw(data2,options2);
+    });
   }
 </script>
 
@@ -44,12 +60,13 @@
               <td colspan="4" class="text-center bg-success"><%= key %></td>
 	    </tr>
 	    <tr>
+              <% value %>
 	      <% value.each do |type, value| %>
 	        <tr rowspan="4">
-	          <td><%#= type %></td>
-                  <td><%#= value["current_ytd"].nil? ? "0.00" : value["current_ytd"].round(2) %></td>
-	          <td><%#= value["previous_year"].nil? ? "0.00" : value["previous_year"].round(2) %></td>
-	          <td><%#= value["current_month"].nil? ? "0.00" : value["current_month"].round(2) %></td>
+	          <td><%= type %></td>
+                  <td><%= value["current_ytd"].nil? ? "0.00" : value["current_ytd"].round(2) %></td>
+	          <td><%= value["previous_year"].nil? ? "0.00" : value["previous_year"].round(2) %></td>
+	          <td><%= value["current_month"].nil? ? "0.00" : value["current_month"].round(2) %></td>
 	        </tr>	      
 	      <% end %>
             </tr>
@@ -70,6 +87,7 @@
             <th>Manual Lines</th>
             <th>Auto Lines</th>
             <th>SROs</th>
+	    <th>Orders Complete(%)</th>
           </tr>
         </thead>
       <tbody>
@@ -83,6 +101,7 @@
  	    <td><%= user_stat["t_man_line"] %></td>
 	    <td><%= user_stat["t_edi_line"] + user_stat["t_scn_line"] %></td>
 	    <td><%= user_stat["t_edi_sro"] + user_stat["t_scn_sro"] + user_stat["t_man_sro"] %></td>
+            <td class="text-center"><%= user_stat["percent"] %></td>
           </tr>
         <% end %>
       </tbody>
