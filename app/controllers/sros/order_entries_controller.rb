@@ -25,7 +25,7 @@ class Sros::OrderEntriesController < ApplicationController
 	  @total_manual_sros = 0
 
 	  #URI call to QAD API to receive JSON data
-	  uri = URI("http://qadprod.endura.enduraproducts.com/cgi-bin/prodapi/xxapioesrodashboard.p?start=#{@start_date}&end=#{@end_date}")
+	  uri = URI(self.api_url + "xxapioesrodashboard.p?start=#{@start_date}&end=#{@end_date}")
 	  response = Net::HTTP.get(uri)
 	  json_response =  JSON.parse(response)
 	  @user_stats = json_response["userstats"]
