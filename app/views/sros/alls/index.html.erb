@@ -1,30 +1,130 @@
+
 <div style="margin-top:100px;">
+</div>
+<div class="container">
+<div class="row">
+  SRO's By Division
+</div>
+<div class="row">
   <table class="table table-hover">
     <thead>
       <tr>
-        <th>Customer</th>
-        <th>1000</th>
-	<th>2000</th>
-	<th>3000</th>
-	<th>4300</th>
-	<th>5000</th>
-	<th>9000</th>
-	<th>Total</th>
+        <th>Division</th>
+        <th>Current Month</th>
+	<th>Previous Month</th>
+	<th>YTD</th>
+	<th>Previous YTD</th>
+	<th>Previous Year</th>
       </tr>
-    </thad>
+    </thead>
     <tbody>
-      <% @sro_summary.each do |key, value| %>
+      <% @sro_by_division.each do |key, value| %>
         <tr>
           <td><%= key %></td>
-	  <td><%= value["1000"] %></td>
-          <td><%= value["2000"] %></td>
-          <td><%= value["3000"] %></td>
-          <td><%= value["4300"] %></td>
-          <td><%= value["5000"] %></td>
-          <td><%= value["9000"] %></td>
-	  <td><%= value["grand_total"] %></td>
+	  <td><%= number_to_currency(value[:curr_month]) %></td>
+          <td><%= number_to_currency(value[:prev_month]) %></td>
+          <td><%= number_to_currency(value[:curr_ytd]) %></td>
+          <td><%= number_to_currency(value[:prev_ytd]) %></td>
+          <td><%= number_to_currency(value[:prev_year]) %></td>
         </tr>
       <% end %>
     </tbody>  
   </table>  
+</div>
+<div class="row">
+  SRO's By Type
+</div>
+<div class="row">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Current Month</th>
+        <th>Previous Month</th>
+        <th>YTD</th>
+        <th>Previous YTD</th>
+        <th>Previous Year</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @sro_by_type.each do |key, value| %>
+	<tr class="table danger"><td colspan="6"><%= key %></td></tr>
+	<% value.each do |key, vaule| %>
+        <tr>
+          <td><%= key %></td>
+          <td><%= number_to_currency(value[:curr_month]) %></td>
+          <td><%= number_to_currency(value[:prev_month]) %></td>
+          <td><%= number_to_currency(value[:curr_ytd]) %></td>
+          <td><%= number_to_currency(value[:prev_ytd]) %></td>
+          <td><%= number_to_currency(value[:prev_year]) %></td>
+        </tr>
+	<% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<div class="row">
+  SRO's By Product Line
+</div>
+<div class="row">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Product Line</th>
+        <th>Current Month</th>
+        <th>Previous Month</th>
+        <th>YTD</th>
+        <th>Previous YTD</th>
+        <th>Previous Year</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @sro_by_prod_line.each do |key, value| %>
+        <tr class="table danger"><td colspan="6"><%= key %></td></tr>
+	<% value.each do |key, value| %>
+        <tr>
+          <td><%= key %></td>
+          <td><%= number_to_currency(value[:curr_month]) %></td>
+          <td><%= number_to_currency(value[:prev_month]) %></td>
+          <td><%= number_to_currency(value[:curr_ytd]) %></td>
+          <td><%= number_to_currency(value[:prev_ytd]) %></td>
+          <td><%= number_to_currency(value[:prev_year]) %></td>
+        </tr>
+	<% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<div class="row">
+  SROs By Department
+</div>
+<div class="row">
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Department</th>
+        <th>Current Month</th>
+        <th>Previous Month</th>
+        <th>YTD</th>
+        <th>Previous YTD</th>
+        <th>Previous Year</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @sro_by_dept.each do |key, value| %>
+	<tr class="table danger"><td><%= key %></td></tr>
+        <% value.each do |key, value| %>
+        <tr>
+          <td><%= key %></td>
+          <td><%= number_to_currency(value[:curr_month]) %></td>
+          <td><%= number_to_currency(value[:prev_month]) %></td>
+          <td><%= number_to_currency(value[:curr_ytd]) %></td>
+          <td><%= number_to_currency(value[:prev_ytd]) %></td>
+          <td><%= number_to_currency(value[:prev_year]) %></td>
+        </tr>
+	<% end %>
+      <% end %>
+    </tbody>
+  </table>
+</div>
 </div>
