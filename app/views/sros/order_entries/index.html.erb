@@ -73,6 +73,24 @@
           <% end %>
         </tbody>
       </table>
+      <table class="table table-condensed">
+        <thead>
+	  <tr><td colspan="2" class="text-center header_row" bg-danger>Top 20 Customers by SRO $</td></tr>
+          <tr>
+            <th>Customer</th>
+            <th>YTD SRO $</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @sro_by_customer.each do |key, value| %>
+            <tr>
+              <td><%= key %></td>
+	      <td><%= number_to_currency(value) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+
     </div>
     <div class="tab-pane active" id="current_snap">
       <div id="performance_chart" class="col-md-12" style="height:350px;"></div>
@@ -83,11 +101,12 @@
             <th>Total Orders</th>
             <th>Manual Orders</th>
             <th>Auto Orders</th>
+            <th>Orders Complete(%)</th>
             <th>Total Lines</th>
             <th>Manual Lines</th>
             <th>Auto Lines</th>
+            <th>Lines Complete(%)</th>
             <th>SROs</th>
-	    <th>Orders Complete(%)</th>
           </tr>
         </thead>
       <tbody>
@@ -97,11 +116,12 @@
 	    <td><%= user_stat["t_edi_ord"] + user_stat["t_scn_ord"] + user_stat["t_man_ord"] %></td>
 	    <td><%= user_stat["t_man_ord"] %></td>
 	    <td><%= user_stat["t_edi_ord"] + user_stat["t_scn_ord"] %></td>
+            <td class="text-center"><%= user_stat["order_percent"] %></td>
 	    <td><%= user_stat["t_edi_line"] + user_stat["t_scn_line"] + user_stat["t_man_line"] %></td>
  	    <td><%= user_stat["t_man_line"] %></td>
 	    <td><%= user_stat["t_edi_line"] + user_stat["t_scn_line"] %></td>
+	    <td class="text-center"><%= user_stat["line_percent"] %></td>
 	    <td><%= user_stat["t_edi_sro"] + user_stat["t_scn_sro"] + user_stat["t_man_sro"] %></td>
-            <td class="text-center"><%= user_stat["percent"] %></td>
           </tr>
         <% end %>
       </tbody>

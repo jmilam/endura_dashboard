@@ -19,7 +19,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a href="/Home/Index" class="navbar-brand" >
+                <a href="/" class="navbar-brand" >
 		   <span><%= image_tag("endura-check.svg", height:"20", data: {title: "Endura"}) %></span>
 		   Endura
                 </a>
@@ -27,9 +27,20 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
+		      <div class="form-inline">
                         <div class="form-group" style="margin-top:8px;">
-                                <input type="text" class="form-control" id="datepicker" placeholder="Search Date..." style="text-align:center;">
+			  
+			  <div class="form-group">
+                            <input type="text" class="form-control datepicker" id="start_date" placeholder="Start Date..." style="text-align:center;">
+			  </div>
+			  <div class="form-group">
+			    <input type="text" class="form-control datepicker" id="end_date" placeholder="End Date..." style="text-align:center;">
+			  </div>
+			  <div class="form-group">
+			    <button class="btn btn-success search">GO</button>
+			  </div>
                         </div>
+		      </div>
                     </li>
                 </ul>
             </div>
@@ -38,4 +49,11 @@
 
     <%= yield %>
   </body>
+  <script type="text/javascript">
+    $('.search').on('click', function(){
+	var start = $('#start_date').val();
+	var end = $('#end_date').val();
+        window.location.href = window.location.href + '?start_date=' + start + '&end_date=' + end
+    });
+  </script>
 </html>

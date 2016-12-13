@@ -4,4 +4,5 @@ Rails.application.routes.draw do
     resources :order_entries
     resources :alls
   end
+  root to: "sros/alls#index"
 end

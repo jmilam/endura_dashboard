@@ -3,6 +3,7 @@ class Sros::OrderEntriesController < ApplicationController
 	  @title = "SRO OE Dashboard"
 	  #Initial Values set for variables
 	  @sro_overview = Hash.new
+	  @sro_by_customer = Hash.new
 	  @current_year = Date.today.year
 	  @previous_year = Date.today.last_year.year
 	  @performance_data = Array.new
@@ -12,8 +13,8 @@ class Sros::OrderEntriesController < ApplicationController
 	  @manual_orders = ['Manual Orders']
 	  @auto_lines = ['Auto Lines']
 	  @manual_lines = ['Manual Lines']
-	  @start_date = (Date.today.beginning_of_week - 1.week).strftime("%D")
-	  @end_date = (Date.today.end_of_week - 1.week).strftime("%D")
+	  @start_date = params[:start_date].blank? ? (Date.today.beginning_of_week - 1.week).strftime("%D") : params[:start_date]
+	  @end_date = params[:end_date].blank? ? (Date.today.end_of_week - 1.week).strftime("%D") : params[:end_date]
           @total_edi_orders = 0
 	  @total_manual_orders = 0
 	  @total_scn_orders = 0
@@ -34,7 +35,7 @@ class Sros::OrderEntriesController < ApplicationController
 
           #This cycles the returned JSON data from QAD and builds an Array for Google Chart Visualization for the Summary Data
 	  @sro_summary.each do |summary|
-	    if @current_year == summary["sro-due-date"].to_date.year
+	    if @current_year == summary["sro-ent-date"].to_date.year
 	      if @sro_overview.key?(summary["sro-taken"])
 		if @sro_overview[summary["sro-taken"]].key?(summary["sro-type"]) 
 		  if @sro_overview[summary["sro-taken"]][summary["sro-type"]]["current_ytd"].nil?
@@ -47,7 +48,7 @@ class Sros::OrderEntriesController < ApplicationController
 	        end
 	      else
 		@sro_overview[summary["sro-taken"]] = summary["sro-taken"]
-		if summary["sro-due-date"].to_date.month == Date.today.month
+		if summary["sro-ent-date"].to_date.month == Date.today.month
 		  @sro_overview[summary["sro-taken"]] = {summary["sro-type"] => {"current_ytd" => summary["sro-line-total"], "current_month" => summary["sro-line-total"]}}
 		else
 		  @sro_overview[summary["sro-taken"]] = {summary["sro-type"] => {"current_ytd" => summary["sro-line-total"]}}
@@ -61,11 +62,20 @@ class Sros::OrderEntriesController < ApplicationController
 		@sro_overview[summary["sro-taken"]] = {summary["sro-type"] => {"previous_year" => summary["sro-line-total"]}}
               end
             end
+
+	    if @sro_by_customer.keys.include?(summary["sro-name"])
+        	@sro_by_customer[summary["sro-name"]] = Sro.calculate_customer_ytd(@sro_by_customer[summary["sro-name"]], summary["sro-line-total"], summary["sro-ent-date"])
+      	    else
+        	@sro_by_customer[summary["sro-name"]] = summary["sro-line-total"]
+       	    end unless summary["sro-name"].empty?
 	  end
-	  
+	  @sro_by_customer = @sro_by_customer.sort_by {|key, value| value }.reverse[0..19].to_h
+
 	  #This cycles the returned JSON data from QAD and builds an Array for Google Chart Visualization for the Performance Snapshot
 	  @sro_month = @user_stats.first["t_month"].to_date.strftime("%b '%y")
-          @total = @user_stats.inject(1.0){|sum, hash| sum + (hash["t_edi_ord"] + hash["t_scn_ord"] + hash["t_man_ord"])}
+          @total_orders = @user_stats.inject(1.0){|sum, hash| sum + (hash["t_edi_ord"] + hash["t_scn_ord"] + hash["t_man_ord"])}
+          @total_lines = @user_stats.inject(1.0){|sum, hash| sum + (hash["t_edi_line"] + hash["t_scn_line"] + hash["t_man_line"])}
+
 	  @user_stats.each do |stats|
 	   
 	    @auto_orders << (stats["t_edi_ord"] + stats["t_scn_ord"])
@@ -73,8 +83,9 @@ class Sros::OrderEntriesController < ApplicationController
 	    @auto_lines << (stats["t_edi_line"] + stats["t_scn_line"])
 	    @manual_lines << stats["t_man_line"]
 	    @user_names << stats["t_userid"]
-	    stats["percent"] = (((stats["t_edi_ord"] + stats["t_scn_ord"] + stats["t_man_ord"]) / @total) * 100).round.to_s + "%"
-	    
+	    stats["order_percent"] = (((stats["t_edi_ord"] + stats["t_scn_ord"] + stats["t_man_ord"]) / @total_orders) * 100).round.to_s + "%"
+	    stats["line_percent"] = (((stats["t_edi_line"] + stats["t_scn_line"] + stats["t_man_line"]) /@total_lines) * 100).round.to_s + "%"	    
+
             @total_manual_orders += stats["t_man_ord"]
 	    @total_edi_orders += stats["t_edi_ord"]
 	    @total_scn_orders += stats["t_scn_ord"]
@@ -85,7 +96,7 @@ class Sros::OrderEntriesController < ApplicationController
 	    @total_scn_sros += stats["t_scn_sro"]
  	    @total_manual_sros += stats["t_man_sro"]
 	  end
-          @user_stats << {"t_userid":"Total", "t_edi_sro": @total_edi_sros, "t_scn_sro": @total_scn_sros, "t_man_sro": @total_manual_sros,"t_edi_ord": @total_edi_orders, "t_scn_ord":@total_scn_orders, "t_man_ord":@total_manual_orders, "t_edi_line":@total_edi_lines, "t_scn_line":@total_scn_lines, "t_man_line":@total_manual_lines, "percent":"100%"}.stringify_keys	  
+          @user_stats << {"t_userid":"Total", "t_edi_sro": @total_edi_sros, "t_scn_sro": @total_scn_sros, "t_man_sro": @total_manual_sros,"t_edi_ord": @total_edi_orders, "t_scn_ord":@total_scn_orders, "t_man_ord":@total_manual_orders, "t_edi_line":@total_edi_lines, "t_scn_line":@total_scn_lines, "t_man_line":@total_manual_lines, "order_percent":"100%", "line_percent":"100%"}.stringify_keys	  
 
           @performance_data << @user_names
 	  @performance_data << @auto_orders

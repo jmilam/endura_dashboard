@@ -2,11 +2,11 @@
 <div style="margin-top:100px;">
 </div>
 <div class="container">
-<div class="row">
+<div class="row text-center header_row">
   SRO's By Division
 </div>
 <div class="row">
-  <table class="table table-hover">
+  <table class="table table">
     <thead>
       <tr>
         <th>Division</th>
@@ -31,11 +31,11 @@
     </tbody>  
   </table>  
 </div>
-<div class="row">
+<div class="row text-center header_row">
   SRO's By Type
 </div>
 <div class="row">
-  <table class="table table-hover">
+  <table class="table table">
     <thead>
       <tr>
         <th>Type</th>
@@ -52,22 +52,22 @@
 	<% value.each do |key, vaule| %>
         <tr>
           <td><%= key %></td>
-          <td><%= number_to_currency(value[:curr_month]) %></td>
-          <td><%= number_to_currency(value[:prev_month]) %></td>
-          <td><%= number_to_currency(value[:curr_ytd]) %></td>
-          <td><%= number_to_currency(value[:prev_ytd]) %></td>
-          <td><%= number_to_currency(value[:prev_year]) %></td>
+          <td><%= number_to_currency(value[key][:curr_month]) %></td>
+          <td><%= number_to_currency(value[key][:prev_month]) %></td>
+          <td><%= number_to_currency(value[key][:curr_ytd]) %></td>
+          <td><%= number_to_currency(value[key][:prev_ytd]) %></td>
+          <td><%= number_to_currency(value[key][:prev_year]) %></td>
         </tr>
 	<% end %>
       <% end %>
     </tbody>
   </table>
 </div>
-<div class="row">
+<div class="row text-center header_row">
   SRO's By Product Line
 </div>
 <div class="row">
-  <table class="table table-hover">
+  <table class="table table">
     <thead>
       <tr>
         <th>Product Line</th>
@@ -95,11 +95,11 @@
     </tbody>
   </table>
 </div>
-<div class="row">
+<div class="row text-center header_row">
   SROs By Department
 </div>
 <div class="row">
-  <table class="table table-hover">
+  <table class="table table">
     <thead>
       <tr>
         <th>Department</th>
@@ -112,7 +112,7 @@
     </thead>
     <tbody>
       <% @sro_by_dept.each do |key, value| %>
-	<tr class="table danger"><td><%= key %></td></tr>
+	<tr class="table danger"><td colspan="6"><%= key %></td></tr>
         <% value.each do |key, value| %>
         <tr>
           <td><%= key %></td>
@@ -126,5 +126,28 @@
       <% end %>
     </tbody>
   </table>
+</div>
+<div class="row text-center header_row">
+  Top 20 Customers by SRO $
+</div>
+<div class="row">
+  <table class="table table">
+    <thead>
+      <tr>
+        <th>Customer</th>
+        <th>YTD SRO $</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @sro_by_customer.each do |key, value| %>
+        <tr>
+	  <td><%= key %></td>
+	  <td><%= number_to_currency(value) %></td>
+        </tr>
+        <%# end %>
+      <% end %>
+    </tbody>
+  </table>
+
 </div>
 </div>
