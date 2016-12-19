@@ -1,0 +1,2 @@
+class ReportCriteria < ApplicationRecord
+end

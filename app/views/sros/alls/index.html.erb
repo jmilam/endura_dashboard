@@ -2,152 +2,220 @@
 <div style="margin-top:100px;">
 </div>
 <div class="container">
-<div class="row text-center header_row">
-  SRO's By Division
-</div>
-<div class="row">
-  <table class="table table">
-    <thead>
-      <tr>
-        <th>Division</th>
-        <th>Current Month</th>
-	<th>Previous Month</th>
-	<th>YTD</th>
-	<th>Previous YTD</th>
-	<th>Previous Year</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @sro_by_division.each do |key, value| %>
+  <div id="ByResponsibility">
+    <table class="table table-striped">
+      <thead>
         <tr>
-          <td><%= key %></td>
-	  <td><%= number_to_currency(value[:curr_month]) %></td>
-          <td><%= number_to_currency(value[:prev_month]) %></td>
-          <td><%= number_to_currency(value[:curr_ytd]) %></td>
-          <td><%= number_to_currency(value[:prev_ytd]) %></td>
-          <td><%= number_to_currency(value[:prev_year]) %></td>
+          <td colspan="10">Sum of Ext Total</td>
         </tr>
-      <% end %>
-    </tbody>  
-  </table>  
-</div>
-<div class="row text-center header_row">
-  SRO's By Type
-</div>
-<div class="row">
-  <table class="table table">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Current Month</th>
-        <th>Previous Month</th>
-        <th>YTD</th>
-        <th>Previous YTD</th>
-        <th>Previous Year</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @sro_by_type.each do |key, value| %>
-	<tr class="table danger"><td colspan="6"><%= key %></td></tr>
-	<% value.each do |key, vaule| %>
         <tr>
-          <td><%= key %></td>
-          <td><%= number_to_currency(value[key][:curr_month]) %></td>
-          <td><%= number_to_currency(value[key][:prev_month]) %></td>
-          <td><%= number_to_currency(value[key][:curr_ytd]) %></td>
-          <td><%= number_to_currency(value[key][:prev_ytd]) %></td>
-          <td><%= number_to_currency(value[key][:prev_year]) %></td>
+          <th>Responsibility</th>
+          <th>Failure Code</th>
+          <th class="text-center">Reasons</th>
+          <th style="width:100px;text-align: center;">1000</th>
+          <th style="width:100px;text-align: center;">2000</th>
+          <th style="width:100px;text-align: center">3000</th>
+          <th style="width:100px;">4300</th>
+          <th style="width:100px;">5000</th>
+          <th style="width:100px;text-align: center">9000</th>
+          <th>Total</th>
         </tr>
-	<% end %>
-      <% end %>
-    </tbody>
-  </table>
-</div>
-<div class="row text-center header_row">
-  SRO's By Product Line
-</div>
-<div class="row">
-  <table class="table table">
-    <thead>
-      <tr>
-        <th>Product Line</th>
-        <th>Current Month</th>
-        <th>Previous Month</th>
-        <th>YTD</th>
-        <th>Previous YTD</th>
-        <th>Previous Year</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @sro_by_prod_line.each do |key, value| %>
-        <tr class="table danger"><td colspan="6"><%= key %></td></tr>
-	<% value.each do |key, value| %>
-        <tr>
-          <td><%= key %></td>
-          <td><%= number_to_currency(value[:curr_month]) %></td>
-          <td><%= number_to_currency(value[:prev_month]) %></td>
-          <td><%= number_to_currency(value[:curr_ytd]) %></td>
-          <td><%= number_to_currency(value[:prev_ytd]) %></td>
-          <td><%= number_to_currency(value[:prev_year]) %></td>
-        </tr>
-	<% end %>
-      <% end %>
-    </tbody>
-  </table>
-</div>
-<div class="row text-center header_row">
-  SROs By Department
-</div>
-<div class="row">
-  <table class="table table">
-    <thead>
-      <tr>
-        <th>Department</th>
-        <th>Current Month</th>
-        <th>Previous Month</th>
-        <th>YTD</th>
-        <th>Previous YTD</th>
-        <th>Previous Year</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @sro_by_dept.each do |key, value| %>
-	<tr class="table danger"><td colspan="6"><%= key %></td></tr>
-        <% value.each do |key, value| %>
-        <tr>
-          <td><%= key %></td>
-          <td><%= number_to_currency(value[:curr_month]) %></td>
-          <td><%= number_to_currency(value[:prev_month]) %></td>
-          <td><%= number_to_currency(value[:curr_ytd]) %></td>
-          <td><%= number_to_currency(value[:prev_ytd]) %></td>
-          <td><%= number_to_currency(value[:prev_year]) %></td>
-        </tr>
-	<% end %>
-      <% end %>
-    </tbody>
-  </table>
-</div>
-<div class="row text-center header_row">
-  Top 20 Customers by SRO $
-</div>
-<div class="row">
-  <table class="table table">
-    <thead>
-      <tr>
-        <th>Customer</th>
-        <th>YTD SRO $</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @sro_by_customer.each do |key, value| %>
-        <tr>
-	  <td><%= key %></td>
-	  <td><%= number_to_currency(value) %></td>
-        </tr>
-        <%# end %>
-      <% end %>
-    </tbody>
-  </table>
-
-</div>
+      </thead>
+      <tbody>
+        <% @sro_by_responsibility.each do |key, codes| %>
+          <tr>
+            <td><%= key %></td>
+            <td style="padding-left: 0;padding-right:0;">
+              <table style="width:100%">
+                <% codes.keys.each do |code| %>
+                  <tr class="inside_table">
+                    <td><%= code %></td>
+                  </tr>
+                <% end %>
+              </table>
+            </td>
+            <td style="padding-left: 0;padding-right:0;">
+              <table  style="width:100%">            
+                <% codes.each do |key, value| %>
+                  <% unless value.class == Array %>
+                    <tr class="inside_table">
+                      <% value["description"].each do |desc| %>
+                        <td><%= desc %></td>
+                      <% end %>
+                    </tr>
+                  <% end %>
+                <% end %>
+              </table>
+            </td>
+            <td colspan="7" style="padding-left:0;padding-right:0;">
+              <table style="width:100%">
+                <% codes.each do |key, value|%>
+                  <% unless value.class == Array %>
+                    <tr class="inside_table" style="border-right:none;">
+                      <td style="width:100px; text-align:right;"><%= number_to_currency(value["1000"]) %></td>
+                      <td style="width:100px; text-align:right;"><%= number_to_currency(value["2000"]) %></td>
+                      <td style="width:100px; text-align:right;"><%= number_to_currency(value["3000"]) %></td>
+                      <td style="width:100px; text-align:right;"><%= number_to_currency(value["4300"]) %></td>
+                      <td style="width:100px; text-align:right;"><%= number_to_currency(value["5000"]) %></td>
+                      <td style="width:100px; text-align:right;"><%= number_to_currency(value["9000"]) %></td>
+                      <td style="width:100px; text-align:right;"><%= number_to_currency(value["Total"]) %></td>
+                    </tr>
+                  <% end %>
+                <% end %>
+              </table>
+            </td>
+          </tr>
+        <% end %> 
+      </tbody>
+    </table>
+  </div>
+  <div id="HighLevel">
+    <div class="row text-center header_row">
+      SRO's By Division
+    </div>
+    <div class="row">
+      <table class="table table">
+        <thead>
+          <tr>
+            <th>Division</th>
+            <th>Current Month</th>
+    	<th>Previous Month</th>
+    	<th>YTD</th>
+    	<th>Previous YTD</th>
+    	<th>Previous Year</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @sro_by_division.each do |key, value| %>
+            <tr>
+              <td><%= key %></td>
+    	  <td><%= number_to_currency(value[:curr_month]) %></td>
+              <td><%= number_to_currency(value[:prev_month]) %></td>
+              <td><%= number_to_currency(value[:curr_ytd]) %></td>
+              <td><%= number_to_currency(value[:prev_ytd]) %></td>
+              <td><%= number_to_currency(value[:prev_year]) %></td>
+            </tr>
+          <% end %>
+        </tbody>  
+      </table>  
+    </div>
+    <div class="row text-center header_row">
+      SRO's By Type
+    </div>
+    <div class="row">
+      <table class="table table">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Current Month</th>
+            <th>Previous Month</th>
+            <th>YTD</th>
+            <th>Previous YTD</th>
+            <th>Previous Year</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @sro_by_type.each do |key, value| %>
+    	<tr class="table danger"><td colspan="6"><%= key %></td></tr>
+    	<% value.each do |key, vaule| %>
+            <tr>
+              <td><%= key %></td>
+              <td><%= number_to_currency(value[key][:curr_month]) %></td>
+              <td><%= number_to_currency(value[key][:prev_month]) %></td>
+              <td><%= number_to_currency(value[key][:curr_ytd]) %></td>
+              <td><%= number_to_currency(value[key][:prev_ytd]) %></td>
+              <td><%= number_to_currency(value[key][:prev_year]) %></td>
+            </tr>
+    	<% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="row text-center header_row">
+      SRO's By Product Line
+    </div>
+    <div class="row">
+      <table class="table table">
+        <thead>
+          <tr>
+            <th>Product Line</th>
+            <th>Current Month</th>
+            <th>Previous Month</th>
+            <th>YTD</th>
+            <th>Previous YTD</th>
+            <th>Previous Year</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @sro_by_prod_line.each do |key, value| %>
+            <tr class="table danger"><td colspan="6"><%= key %></td></tr>
+    	<% value.each do |key, value| %>
+            <tr>
+              <td><%= key %></td>
+              <td><%= number_to_currency(value[:curr_month]) %></td>
+              <td><%= number_to_currency(value[:prev_month]) %></td>
+              <td><%= number_to_currency(value[:curr_ytd]) %></td>
+              <td><%= number_to_currency(value[:prev_ytd]) %></td>
+              <td><%= number_to_currency(value[:prev_year]) %></td>
+            </tr>
+    	<% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="row text-center header_row">
+      SROs By Department
+    </div>
+    <div class="row">
+      <table class="table table">
+        <thead>
+          <tr>
+            <th>Department</th>
+            <th>Current Month</th>
+            <th>Previous Month</th>
+            <th>YTD</th>
+            <th>Previous YTD</th>
+            <th>Previous Year</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @sro_by_dept.each do |key, value| %>
+    	<tr class="table danger"><td colspan="6"><%= key %></td></tr>
+            <% value.each do |key, value| %>
+            <tr>
+              <td><%= key %></td>
+              <td><%= number_to_currency(value[:curr_month]) %></td>
+              <td><%= number_to_currency(value[:prev_month]) %></td>
+              <td><%= number_to_currency(value[:curr_ytd]) %></td>
+              <td><%= number_to_currency(value[:prev_ytd]) %></td>
+              <td><%= number_to_currency(value[:prev_year]) %></td>
+            </tr>
+    	<% end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="row text-center header_row">
+      Top 20 Customers by SRO $
+    </div>
+    <div class="row">
+      <table class="table table">
+        <thead>
+          <tr>
+            <th>Customer</th>
+            <th>YTD SRO $</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @sro_by_customer.each do |key, value| %>
+            <tr>
+    	  <td><%= key %></td>
+    	  <td><%= number_to_currency(value) %></td>
+            </tr>
+            <%# end %>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </div>

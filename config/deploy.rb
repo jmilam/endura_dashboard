@@ -40,7 +40,7 @@ set :assets_roles, [:web, :app]
 #   before :start, :make_dirs
 # end
 
-# namespace :deploy do
+namespace :deploy do
 #   desc "Make sure local git is in sync with remote."
 #   task :check_revision do
 #     on roles(:app) do
@@ -60,18 +60,18 @@ set :assets_roles, [:web, :app]
 #     end
 #   end
 
-#   desc 'Restart application'
-#   task :restart do
-#     on roles(:app), in: :sequence, wait: 5 do
-#       invoke 'puma:restart'
-#     end
-#   end
+  desc 'Restart application'
+  task :restart do
+    on roles(:app), in: :sequence, wait: 5 do
+      invoke 'service nginx restart'
+    end
+  end
 
 #   before :starting,     :check_revision
 #   after  :finishing,    :compile_assets
 #   after  :finishing,    :cleanup
 #   after  :finishing,    :restart
-# end
+end
 
 # ps aux | grep puma    # Get puma pid
 # kill -s SIGUSR2 pid   # Restart puma

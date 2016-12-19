@@ -10,9 +10,9 @@
     var data = google.visualization.arrayToDataTable(<%= raw @performance_data %>);
     
     var options1 = {
-	vAxis: {title: 'Total Count'},
-	hAxis: {title: 'Entry  Method'},
-	seriesType: 'bars'
+    	vAxis: {title: 'Total Count'},
+    	hAxis: {title: 'Entry  Method'},
+    	seriesType: 'bars'
     };
 
     var chart = new google.visualization.ComboChart(document.getElementById('performance_chart'));

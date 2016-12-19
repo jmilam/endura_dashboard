@@ -27,20 +27,25 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-		      <div class="form-inline">
-                        <div class="form-group" style="margin-top:8px;">
-			  
-			  <div class="form-group">
-                            <input type="text" class="form-control datepicker" id="start_date" placeholder="Start Date..." style="text-align:center;">
-			  </div>
-			  <div class="form-group">
-			    <input type="text" class="form-control datepicker" id="end_date" placeholder="End Date..." style="text-align:center;">
-			  </div>
-			  <div class="form-group">
-			    <button class="btn btn-success search">GO</button>
-			  </div>
+                        <div class="form-inline">
+                            <div class="form-group" style="margin-top:8px;">
+                                <% if current_page?(controller: 'alls', action: 'index') %>
+                                    <div class="form-group">
+                                     <%= select(:sro_criteria, :criteria_id, @criteria.map {|search| search.criteria },{prompt: "-- Select Search Criteria --", }, {class: 'form-control text-center', id: 'Criteria'}) %>
+                                    </div>
+                                <% else %>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control datepicker" id="start_date" placeholder="Start Date..." style="text-align:center;">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="text" class="form-control datepicker" id="end_date" placeholder="End Date..." style="text-align:center;">
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn btn-success search">GO</button>
+                                    </div>
+                                <% end %>
+                            </div>
                         </div>
-		      </div>
                     </li>
                 </ul>
             </div>
