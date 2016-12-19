@@ -106,22 +106,26 @@
             <th>Manual Lines</th>
             <th>Auto Lines</th>
             <th>Lines Complete(%)</th>
+            <th>Customer Count</th>
             <th>SROs</th>
+            <th>Stats Month</th>
           </tr>
         </thead>
       <tbody>
         <% @user_stats.each do |user_stat| %>
           <tr>
             <td><%= user_stat["t_userid"] %></td>
-	    <td><%= user_stat["t_edi_ord"] + user_stat["t_scn_ord"] + user_stat["t_man_ord"] %></td>
-	    <td><%= user_stat["t_man_ord"] %></td>
-	    <td><%= user_stat["t_edi_ord"] + user_stat["t_scn_ord"] %></td>
-            <td class="text-center"><%= user_stat["order_percent"] %></td>
-	    <td><%= user_stat["t_edi_line"] + user_stat["t_scn_line"] + user_stat["t_man_line"] %></td>
- 	    <td><%= user_stat["t_man_line"] %></td>
-	    <td><%= user_stat["t_edi_line"] + user_stat["t_scn_line"] %></td>
-	    <td class="text-center"><%= user_stat["line_percent"] %></td>
-	    <td><%= user_stat["t_edi_sro"] + user_stat["t_scn_sro"] + user_stat["t_man_sro"] %></td>
+      	    <td><%= user_stat["t_edi_ord"] + user_stat["t_scn_ord"] + user_stat["t_man_ord"] %></td>
+      	    <td><%= user_stat["t_man_ord"] %></td>
+      	    <td><%= user_stat["t_edi_ord"] + user_stat["t_scn_ord"] %></td>
+                  <td class="text-center"><%= user_stat["order_percent"] %></td>
+      	    <td><%= user_stat["t_edi_line"] + user_stat["t_scn_line"] + user_stat["t_man_line"] %></td>
+       	    <td><%= user_stat["t_man_line"] %></td>
+      	    <td><%= user_stat["t_edi_line"] + user_stat["t_scn_line"] %></td>
+      	    <td class="text-center"><%= user_stat["line_percent"] %></td>
+            <td class="text-center"><%= user_stat["t_cust"] %></td>
+      	    <td><%= user_stat["t_edi_sro"] + user_stat["t_scn_sro"] + user_stat["t_man_sro"] %></td>
+            <td><%= Date.parse(user_stat["t_month"]).strftime("%b '%y") unless user_stat["t_month"].nil? %></td>
           </tr>
         <% end %>
       </tbody>
