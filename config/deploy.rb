@@ -22,6 +22,7 @@ set :branch,        :master
 # set :format,        :pretty
 # set :log_level,     :debug
 set :keep_releases, 5
+set :assets_roles, [:web, :app]
 
 ## Linked Files & Directories (Default None):
 # set :linked_files, %w{config/database.yml}
