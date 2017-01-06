@@ -6,9 +6,6 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <td colspan="10">Sum of Ext Total</td>
-        </tr>
-        <tr>
           <th>Responsibility</th>
           <th>Failure Code</th>
           <th class="text-center">Reasons</th>
@@ -28,9 +25,11 @@
             <td style="padding-left: 0;padding-right:0;">
               <table style="width:100%">
                 <% codes.keys.each do |code| %>
-                  <tr class="inside_table">
-                    <td><%= code %></td>
-                  </tr>
+                  <% unless codes[code].empty? %>
+                    <tr class="inside_table">
+                      <td><%= code %></td>
+                    </tr>
+                  <% end %>
                 <% end %>
               </table>
             </td>
@@ -66,6 +65,26 @@
             </td>
           </tr>
         <% end %> 
+      </tbody>
+    </table>
+  </div>
+  <div id="ByCustomer" style="display:none;">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Customer</th>
+          <th>Failure Code</th>
+          <th class="text-center">Reasons</th>
+          <th style="width:100px;text-align: center;">1000</th>
+          <th style="width:100px;text-align: center;">2000</th>
+          <th style="width:100px;text-align: center">3000</th>
+          <th style="width:100px;">4300</th>
+          <th style="width:100px;">5000</th>
+          <th style="width:100px;text-align: center">9000</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
       </tbody>
     </table>
   </div>
@@ -209,8 +228,8 @@
         <tbody>
           <% @sro_by_customer.each do |key, value| %>
             <tr>
-    	  <td><%= key %></td>
-    	  <td><%= number_to_currency(value) %></td>
+          	  <td><%= key %></td>
+          	  <td><%= number_to_currency(value) %></td>
             </tr>
             <%# end %>
           <% end %>

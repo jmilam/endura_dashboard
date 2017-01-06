@@ -1,4 +1,8 @@
 class Sro
+  class << self
+    attr_accessor :totals_by_site
+  end
+
   def self.add(total, number)
     (total += number).round(2)
   end
@@ -108,7 +112,22 @@ class Sro
         grand_total["Total"] += total unless total.class == Array
       end
     end
+    self.total_all_data_by_site(grand_total)
     hash_by_responsibility["Total"] = grand_total
+    
     hash_by_responsibility
+  end
+
+  def self.total_all_data_by_site(hash_by_site)
+    if @totals_by_site.nil?
+      @totals_by_site = {"description" => ["-"], "1000" => 0.00, "2000" => 0.00, "3000" => 0.00, "4300" => 0.00, "5000" => 0.00, "9000" => 0.00, "Total" => 0.00}
+    end
+    @totals_by_site["1000"] += hash_by_site["1000"]
+    @totals_by_site["2000"] += hash_by_site["2000"]
+    @totals_by_site["3000"] += hash_by_site["3000"]
+    @totals_by_site["4300"] += hash_by_site["4300"]
+    @totals_by_site["5000"] += hash_by_site["5000"]
+    @totals_by_site["9000"] += hash_by_site["9000"]
+    @totals_by_site["Total"] += hash_by_site["Total"]
   end
 end

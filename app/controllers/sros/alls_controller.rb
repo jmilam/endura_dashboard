@@ -6,9 +6,12 @@ class Sros::AllsController < ApplicationController
     @sro_by_dept = Hash.new
     @sro_by_customer = Hash.new
     @sro_by_responsibility = Hash.new
+    @sro_by_customer = Hash.new
     
     @start_date = params[:start_date].blank? ? (Date.today.beginning_of_week - 1.week).strftime("%D"): params[:start_date]
     @end_date = params[:end_date].blank? ? (Date.today.end_of_week - 1.week).strftime("%D") : params[:end_date]
+    @sro_start = params[:start_date].blank? ? (Date.today.beginning_of_month).strftime("%D"): params[:start_date]
+    @sro_end = params[:end_date].blank? ? (Date.today.end_of_month).strftime("%D") : params[:end_date]
     @criteria = ReportCriteria.all
 
     #Pulls data from Mysql Table and builds created responsibilities
@@ -19,11 +22,12 @@ class Sros::AllsController < ApplicationController
     end
 
     #Pulls Data from QAD through API call.
-    uri = URI(self.api_url + "xxapioesrodashboard.p?start=#{@start_date}&end=#{@end_date}")
+    uri = URI(self.api_url + "xxapioesrodashboard.p?start=#{@start_date}&end=#{@end_date}&srodetailfrom=#{@sro_start}&srodetailto=#{@sro_end}")
     response = Net::HTTP.get(uri)
 
     #Cycles through returned data and builds Hash of totals to display
     JSON.parse(response)["sros"].each do |sros|
+      #Builds data based on Responsibility Specifications
       if @sro_by_responsibility.values[0].keys.include?(sros["sro-failure1"])
         if @sro_by_responsibility.values[0][sros["sro-failure1"]].empty?
           @sro_by_responsibility.values[0][sros["sro-failure1"]] = Sro.create_by_responsibility(sros["sro-desc"])
@@ -56,6 +60,8 @@ class Sros::AllsController < ApplicationController
           @sro_by_responsibility.values[4] = Sro.add_values_by_responsibility(sros["xxsro-so-site"], sros["sro-failure1"], @sro_by_responsibility.values[4], sros["sro-line-total"])
         end
       end
+
+      #Builds data based on Customer Specifications
 
       #
       if @sro_by_division.keys.include?(sros["sro-div"])
@@ -99,6 +105,7 @@ class Sros::AllsController < ApplicationController
         @sro_by_dept[sros["sro-div"]] = {sros["xxsro-so-dept"] => Sro.create_sro_with_hash(@sro_by_prod_line, sros["sro-div"], sros["xxsro-so-dept"], sros)}
       end unless sros["sro-div"].empty?
 
+      #
       if @sro_by_customer.keys.include?(sros["sro-name"])
         @sro_by_customer[sros["sro-name"]] = Sro.calculate_customer_ytd(@sro_by_customer[sros["sro-name"]], sros["sro-line-total"], sros["sro-ent-date"])
       else
@@ -111,6 +118,8 @@ class Sros::AllsController < ApplicationController
     @sro_by_responsibility.values[2] = Sro.total_all_data_by_responsibility(@sro_by_responsibility.values[2])
     @sro_by_responsibility.values[3] = Sro.total_all_data_by_responsibility(@sro_by_responsibility.values[3])
     @sro_by_responsibility.values[4] = Sro.total_all_data_by_responsibility(@sro_by_responsibility.values[4])
+    @sro_by_responsibility["Grand Total"] = {"Grand Total" => Sro.totals_by_site}
+
     #Sorts built data
     @sro_by_division = @sro_by_division.sort_by {|key, value| key}.to_h
     @sro_by_type = Sro.sort_data(@sro_by_type).sort.to_h
