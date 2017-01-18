@@ -17,9 +17,8 @@ class Sros::ReportCardController < ApplicationController
 																		 value["man_lines"], value["auto_lines"], value["line_perc"], value["cust_count"], value["sro_total"], value["stat_month"]]
 			row_count += 1
 		end
-		#sheet1.row(1).replace [params["t_userid"], (params["t_edi_ord"] + params["t_scn_ord"] + params["t_man_ord"]), params["t_man_ord"],(params["t_edi_ord"] + params["t_scn_ord"]),params["order_percent"], (params["t_edi_line"] + params["t_scn_line"] + params["t_man_line"]),params["t_man_line"], (params["t_edi_line"] + params["t_scn_line"]),params["line_percent"], params["t_cust"],(params["t_edi_sro"] + params["t_scn_sro"] + params["t_man_sro"]), report_date]
 
 		book.write "public/report cards/oe/OE-Emp-Report-Card-#{Date.today.strftime("%m-%d-%Y")}.xls"
-		
+
 	end
 end

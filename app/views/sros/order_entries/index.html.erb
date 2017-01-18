@@ -38,6 +38,7 @@
     $('.report-card').on('click', function(e){
       var emp_report_card = [];
 
+      //This cycles all checkboxes and selects which users to send back to the controller based off being checked
       $.each($('input[type=checkbox]'), function(){
         if ($(this).prop('checked')){
           var data_row = $(this).parents('tr')
@@ -145,8 +146,7 @@
             <th>Customer Count</th>
             <th>SROs</th>
             <th>Stats Month</th>
-            <th><%#= link_to "", sros_report_card_index_path, method: :post, class: "glyphicon glyphicon-option-vertical report-card" %></th>
-            <th><span class="glyphicon glyphicon-option-vertical report-card"></span></th>
+            <th><span class="glyphicon glyphicon-save-file report-card"></span></th>
           </tr>
         </thead>
       <tbody>
