@@ -1,0 +1,32 @@
+<%#= @sales_call_data %>
+<div style="margin-top: 100px;">
+	<table class="table table-hover">
+	  <thead>
+	    <th>SF Id</th>
+	    <th>Business Plan</th>
+	    <th>Milestone</th>
+	    <th>TSM</th>
+	    <th>Territory/Rep</th>
+	    <th>Customer</th>
+	    <th>Call Purpose</th>
+	    <th>Items Discussed</th>
+	    <th>Account</th>
+	    <th>Contact</th>
+	    <th>Lead</th>
+	    <th>Follow Up By</th>
+	    <th>Follow Up Points</th>
+	    <th>Status</th>
+	  </thead>
+	  <tbody>
+	  <tr><%= @sales_call_data.count %></tr>
+			<% @sales_call_data.each do |data| %>
+
+				<tr>
+					<% data["dataCells"].each do |details| %>
+						<td><%= details["label"] %></td>
+					<% end %>
+				</tr>
+			<% end %>
+		</tbody>
+	</table>
+</div>

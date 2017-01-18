@@ -42,13 +42,18 @@ class Sro
     due_date.month == curr_date.month && due_date.year == curr_date.year
   end
 
-  def self.calculate_customer_ytd(total, amount, due_date)
+  def self.calculate_customer_ytd(curr_data, total, amount, due_date, site)
     due_date = due_date.to_date
     curr_date = Date.today
     if due_date.month <= curr_date.month && due_date.year == curr_date.year
       total += amount
     end
-    total
+
+    if curr_data["#{site}"].nil?
+      {curr_data["#{site}"] => total}
+    else
+      {"#{site}" => curr_data["#{site}"] += total} 
+    end
   end
 
   def self.create_sro_with_hash(data_hash, division, sub_group=nil, sro)

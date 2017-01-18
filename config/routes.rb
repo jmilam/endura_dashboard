@@ -3,6 +3,12 @@ Rails.application.routes.draw do
   namespace :sros do
     resources :order_entries
     resources :alls
+    resources :report_card
+  end
+  namespace :salesforces do
+  	#namespace :reports do
+  		resources :sales_calls
+  	#end
   end
   root to: "sros/alls#index"
 end

@@ -33,6 +33,42 @@
       chart.draw(data, options1);
       chart2.draw(data2,options2);
     });
+
+    //This will export data to Sros::ReportCard to create xls file on the backend and download it
+    $('.report-card').on('click', function(e){
+      var emp_report_card = [];
+
+      $.each($('input[type=checkbox]'), function(){
+        if ($(this).prop('checked')){
+          var data_row = $(this).parents('tr')
+          var emp = data_row.children('td:eq(0)').text()
+          var total_order_count = data_row.children('td:eq(1)').text()
+          var man_orders = data_row.children('td:eq(2)').text()
+          var auto_orders = data_row.children('td:eq(3)').text()
+          var order_perc = data_row.children('td:eq(4)').text()
+          var total_lines = data_row.children('td:eq(5)').text()
+          var man_lines = data_row.children('td:eq(6)').text()
+          var auto_lines = data_row.children('td:eq(7)').text()
+          var line_perc = data_row.children('td:eq(8)').text()
+          var cust_count = data_row.children('td:eq(9)').text()
+          var sro_total = data_row.children('td:eq(10)').text()
+          var stat_month = data_row.children('td:eq(11)').text()
+
+          emp_report_card.push({emp: emp, total_order_count: total_order_count, man_orders: man_orders, auto_orders: auto_orders, order_perc: order_perc, total_lines: total_lines, man_lines: man_lines, auto_lines: auto_lines, line_perc: line_perc, cust_count: cust_count, sro_total: sro_total, stat_month: stat_month});
+        }
+      });
+
+      $.ajax({
+          url: '/sros/report_card',
+          type: 'post',
+          datatype: 'json',
+          data: {emp_report_card},
+          success: function (data) {
+              alert("Successful Export. File will be moved to the Z drive")
+          }
+          
+      });
+    });
   }
 </script>
 
@@ -109,6 +145,8 @@
             <th>Customer Count</th>
             <th>SROs</th>
             <th>Stats Month</th>
+            <th><%#= link_to "", sros_report_card_index_path, method: :post, class: "glyphicon glyphicon-option-vertical report-card" %></th>
+            <th><span class="glyphicon glyphicon-option-vertical report-card"></span></th>
           </tr>
         </thead>
       <tbody>
@@ -126,6 +164,11 @@
             <td class="text-center"><%= user_stat["t_cust"] %></td>
       	    <td><%= user_stat["t_edi_sro"] + user_stat["t_scn_sro"] + user_stat["t_man_sro"] %></td>
             <td><%= Date.parse(user_stat["t_month"]).strftime("%b '%y") unless user_stat["t_month"].nil? %></td>
+            <% if  user_stat["export"] == false %>
+              <td/>            
+            <% else %>
+              <td><%= check_box("me", "you") %></td>
+            <% end %>
           </tr>
         <% end %>
       </tbody>

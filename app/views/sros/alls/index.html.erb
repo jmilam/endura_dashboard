@@ -68,13 +68,12 @@
       </tbody>
     </table>
   </div>
-  <div id="ByCustomer" style="display:none;">
+  <div id="ByCustomer" style="">
+    <%#= @sro_by_customer %>
     <table class="table table-striped">
       <thead>
         <tr>
           <th>Customer</th>
-          <th>Failure Code</th>
-          <th class="text-center">Reasons</th>
           <th style="width:100px;text-align: center;">1000</th>
           <th style="width:100px;text-align: center;">2000</th>
           <th style="width:100px;text-align: center">3000</th>
@@ -85,6 +84,18 @@
         </tr>
       </thead>
       <tbody>
+        <% @sro_by_customer.each do |key, value| %>
+          <tr>
+            <td><%= key %></td>
+            <td style="width:100px;text-align: center;"><%= number_to_currency(value["1000"]) %></td>
+            <td style="width:100px;text-align: center;"><%= number_to_currency(value["2000"]) %></td>
+            <td style="width:100px;text-align: center;"><%= number_to_currency(value["3000"]) %></td>
+            <td style="width:100px;"><%= number_to_currency(value["4300"]) %></td>
+            <td style="width:100px;"><%= number_to_currency(value["5000"]) %></td>
+            <td style="width:100px;text-align: center;"><%= number_to_currency(value["9000"]) %></td>
+            <td><%= number_to_currency(value["total"]) %></td>
+          </tr>
+        <% end %>
       </tbody>
     </table>
   </div>
@@ -201,37 +212,15 @@
           <% @sro_by_dept.each do |key, value| %>
     	<tr class="table danger"><td colspan="6"><%= key %></td></tr>
             <% value.each do |key, value| %>
-            <tr>
-              <td><%= key %></td>
-              <td><%= number_to_currency(value[:curr_month]) %></td>
-              <td><%= number_to_currency(value[:prev_month]) %></td>
-              <td><%= number_to_currency(value[:curr_ytd]) %></td>
-              <td><%= number_to_currency(value[:prev_ytd]) %></td>
-              <td><%= number_to_currency(value[:prev_year]) %></td>
-            </tr>
-    	<% end %>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-    <div class="row text-center header_row">
-      Top 20 Customers by SRO $
-    </div>
-    <div class="row">
-      <table class="table table">
-        <thead>
-          <tr>
-            <th>Customer</th>
-            <th>YTD SRO $</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @sro_by_customer.each do |key, value| %>
-            <tr>
-          	  <td><%= key %></td>
-          	  <td><%= number_to_currency(value) %></td>
-            </tr>
-            <%# end %>
+              <tr>
+                <td><%= key %></td>
+                <td><%= number_to_currency(value[:curr_month]) %></td>
+                <td><%= number_to_currency(value[:prev_month]) %></td>
+                <td><%= number_to_currency(value[:curr_ytd]) %></td>
+                <td><%= number_to_currency(value[:prev_ytd]) %></td>
+                <td><%= number_to_currency(value[:prev_year]) %></td>
+              </tr>
+    	      <% end %>
           <% end %>
         </tbody>
       </table>

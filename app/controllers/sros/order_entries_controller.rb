@@ -98,7 +98,7 @@ class Sros::OrderEntriesController < ApplicationController
  	    @total_manual_sros += stats["t_man_sro"]
  	    @total_customers += stats["t_cust"]
 	  end
-          @user_stats << {"t_userid":"Total", "t_edi_sro": @total_edi_sros, "t_scn_sro": @total_scn_sros, "t_man_sro": @total_manual_sros,"t_edi_ord": @total_edi_orders, "t_scn_ord":@total_scn_orders, "t_man_ord":@total_manual_orders, "t_edi_line":@total_edi_lines, "t_scn_line":@total_scn_lines, "t_man_line":@total_manual_lines, "order_percent":"100%", "line_percent":"100%", "t_cust": @total_customers}.stringify_keys	  
+          @user_stats << {"t_userid":"Total", "t_edi_sro": @total_edi_sros, "t_scn_sro": @total_scn_sros, "t_man_sro": @total_manual_sros,"t_edi_ord": @total_edi_orders, "t_scn_ord":@total_scn_orders, "t_man_ord":@total_manual_orders, "t_edi_line":@total_edi_lines, "t_scn_line":@total_scn_lines, "t_man_line":@total_manual_lines, "order_percent":"100%", "line_percent":"100%", "t_cust": @total_customers, "export": false}.stringify_keys	  
 
           @performance_data << @user_names
 	  @performance_data << @auto_orders

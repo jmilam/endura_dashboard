@@ -107,9 +107,10 @@ class Sros::AllsController < ApplicationController
 
       #
       if @sro_by_customer.keys.include?(sros["sro-name"])
-        @sro_by_customer[sros["sro-name"]] = Sro.calculate_customer_ytd(@sro_by_customer[sros["sro-name"]], sros["sro-line-total"], sros["sro-ent-date"])
+        p @sro_by_customer[sros["sro-name"]]
+        @sro_by_customer[sros["sro-name"]] = Sro.calculate_customer_ytd(@sro_by_customer[sros["sro-name"]],@sro_by_customer[sros["sro-name"]][sros["srod-site"]], sros["sro-line-total"], sros["sro-ent-date"], sros["srod-site"])
       else
-        @sro_by_customer[sros["sro-name"]] = sros["sro-line-total"]
+        @sro_by_customer[sros["sro-name"]] = {sros["srod-site"] => sros["sro-line-total"]}
       end unless sros["sro-name"].empty?
     end
 
@@ -125,7 +126,6 @@ class Sros::AllsController < ApplicationController
     @sro_by_type = Sro.sort_data(@sro_by_type).sort.to_h
     @sro_by_prod_line = Sro.sort_data(@sro_by_prod_line).sort.to_h
     @sro_by_dept = Sro.sort_data(@sro_by_dept).sort.to_h
-    @sro_by_customer = @sro_by_customer.sort_by {|key, value| value }.reverse[0..19].to_h
   end
 end
 

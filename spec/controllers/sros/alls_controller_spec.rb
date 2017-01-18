@@ -7,6 +7,7 @@ RSpec.describe Sros::AllsController, :type => :controller do
     end
 
     it "responds successfully" do
+      build :report_criteria
       expect(response).to be_success
     end
     it "should have valid data in hash" do
