@@ -106,12 +106,12 @@ class Sros::AllsController < ApplicationController
       end unless sros["sro-div"].empty?
 
       #
-      if @sro_by_customer.keys.include?(sros["sro-name"])
-        p @sro_by_customer[sros["sro-name"]]
-        @sro_by_customer[sros["sro-name"]] = Sro.calculate_customer_ytd(@sro_by_customer[sros["sro-name"]],@sro_by_customer[sros["sro-name"]][sros["srod-site"]], sros["sro-line-total"], sros["sro-ent-date"], sros["srod-site"])
-      else
-        @sro_by_customer[sros["sro-name"]] = {sros["srod-site"] => sros["sro-line-total"]}
-      end unless sros["sro-name"].empty?
+      # if @sro_by_customer.keys.include?(sros["sro-name"])
+      #   p @sro_by_customer[sros["sro-name"]]
+      #   @sro_by_customer[sros["sro-name"]] = Sro.calculate_customer_ytd(@sro_by_customer[sros["sro-name"]],@sro_by_customer[sros["sro-name"]][sros["srod-site"]], sros["sro-line-total"], sros["sro-ent-date"], sros["srod-site"])
+      # else
+      #   @sro_by_customer[sros["sro-name"]] = {sros["srod-site"] => sros["sro-line-total"]}
+      # end unless sros["sro-name"].empty?
     end
 
     @sro_by_responsibility.values[0] = Sro.total_all_data_by_responsibility(@sro_by_responsibility.values[0])
