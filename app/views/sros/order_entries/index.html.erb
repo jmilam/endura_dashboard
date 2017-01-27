@@ -1,5 +1,8 @@
 <script type="text/javascript">
+  
   $(window).load(function(){
+   
+    
     $('table tr:last').css('background-color','#428bca');
 
     //This will export data to Sros::ReportCard to create xls file on the backend and download it
@@ -38,6 +41,7 @@
           
       });
     });
+
   });
 
   google.charts.load('current', {'packages':['corechart']});
@@ -65,31 +69,26 @@
     // var chart2 = new google.visualization.ComboChart(document.getElementById('sro_overview_chart'));
     // chart2.draw(data2, options2);
 
-    var data3 = google.visualization.arrayToDataTable([
-          ['Year', 'bbeasley', 'djorgens','jmilam','mdraughn'],
-          ['Mon', 2, 4, 5, 7],
-          ['Tues', 11, 4, 1, 0],
-          ['Wed', 1, 0, 0, 7],
-          ['Thurs', 5, 20, 13, 7],
-          ['Friday', 0, 1, 1, 5]
-        ]); 
-      var options3 = {
-          title: 'Company Performance',
-          curveType: 'function',
-          legend: { position: 'bottom' }
-        };
+    var data3 = google.visualization.arrayToDataTable(<%= raw @user_unconfirmed_chart_data %>)
+    var options3 = {
+        curveType: 'function',
+        legend: { position: 'bottom' }
+      };
 
-        var chart3 = new google.visualization.LineChart(document.getElementById('unconfirmed_order_chart'));
-        chart3.draw(data3, options3);
+    var chart3 = new google.visualization.LineChart(document.getElementById('unconfirmed_order_chart'));
+    chart3.draw(data3, options3);
+
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+      chart.draw(data, options1)
+      chart3.draw(data3,options3);
+    });
+
   }
-
-
-
 </script>
 
 <div class="container" style="margin-top:65px;">
-  <ul class="nav nav-pills nav-justified">
-    <li class="active"><a href="#current_snap" data-toggle="tab">Performance Snapshot - <%= @sro_month %></a></li>
+  <ul class="nav nav-pills nav-justified" id="test">
+    <li class="active"><a href="#current_snap" data-toggle="tab", id="snapTab">Performance Snapshot - <%= @sro_month %></a></li>
     <li><a href="#sro_summary" data-toggle="tab" id="sroTab">SRO Summary</a></li>
     <li><a href="#unconfirmed_overview" data-toggle="tab" id="unconfirmedTab">Unconfirmed Overview</a></li>
   </ul>
@@ -123,12 +122,12 @@
                 <td><%= user_stat["t_edi_ord"] + user_stat["t_scn_ord"] + user_stat["t_man_ord"] %></td>
                 <td><%= user_stat["t_man_ord"] %></td>
                 <td><%= user_stat["t_edi_ord"] + user_stat["t_scn_ord"] %></td>
-                      <td class="text-center"><%= user_stat["order_percent"] %></td>
+                <td class="text-center"><%= user_stat["order_percent"] %></td>
                 <td><%= user_stat["t_edi_line"] + user_stat["t_scn_line"] + user_stat["t_man_line"] %></td>
                 <td><%= user_stat["t_man_line"] %></td>
                 <td><%= user_stat["t_edi_line"] + user_stat["t_scn_line"] %></td>
                 <td class="text-center"><%= user_stat["line_percent"] %></td>
-                <td class="text-center"><%= user_stat["t_cust"] %></td>
+                <td class="text-center"><%= user_stat["t_custcount"] %></td>
                 <td><%= user_stat["t_edi_sro"] + user_stat["t_scn_sro"] + user_stat["t_man_sro"] %></td>
                 <td><%= Date.parse(user_stat["t_month"]).strftime("%b '%y") unless user_stat["t_month"].nil? %></td>
                 <% if  user_stat["export"] == false %>
@@ -192,6 +191,7 @@
     </div>
 
     <div class="tab-pane fade" id="unconfirmed_overview">
+
       <div id="unconfirmed_order_chart" style="height:350px;"></div>
       <table class="table table-condensed">
         <thead>
@@ -202,18 +202,23 @@
             <th>Wednesday</th>
             <th>Thursday</th>
             <th>Friday</th>
+            <th>Saturday</th>
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>bbeasley</td>
-            <td>2</td>
-            <td>11</td>
-            <td>1</td>
-            <td>5</td>
-            <td>0</td>
-          </tr>
+          <% @user_unconfirmed.each do |key, values| %>
+            <tr>
+              <td><%= key %></td>
+              <td><%=values["Monday"] %></td>
+              <td><%=values["Tuesday"] %></td>
+              <td><%=values["Wednesday"] %></td>
+              <td><%=values["Thursday"] %></td>
+              <td><%=values["Friday"] %></td>
+              <td><%=values["Saturday"] %></td>
+            </tr>
+          <% end %>
         </tbody>
+      </table>
     </div>
   </div>
 </div>

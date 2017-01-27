@@ -15,8 +15,8 @@ class Sros::OrderEntriesController < ApplicationController
 	  @manual_lines = ['Manual Lines']
 	  @user_exceptions = ['djorgens', 'mdavis', 'hmeitl', 'hbenson']
 
-	  @start_date = params[:start_date].blank? ? (Date.today.beginning_of_week - 1.week).strftime("%D") : params[:start_date]
-	  @end_date = params[:end_date].blank? ? (Date.today.end_of_week - 1.week).strftime("%D") : params[:end_date]
+	  @start_date = params[:start_date].blank? ? (Date.today.beginning_of_week).strftime("%D") : params[:start_date]
+	  @end_date = params[:end_date].blank? ? (Date.today.end_of_week).strftime("%D") : params[:end_date]
     @total_edi_orders = 0
 	  @total_manual_orders = 0
 	  @total_scn_orders = 0
@@ -35,6 +35,11 @@ class Sros::OrderEntriesController < ApplicationController
 	  @user_stats = json_response["userstats"]
 	  @sro_summary = json_response["sros"]
 	  @sro_type_by_month = json_response["srotype"]
+	  @user_unconfirmed = json_response["unconfirmed"]
+
+	  @user_unconfirmed = Sro.group_unconfirmed(json_response["unconfirmed"])
+	  @user_unconfirmed_chart_data = @user_unconfirmed[1]
+	  @user_unconfirmed = @user_unconfirmed[0]
     
     #This cycles the returned JSON data from QAD and builds an Array for Google Chart Visualization for the Summary Data
 	  @sro_summary.each do |summary|
@@ -100,7 +105,7 @@ class Sros::OrderEntriesController < ApplicationController
 		    @total_edi_sros += stats["t_edi_sro"]
 		    @total_scn_sros += stats["t_scn_sro"]
 	 	    @total_manual_sros += stats["t_man_sro"]
-	 	    @total_customers += stats["t_cust"]
+	 	    @total_customers += stats["t_custcount"]
 	 	  end
 	  end
     @user_stats << {"t_userid":"Total", "t_edi_sro": @total_edi_sros, "t_scn_sro": @total_scn_sros, "t_man_sro": @total_manual_sros,"t_edi_ord": @total_edi_orders, "t_scn_ord":@total_scn_orders, "t_man_ord":@total_manual_orders, "t_edi_line":@total_edi_lines, "t_scn_line":@total_scn_lines, "t_man_line":@total_manual_lines, "order_percent":"100%", "line_percent":"100%", "t_cust": @total_customers, "export": false}.stringify_keys	  

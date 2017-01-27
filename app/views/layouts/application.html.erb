@@ -8,10 +8,11 @@
     <%= javascript_include_tag 'application' %>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<!--     <link rel="stylesheet" href="/resources/demos/style.css"> -->
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-1.12.4.js"></script> -->
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript">
     
+    </script>
   </head>
 
   <body>
@@ -34,7 +35,7 @@
                         <div class="form-group" style="margin-top:8px;">
                             <% if current_page?(controller: 'alls', action: 'index') || current_page?('/') %>
                                 <div class="form-group">
-                                    <li><%= select(:sro_criteria, :criteria_id, @criteria.map {|search| search.criteria },{prompt: "-- Select Search Criteria --", }, {class: 'form-control text-center', id: 'Criteria'}) %></li>
+                                    <li><%= select(:sro_criteria, :criteria_id, @criteria.map {|search| search.criteria },{}, {class: 'form-control text-center', id: 'Criteria'}) %></li>
                                 </div>
                                  <div class="form-group">
                                     <li><input type="text" class="form-control datepicker" id="start_date" placeholder="Start Date..." style="text-align:center;"></li>
