@@ -8,8 +8,51 @@ class Sro
     value.sort_by {|key, value| [value[:total], key]}
   end
 
+  def self.build_data_for_google_pies(data, chart, type="by_keys")
+    return_data = [["Key", "value"]]
+    cycle_count = 0 
+    
+    if type == "by_keys"
+      data.each do |key, value| 
+        case chart
+        when "responsibility"
+          value["Total"].nil? ? 0 : return_data << [key, value["Total"]["Total"].abs.round]
+        when "failure_code"
+          value["Total"].nil? ? 0 : return_data << [key, value["Total"].abs.round] unless key == "Total"
+        when "customer"
+          value["Total"].nil? ? 0 : return_data << [key, value["Total"].abs.round]
+        end
+      end
+    elsif type == "by_grand_total"
+      case chart
+      when "responsibility"
+        data["Grand Total"]["Grand Total"].each do |key, value|
+            unless cycle_count == 0 || key.downcase == "total"
+              return_data << [key, value.round]
+            end
+          cycle_count += 1
+        end
+      when "failure_code"
+        data["Total"].each do |key, value|
+          unless cycle_count == 0 || key.downcase == "total"
+            return_data << [key, value.round]
+          end
+          cycle_count += 1
+        end
+      when "customer"
+        data["Grand Total"].each do |key, value|
+          unless cycle_count == 0 || key.downcase == "total"
+            return_data << [key, value.round]
+          end
+          cycle_count += 1
+        end
+      end
+    end
+    return_data
+  end
+
   def self.build_by_responsibility(sros, sro_by_responsibility)
-     if sro_by_responsibility.values[0].keys.include?(sros["sro-failure1"])
+    if sro_by_responsibility.values[0].keys.include?(sros["sro-failure1"])
       if sro_by_responsibility.values[0][sros["sro-failure1"]].empty?
         sro_by_responsibility.values[0][sros["sro-failure1"]] = self.create_by_responsibility(sros["sro-desc"])
       else
@@ -90,6 +133,22 @@ class Sro
     sro_by_site_item[sros["xxsro-so-site"]]["Total"][:total] += sros["sro-line-total"]
     sro_by_site_item["Total"]["Total"][:total] += sros["sro-line-total"]
     sro_by_site_item
+  end
+
+  def self.build_by_failure_code(sros, sro_by_failure_code)
+    site = sros["xxsro-so-site"]
+
+    if sro_by_failure_code.keys.include?(sros["sro-failure1"])
+      #add to toals
+      sro_by_failure_code[sros["sro-failure1"]][site] += sros["sro-line-total"]
+    else
+      sro_by_failure_code[sros["sro-failure1"]] = {reason: sros["sro-desc"], "1000" => 0, "2000" => 0, "3000" => 0, "4300" => 0, "5000" => 0, "9000" => 0, "Total" => 0}
+      sro_by_failure_code[sros["sro-failure1"]][site] = sros["sro-line-total"]
+    end
+    sro_by_failure_code[sros["sro-failure1"]]["Total"] += sros["sro-line-total"]
+    sro_by_failure_code["Total"][site] += sros["sro-line-total"]
+    sro_by_failure_code["Total"]["Total"] += sros["sro-line-total"]
+    sro_by_failure_code
   end
 
   def self.add(total, number)
@@ -236,6 +295,7 @@ class Sro
     @totals_by_site["5000"] += hash_by_site["5000"]
     @totals_by_site["9000"] += hash_by_site["9000"]
     @totals_by_site["Total"] += hash_by_site["Total"]
+    @totals_by_site
   end
 
   def self.group_unconfirmed(unconf_ords)

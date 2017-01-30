@@ -1,8 +1,78 @@
+<script type="text/javascript">
 
+  google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawVisualization);
+
+  function drawVisualization(){
+    var options1 = {
+      pieHole: 0.4,
+      title: "Totals By Responsibility"
+    };
+
+    var data1 = google.visualization.arrayToDataTable(<%= raw @sro_responsibiilty_pie %>);
+    var chart1 = new google.visualization.PieChart(document.getElementById('responsibility_pie'));
+    chart1.draw(data1, options1);
+
+    var options2 = {
+      pieHole: 0.4,
+      title: "Totals By Site"
+    };
+    var data2 = google.visualization.arrayToDataTable(<%= raw @sro_responsibility_sites_pie %>);
+    var chart2 = new google.visualization.PieChart(document.getElementById('responsibility_site_pie'));
+    chart2.draw(data2, options2);
+
+    var options3 = {
+      pieHole: 0.4,
+      title: "Totals By Customer"
+    };
+    var data3 = google.visualization.arrayToDataTable(<%= raw @sro_by_customer_pie %>);
+    var chart3 = new google.visualization.PieChart(document.getElementById('customer_pie'));
+    chart3.draw(data3, options3);
+
+    var options4 = {
+      pieHole: 0.4,
+      title: "Totals By Site"
+    };
+    var data4 = google.visualization.arrayToDataTable(<%= raw @sro_by_customer_sites_pie %>);
+    var chart4 = new google.visualization.PieChart(document.getElementById('customer_site_pie'));
+    chart4.draw(data4, options4);
+
+    var options5 = {
+      pieHole: 0.4,
+      title: "Totals By Failure Code"
+    };
+    var data5 = google.visualization.arrayToDataTable(<%= raw @sro_by_failure_code_pie %>);
+    var chart5 = new google.visualization.PieChart(document.getElementById('failure_code_pie'));
+    chart5.draw(data5, options5);
+
+    var options6 = {
+      pieHole: 0.4,
+      title: "Totals By Site"
+    };
+
+    var data6 = google.visualization.arrayToDataTable(<%= raw @sro_by_failure_code_sites_pie %>);
+    var chart6 = new google.visualization.PieChart(document.getElementById('failure_code_site_pie'));
+    chart6.draw(data6, options6);
+
+    $('select#Criteria').on('change', function (e) {
+      chart1.draw(data1, options1);
+      chart2.draw(data2, options2);
+      chart3.draw(data3,options3);
+      chart4.draw(data4,options4);
+      chart5.draw(data5, options5);
+      chart6.draw(data6, options6);
+    });
+  }
+
+</script>
 <div style="margin-top:100px;">
 </div>
 <div class="container">
   <div id="ByResponsibility">
+    <div class="row">
+      <div class="col-md-6"><div id="responsibility_pie" style="height: 350px;"></div></div>
+      <div class="col-md-6"><div id="responsibility_site_pie" style="height: 350px;"></div></div>
+    </div>
     <table class="table table-striped">
       <thead>
         <tr>
@@ -69,7 +139,10 @@
     </table>
   </div>
   <div id="ByCustomer" style="">
-    <%#= customer %>
+    <div class="row">
+      <div class="col-md-6"><div id="customer_pie" style="height: 350px;"></div></div>
+      <div class="col-md-6"><div id="customer_site_pie" style="height: 350px;"></div></div>
+    </div>
     <table class="table table-striped">
       <thead>
         <tr>
@@ -85,16 +158,18 @@
       </thead>
       <tbody>
         <% @sro_by_customer.each do |key, value| %>
-          <tr>
-            <td><%= key %></td>
-            <td style="width:100px;text-align: center;"><%= number_to_currency(value["1000"]) %></td>
-            <td style="width:100px;text-align: center;"><%= number_to_currency(value["2000"]) %></td>
-            <td style="width:100px;text-align: center;"><%= number_to_currency(value["3000"]) %></td>
-            <td style="width:100px;"><%= number_to_currency(value["4300"]) %></td>
-            <td style="width:100px;"><%= number_to_currency(value["5000"]) %></td>
-            <td style="width:100px;text-align: center;"><%= number_to_currency(value["9000"]) %></td>
-            <td><%= number_to_currency(value["Total"]) %></td>
-          </tr>
+          <% unless key == "Grand Total" %>
+            <tr>
+              <td><%= key %></td>
+              <td style="width:100px;text-align: center;"><%= number_to_currency(value["1000"]) %></td>
+              <td style="width:100px;text-align: center;"><%= number_to_currency(value["2000"]) %></td>
+              <td style="width:100px;text-align: center;"><%= number_to_currency(value["3000"]) %></td>
+              <td style="width:100px;"><%= number_to_currency(value["4300"]) %></td>
+              <td style="width:100px;"><%= number_to_currency(value["5000"]) %></td>
+              <td style="width:100px;text-align: center;"><%= number_to_currency(value["9000"]) %></td>
+              <td><%= number_to_currency(value["Total"]) %></td>
+            </tr>
+          <% end %>
         <% end %>
       </tbody>
     </table>
@@ -215,6 +290,41 @@
     </table>
   </div>
   <div id="ByFailureCode">
+  <div class="row">
+      <div class="col-md-6"><div id="failure_code_pie" style="height: 350px;"></div></div>
+      <div class="col-md-6"><div id="failure_code_site_pie" style="height: 350px;"></div></div>
+    </div>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Failure Code</th>
+          <th style="width:500px;">Reason</th>
+          <th>1000</th>
+          <th>2000</th>
+          <th>3000</th>
+          <th>4300</th>
+          <th>5000</th>
+          <th>9000</th>
+          <th class="text-right">Total</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <% @sro_by_failure_code.each do |key, value| %>
+          <tr>
+            <td><%= key %></td>
+            <td><%= value[:reason] %></td>
+            <td><%= number_to_currency(value["1000"])%></td>
+            <td><%= number_to_currency(value["2000"])%></td>
+            <td><%= number_to_currency(value["3000"])%></td>
+            <td><%= number_to_currency(value["4300"])%></td>
+            <td><%= number_to_currency(value["5000"])%></td>
+            <td><%= number_to_currency(value["9000"])%></td>
+            <td class="text-right"><%= number_to_currency(value["Total"]) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
   </div>
   <div id="BySiteReasonPeriod">
   </div>

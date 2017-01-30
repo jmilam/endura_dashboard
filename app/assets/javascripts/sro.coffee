@@ -9,8 +9,8 @@ $(document).on 'ready', ->
     '#BySiteCustomer'
     '#BySiteReason'
     '#BySiteItem'
-    'ByFailureCode'
-    'BySiteReasonPeriod'
+    '#ByFailureCode'
+    '#BySiteReasonPeriod'
   ]
 
   id = ''
