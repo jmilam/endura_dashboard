@@ -15,8 +15,8 @@ class Sros::OrderEntriesController < ApplicationController
 	  @manual_lines = ['Manual Lines']
 	  @user_exceptions = ['djorgens', 'mdavis', 'hmeitl', 'hbenson']
 
-	  @start_date = params[:start_date].blank? ? (Date.today.beginning_of_week).strftime("%D") : params[:start_date]
-	  @end_date = params[:end_date].blank? ? (Date.today.end_of_week).strftime("%D") : params[:end_date]
+	  @start_date = params[:start_date].blank? ? (Date.today.beginning_of_week - 1.week).strftime("%D") : params[:start_date]
+	  @end_date = params[:end_date].blank? ? (Date.today.end_of_week - 1.week).strftime("%D") : params[:end_date]
     @total_edi_orders = 0
 	  @total_manual_orders = 0
 	  @total_scn_orders = 0
