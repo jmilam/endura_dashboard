@@ -36,7 +36,11 @@
           datatype: 'json',
           data: {emp_report_card},
           success: function (data) {
-              alert("Successful Export. File will be moved to the Z drive")
+              if (data["success"] == true){
+                alert("Email is on it's way");
+              } else {
+                alert("There was an error when exporting. Please try again");
+              }
           }
           
       });

@@ -20,7 +20,7 @@ class Sros::AllsController < ApplicationController
     end
 
     #Pulls Data from QAD through API call.
-    uri = URI(self.api_url + "xxapioesrodashboard.p?start=#{@start_date}&end=#{@end_date}&srodetailfrom=#{@sro_start}&srodetailto=#{@sro_end}")
+    uri = URI(self.api_url + "/sro/order_entry?start=#{@start_date}&end=#{@end_date}")
     response = Net::HTTP.get(uri)
 
     #Cycles through returned data and builds Hash of totals to display
@@ -50,7 +50,7 @@ class Sros::AllsController < ApplicationController
     @sro_by_customer = @sro_by_customer.sort_by {|key, value| key}
 
     @sro_by_failure_code_pie = Sro.build_data_for_google_pies(@sro_by_failure_code, "failure_code")
-    p @sro_by_failure_code_sites_pie = Sro.build_data_for_google_pies(@sro_by_failure_code, "failure_code", "by_grand_total")
+    @sro_by_failure_code_sites_pie = Sro.build_data_for_google_pies(@sro_by_failure_code, "failure_code", "by_grand_total")
     @sro_by_failure_code = @sro_by_failure_code.sort_by {|key, value| value["Total"]}
   end
 end

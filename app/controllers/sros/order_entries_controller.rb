@@ -29,7 +29,7 @@ class Sros::OrderEntriesController < ApplicationController
 	  @total_customers = 0
 
 	  #URI call to QAD API to receive JSON data
-	  uri = URI(self.api_url + "xxapioesrodashboard.p?start=#{@start_date}&end=#{@end_date}&srodetailfrom=#{@start_date}&srodetailto=#{@end_date}")
+	  uri = URI(self.api_url + "/sro/order_entry?start=#{@start_date}&end=#{@end_date}")
 	  response = Net::HTTP.get(uri)
 	  json_response =  JSON.parse(response)
 	  @user_stats = json_response["userstats"]
@@ -115,6 +115,8 @@ class Sros::OrderEntriesController < ApplicationController
 	  @performance_data << @manual_orders
 	  @performance_data << @auto_lines
 	  @performance_data << @manual_lines
+
+	  @performance_data
 
 	  @sro_chart_data = Hash.new
 	  @year_overview = [["Month", "CR", "DF", "RT"]]
