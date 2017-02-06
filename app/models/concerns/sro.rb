@@ -21,6 +21,10 @@ class Sro
           value["Total"].nil? ? 0 : return_data << [key, value["Total"].abs.round] unless key == "Total"
         when "customer"
           value["Total"].nil? ? 0 : return_data << [key, value["Total"].abs.round]
+        when "site_customer", "site_reason", "site_item"
+          unless key.downcase == "total"
+            return_data << [key, value[:total].abs.round]
+          end
         end
       end
     elsif type == "by_grand_total"
@@ -49,6 +53,44 @@ class Sro
       end
     end
     return_data
+  end
+
+  def self.build_data_for_google_combo(data)
+    return_data = [['Site'], ['1000'], ['2000'], ['3000'],['4300'], ['5000'], ['9000']]
+
+    data.each do |key, value|
+      value.keys.each do |customer|
+        unless customer.downcase == "total"
+          return_data[0] << customer
+        end
+      end
+    end
+
+    return_data[1..return_data.count-1].each {|data_array| data_array.fill(0,1,return_data[0].count - 1)}
+
+    data.each do |key,value|
+      value.keys.each do |customer|
+        unless customer.downcase == "total"
+          array_loc = return_data[0].index(customer)
+          case key
+          when '1000'
+            return_data[1][array_loc] = value[customer][:total]
+          when '2000'
+            return_data[2][array_loc] = value[customer][:total]
+          when '3000'
+            return_data[3][array_loc] = value[customer][:total]
+          when '4300'
+            return_data[4][array_loc] = value[customer][:total]
+          when '5000'
+            return_data[5][array_loc] = value[customer][:total]
+          when '9000'
+            return_data[6][array_loc] = value[customer][:total]
+          end
+        end
+      end
+    end
+
+    return_data 
   end
 
   def self.build_by_responsibility(sros, sro_by_responsibility)
@@ -274,8 +316,9 @@ class Sro
         when "9000"
           grand_total["9000"] += total
         end
-
-        grand_total["Total"] += total unless total.class == Array
+        unless site.downcase == "total"
+          grand_total["Total"] += total unless total.class == Array
+        end
       end
     end
     self.total_all_data_by_site(grand_total)

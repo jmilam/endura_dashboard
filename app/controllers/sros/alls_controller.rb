@@ -2,6 +2,9 @@ class Sros::AllsController < ApplicationController
   def index
     @sro_by_responsibility = Hash.new
     @sro_by_customer = Hash.new
+    @sro_by_site_customer_pie = Hash.new
+    @sro_by_site_reason_pie = Hash.new
+    @sro_by_site_item_pie = Hash.new
     @sro_by_site_customer = {"1000" => {"Total" => {failure_code: "", total: 0.00}}, "2000" => {"Total" => {failure_code: "", total: 0.00}}, "3000" => {"Total" => {failure_code: "", total: 0.00}}, "4300" => {"Total" => {failure_code: "", total: 0.00}}, "5000" => {"Total" => {failure_code: "", total: 0.00}}, "9000" => {"Total" => {failure_code: "", total: 0.00}}, "Total" => {"Total" => {failure_code: "", total: 0.00}}}
     @sro_by_site_reason= {"1000" => {"Total" => {failure_code: "", total: 0.00}}, "2000" => {"Total" => {failure_code: "", total: 0.00}}, "3000" => {"Total" => {failure_code: "", total: 0.00}}, "4300" => {"Total" => {failure_code: "", total: 0.00}}, "5000" => {"Total" => {failure_code: "", total: 0.00}}, "9000" => {"Total" => {failure_code: "", total: 0.00}}, "Total" => {"Total" => {failure_code: "", total: 0.00}}}
     @sro_by_site_item = {"1000" => {"Total" => {failure_code: "", total: 0.00}}, "2000" => {"Total" => {failure_code: "", total: 0.00}}, "3000" => {"Total" => {failure_code: "", total: 0.00}}, "4300" => {"Total" => {failure_code: "", total: 0.00}}, "5000" => {"Total" => {failure_code: "", total: 0.00}}, "9000" => {"Total" => {failure_code: "", total: 0.00}}, "Total" => {"Total" => {failure_code: "", total: 0.00}}}
@@ -48,6 +51,18 @@ class Sros::AllsController < ApplicationController
     @sro_by_customer_pie = Sro.build_data_for_google_pies(@sro_by_customer, "customer")
     @sro_by_customer_sites_pie = Sro.build_data_for_google_pies(@sro_by_customer, "customer", "by_grand_total")
     @sro_by_customer = @sro_by_customer.sort_by {|key, value| key}
+
+    @sro_by_site_customer.each do |site, data| 
+      @sro_by_site_customer_pie[site] = Sro.build_data_for_google_pies(data, "site_customer")
+    end
+
+    @sro_by_site_reason.each do |site, data|
+      @sro_by_site_reason_pie[site] = Sro.build_data_for_google_pies(data, "site_reason")
+    end
+
+    @sro_by_site_item.each do |site, data|
+      @sro_by_site_item_pie[site] = Sro.build_data_for_google_pies(data, "site_item")
+    end
 
     @sro_by_failure_code_pie = Sro.build_data_for_google_pies(@sro_by_failure_code, "failure_code")
     @sro_by_failure_code_sites_pie = Sro.build_data_for_google_pies(@sro_by_failure_code, "failure_code", "by_grand_total")

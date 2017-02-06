@@ -54,13 +54,103 @@
     var chart6 = new google.visualization.PieChart(document.getElementById('failure_code_site_pie'));
     chart6.draw(data6, options6);
 
+    var pie_options = {
+      pieHole: 0.4
+    };
+
+    var data7 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_customer_pie["1000"] %>);
+    var chart7 = new google.visualization.PieChart(document.getElementById('site_customer_pie_1'));
+    chart7.draw(data7, pie_options);
+
+    var data8 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_customer_pie["2000"] %>);
+    var chart8 = new google.visualization.PieChart(document.getElementById('site_customer_pie_2'));
+    chart8.draw(data8, pie_options);
+
+    var data9 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_customer_pie["3000"] %>);
+    var chart9 = new google.visualization.PieChart(document.getElementById('site_customer_pie_3'));
+    chart9.draw(data9, pie_options);
+
+    var data10 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_customer_pie["4300"] %>);
+    var chart10 = new google.visualization.PieChart(document.getElementById('site_customer_pie_4'));
+    chart10.draw(data10, pie_options);
+
+    var data11 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_customer_pie["5000"] %>);
+    var chart11 = new google.visualization.PieChart(document.getElementById('site_customer_pie_5'));
+    chart11.draw(data11, pie_options);
+
+    var data12 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_customer_pie["9000"] %>);
+    var chart12 = new google.visualization.PieChart(document.getElementById('site_customer_pie_6'));
+    chart12.draw(data12, pie_options);
+
+    var data13 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_reason_pie["1000"] %>);
+    var chart13 = new google.visualization.PieChart(document.getElementById('site_reason_pie_1'));
+    chart13.draw(data13, pie_options);
+
+    var data14 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_reason_pie["2000"] %>);
+    var chart14 = new google.visualization.PieChart(document.getElementById('site_reason_pie_2'));
+    chart14.draw(data14, pie_options);
+
+    var data15 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_reason_pie["3000"] %>);
+    var chart15 = new google.visualization.PieChart(document.getElementById('site_reason_pie_3'));
+    chart15.draw(data15, pie_options);
+
+    var data16 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_reason_pie["4300"] %>);
+    var chart16 = new google.visualization.PieChart(document.getElementById('site_reason_pie_4'));
+    chart16.draw(data16, pie_options);
+
+    var data17 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_reason_pie["5000"] %>);
+    var chart17 = new google.visualization.PieChart(document.getElementById('site_reason_pie_5'));
+    chart17.draw(data17, pie_options);
+
+    var data18 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_reason_pie["9000"] %>);
+    var chart18 = new google.visualization.PieChart(document.getElementById('site_reason_pie_6'));
+    chart18.draw(data18, pie_options);
+
+    var data19 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_item_pie["1000"] %>);
+    var chart19 = new google.visualization.PieChart(document.getElementById('site_item_pie_1'));
+    chart19.draw(data19, pie_options);
+
+    var data20 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_item_pie["2000"] %>);
+    var chart20 = new google.visualization.PieChart(document.getElementById('site_item_pie_2'));
+    chart20.draw(data20, pie_options);
+
+    var data21 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_item_pie["3000"] %>);
+    var chart21 = new google.visualization.PieChart(document.getElementById('site_item_pie_3'));
+    chart21.draw(data21, pie_options);
+
+    var data22 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_item_pie["4300"] %>);
+    var chart22 = new google.visualization.PieChart(document.getElementById('site_item_pie_4'));
+    chart22.draw(data22, pie_options);
+
+    var data23 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_item_pie["5000"] %>);
+    var chart23 = new google.visualization.PieChart(document.getElementById('site_item_pie_5'));
+    chart23.draw(data23, pie_options);
+
+    var data24 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_item_pie["9000"] %>);
+    var chart24 = new google.visualization.PieChart(document.getElementById('site_item_pie_6'));
+    chart24.draw(data24, pie_options);
+
     $('select#Criteria').on('change', function (e) {
       chart1.draw(data1, options1);
       chart2.draw(data2, options2);
-      chart3.draw(data3,options3);
-      chart4.draw(data4,options4);
+      chart3.draw(data3, options3);
+      chart4.draw(data4, options4);
       chart5.draw(data5, options5);
       chart6.draw(data6, options6);
+      chart7.draw(data7, pie_options);
+      chart8.draw(data8, pie_options);
+      chart9.draw(data9, pie_options);
+      chart10.draw(data10, pie_options);
+      chart11.draw(data11, pie_options);
+      chart12.draw(data12, pie_options);
+      chart13.draw(data13, pie_options);
+      chart14.draw(data14, pie_options);
+      chart15.draw(data15, pie_options);
+      chart16.draw(data16, pie_options);
+      chart17.draw(data17, pie_options);
+      chart18.draw(data18, pie_options);
+      chart19.draw(data19, pie_options);
+      chart20.draw(data20, pie_options);
     });
   }
 
@@ -73,7 +163,7 @@
       <div class="col-md-6"><div id="responsibility_pie" style="height: 350px;"></div></div>
       <div class="col-md-6"><div id="responsibility_site_pie" style="height: 350px;"></div></div>
     </div>
-    <table class="table table-striped">
+    <table class="table table">
       <thead>
         <tr>
           <th>Responsibility</th>
@@ -82,9 +172,9 @@
           <th style="width:100px;text-align: center;">1000</th>
           <th style="width:100px;text-align: center;">2000</th>
           <th style="width:100px;text-align: center">3000</th>
-          <th style="width:100px;">4300</th>
-          <th style="width:100px;">5000</th>
-          <th style="width:100px;text-align: center">9000</th>
+          <th style="width:100px;text-align: center">4300</th>
+          <th style="width:100px;text-align: center">5000</th>
+          <th style="width:100px;text-align: left">9000</th>
           <th>Total</th>
         </tr>
       </thead>
@@ -93,7 +183,7 @@
           <tr>
             <td><%= key %></td>
             <td style="padding-left: 0;padding-right:0;">
-              <table style="width:100%">
+              <table class="table table-striped" style="width:100%">
                 <% codes.keys.each do |code| %>
                   <% unless codes[code].empty? %>
                     <tr class="inside_table">
@@ -104,7 +194,7 @@
               </table>
             </td>
             <td style="padding-left: 0;padding-right:0;">
-              <table  style="width:100%">            
+              <table  class="table table-striped" style="width:100%">            
                 <% codes.each do |key, value| %>
                   <% unless value.class == Array %>
                     <tr class="inside_table">
@@ -117,7 +207,7 @@
               </table>
             </td>
             <td colspan="7" style="padding-left:0;padding-right:0;">
-              <table style="width:100%">
+              <table class="table table-striped" style="width:100%">
                 <% codes.each do |key, value|%>
                   <% unless value.class == Array %>
                     <tr class="inside_table" style="border-right:none;">
@@ -175,7 +265,54 @@
     </table>
   </div>
   <div id="BySiteCustomer" style="">
-    <%#= customer %>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="row">
+          <div class="text-center" style="color:grey;">1000</div>
+        </div>
+        <div class="row">
+          <div id="site_customer_pie_1" style="height: 200px;"></div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row">
+          <div class="text-center" style="color:grey;">2000</div>
+        </div>
+        <div id="site_customer_pie_2" style="height: 200px;"></div>
+      </div>
+      <div class="col-md-4">
+        <div class="row">
+          <div class="text-center" style="color:grey;">3000</div>
+        </div>
+        <div class="row">
+          <div id="site_customer_pie_3" style="height: 200px;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="row">
+          <div class="text-center" style="color:grey;">4300</div>
+        </div>
+        <div class="row">
+          <div id="site_customer_pie_4" style="height: 200px;"></div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row">
+          <div class="text-center" style="color:grey;">5000</div>
+        </div>
+        <div id="site_customer_pie_5" style="height: 200px;"></div>
+      </div>
+      <div class="col-md-4">
+        <div class="row">
+          <div class="text-center" style="color:grey;">9000</div>
+        </div>
+        <div class="row">
+          <div id="site_customer_pie_6" style="height: 200px;"></div>
+        </div>
+      </div>
+    </div>
     <table class="table table-striped">
       <thead>
         <tr>
@@ -217,7 +354,54 @@
     </table>
   </div>
   <div id="BySiteReason" style="">
-    <%#= customer %>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="row">
+          <div class="text-center" style="color:grey;">1000</div>
+        </div>
+        <div class="row">
+          <div id="site_reason_pie_1" style="height: 200px;"></div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row">
+          <div class="text-center" style="color:grey;">2000</div>
+        </div>
+        <div id="site_reason_pie_2" style="height: 200px;"></div>
+      </div>
+      <div class="col-md-4">
+        <div class="row">
+          <div class="text-center" style="color:grey;">3000</div>
+        </div>
+        <div class="row">
+          <div id="site_reason_pie_3" style="height: 200px;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="row">
+          <div class="text-center" style="color:grey;">4300</div>
+        </div>
+        <div class="row">
+          <div id="site_reason_pie_4" style="height: 200px;"></div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row">
+          <div class="text-center" style="color:grey;">5000</div>
+        </div>
+        <div id="site_reason_pie_5" style="height: 200px;"></div>
+      </div>
+      <div class="col-md-4">
+        <div class="row">
+          <div class="text-center" style="color:grey;">9000</div>
+        </div>
+        <div class="row">
+          <div id="site_reason_pie_6" style="height: 200px;"></div>
+        </div>
+      </div>
+    </div>
     <table class="table table-striped">
       <thead>
         <tr>
@@ -259,6 +443,54 @@
     </table>
   </div>
   <div id="BySiteItem">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="row">
+          <div class="text-center" style="color:grey;">1000</div>
+        </div>
+        <div class="row">
+          <div id="site_item_pie_1" style="height: 200px;"></div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row">
+          <div class="text-center" style="color:grey;">2000</div>
+        </div>
+        <div id="site_item_pie_2" style="height: 200px;"></div>
+      </div>
+      <div class="col-md-4">
+        <div class="row">
+          <div class="text-center" style="color:grey;">3000</div>
+        </div>
+        <div class="row">
+          <div id="site_item_pie_3" style="height: 200px;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="row">
+          <div class="text-center" style="color:grey;">4300</div>
+        </div>
+        <div class="row">
+          <div id="site_item_pie_4" style="height: 200px;"></div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="row">
+          <div class="text-center" style="color:grey;">5000</div>
+        </div>
+        <div id="site_item_pie_5" style="height: 200px;"></div>
+      </div>
+      <div class="col-md-4">
+        <div class="row">
+          <div class="text-center" style="color:grey;">9000</div>
+        </div>
+        <div class="row">
+          <div id="site_item_pie_6" style="height: 200px;"></div>
+        </div>
+      </div>
+    </div>
     <table class="table table-striped">
       <thead>
         <tr>
@@ -290,7 +522,7 @@
     </table>
   </div>
   <div id="ByFailureCode">
-  <div class="row">
+    <div class="row">
       <div class="col-md-6"><div id="failure_code_pie" style="height: 350px;"></div></div>
       <div class="col-md-6"><div id="failure_code_site_pie" style="height: 350px;"></div></div>
     </div>

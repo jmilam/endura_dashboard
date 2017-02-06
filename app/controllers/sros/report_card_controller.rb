@@ -23,6 +23,7 @@ class Sros::ReportCardController < ApplicationController
 
 	  req_params = {from: "jmilam@enduraproducts.com", to: "jmilam@enduraproducts.com", subject: "OE Report Card", chart_data: {data: Formatter.from_oe_report_card(params[:emp_report_card])}}
 		uri = URI(self.api_url + "/email/order_entry/report_card")
+
 	  File.open(file_loc) do |xls_file|
 	  	req_params[:file] = UploadIO.new(xls_file, "application/vnd.ms-excel", "test.xls")
 		  req = Net::HTTP::Post::Multipart.new uri.path, req_params
