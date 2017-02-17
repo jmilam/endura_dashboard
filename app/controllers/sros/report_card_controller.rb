@@ -21,7 +21,7 @@ class Sros::ReportCardController < ApplicationController
 		file_loc = "public/report cards/oe/OE-Emp-Report-Card-#{Date.today.strftime("%m-%d-%Y")}.xls"
 		book.write file_loc
 
-	  req_params = {from: "jmilam@enduraproducts.com", to: "jmilam@enduraproducts.com", subject: "OE Report Card", chart_data: {data: Formatter.from_oe_report_card(params[:emp_report_card])}}
+	  req_params = {from: "oe_sro_dashboard@enduraproducts.com", to: "djorgenson@enduraproducts.com", subject: "OE Report Card", chart_data: {data: Formatter.from_oe_report_card(params[:emp_report_card])}}
 		uri = URI(self.api_url + "/email/order_entry/report_card")
 
 	  File.open(file_loc) do |xls_file|
