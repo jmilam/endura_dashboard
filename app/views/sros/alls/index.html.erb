@@ -58,9 +58,6 @@
       pieHole: 0.4
     };
 
-    var data7 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_customer_pie["1000"] %>);
-    var chart7 = new google.visualization.PieChart(document.getElementById('site_customer_pie_1'));
-    chart7.draw(data7, pie_options);
 
     var data8 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_customer_pie["2000"] %>);
     var chart8 = new google.visualization.PieChart(document.getElementById('site_customer_pie_2'));
@@ -82,10 +79,6 @@
     var chart12 = new google.visualization.PieChart(document.getElementById('site_customer_pie_6'));
     chart12.draw(data12, pie_options);
 
-    var data13 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_reason_pie["1000"] %>);
-    var chart13 = new google.visualization.PieChart(document.getElementById('site_reason_pie_1'));
-    chart13.draw(data13, pie_options);
-
     var data14 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_reason_pie["2000"] %>);
     var chart14 = new google.visualization.PieChart(document.getElementById('site_reason_pie_2'));
     chart14.draw(data14, pie_options);
@@ -106,9 +99,6 @@
     var chart18 = new google.visualization.PieChart(document.getElementById('site_reason_pie_6'));
     chart18.draw(data18, pie_options);
 
-    var data19 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_item_pie["1000"] %>);
-    var chart19 = new google.visualization.PieChart(document.getElementById('site_item_pie_1'));
-    chart19.draw(data19, pie_options);
 
     var data20 = google.visualization.arrayToDataTable(<%= raw @sro_by_site_item_pie["2000"] %>);
     var chart20 = new google.visualization.PieChart(document.getElementById('site_item_pie_2'));
@@ -137,19 +127,16 @@
       chart4.draw(data4, options4);
       chart5.draw(data5, options5);
       chart6.draw(data6, options6);
-      chart7.draw(data7, pie_options);
       chart8.draw(data8, pie_options);
       chart9.draw(data9, pie_options);
       chart10.draw(data10, pie_options);
       chart11.draw(data11, pie_options);
       chart12.draw(data12, pie_options);
-      chart13.draw(data13, pie_options);
       chart14.draw(data14, pie_options);
       chart15.draw(data15, pie_options);
       chart16.draw(data16, pie_options);
       chart17.draw(data17, pie_options);
       chart18.draw(data18, pie_options);
-      chart19.draw(data19, pie_options);
       chart20.draw(data20, pie_options);
     });
   }
@@ -169,7 +156,6 @@
           <th>Responsibility</th>
           <th>Failure Code</th>
           <th class="text-center">Reasons</th>
-          <th style="width:100px;text-align: center;">1000</th>
           <th style="width:100px;text-align: center;">2000</th>
           <th style="width:100px;text-align: center">3000</th>
           <th style="width:100px;text-align: center">4300</th>
@@ -211,7 +197,6 @@
                 <% codes.each do |key, value|%>
                   <% unless value.class == Array %>
                     <tr class="inside_table" style="border-right:none;">
-                      <td style="width:100px; text-align:right;"><%= number_to_currency(value["1000"]) %></td>
                       <td style="width:100px; text-align:right;"><%= number_to_currency(value["2000"]) %></td>
                       <td style="width:100px; text-align:right;"><%= number_to_currency(value["3000"]) %></td>
                       <td style="width:100px; text-align:right;"><%= number_to_currency(value["4300"]) %></td>
@@ -237,7 +222,6 @@
       <thead>
         <tr>
           <th>Customer</th>
-          <th style="width:100px;text-align: center;">1000</th>
           <th style="width:100px;text-align: center;">2000</th>
           <th style="width:100px;text-align: center">3000</th>
           <th style="width:100px;">4300</th>
@@ -251,7 +235,6 @@
           <% unless key == "Grand Total" %>
             <tr>
               <td><%= key %></td>
-              <td style="width:100px;text-align: center;"><%= number_to_currency(value["1000"]) %></td>
               <td style="width:100px;text-align: center;"><%= number_to_currency(value["2000"]) %></td>
               <td style="width:100px;text-align: center;"><%= number_to_currency(value["3000"]) %></td>
               <td style="width:100px;"><%= number_to_currency(value["4300"]) %></td>
@@ -266,15 +249,12 @@
   </div>
   <div id="BySiteCustomer" style="">
     <div class="row">
-      <div class="col-md-4">
-        <div class="row">
-          <div class="text-center" style="color:grey;">1000</div>
-        </div>
+      <!-- <div class="col-md-4">
         <div class="row">
           <div id="site_customer_pie_1" style="height: 200px;"></div>
         </div>
-      </div>
-      <div class="col-md-4">
+      </div> -->
+      <div class="col-md-4 col-md-offset-2">
         <div class="row">
           <div class="text-center" style="color:grey;">2000</div>
         </div>
@@ -355,15 +335,12 @@
   </div>
   <div id="BySiteReason" style="">
     <div class="row">
-      <div class="col-md-4">
-        <div class="row">
-          <div class="text-center" style="color:grey;">1000</div>
-        </div>
+      <!-- <div class="col-md-4">
         <div class="row">
           <div id="site_reason_pie_1" style="height: 200px;"></div>
         </div>
-      </div>
-      <div class="col-md-4">
+      </div> -->
+      <div class="col-md-4 col-md-offset-2">
         <div class="row">
           <div class="text-center" style="color:grey;">2000</div>
         </div>
@@ -444,15 +421,12 @@
   </div>
   <div id="BySiteItem">
     <div class="row">
-      <div class="col-md-4">
-        <div class="row">
-          <div class="text-center" style="color:grey;">1000</div>
-        </div>
+      <!-- <div class="col-md-4">
         <div class="row">
           <div id="site_item_pie_1" style="height: 200px;"></div>
         </div>
-      </div>
-      <div class="col-md-4">
+      </div> -->
+      <div class="col-md-4 col-md-offset-2">
         <div class="row">
           <div class="text-center" style="color:grey;">2000</div>
         </div>
@@ -531,7 +505,6 @@
         <tr>
           <th>Failure Code</th>
           <th style="width:500px;">Reason</th>
-          <th>1000</th>
           <th>2000</th>
           <th>3000</th>
           <th>4300</th>
@@ -546,7 +519,6 @@
           <tr>
             <td><%= key %></td>
             <td><%= value[:reason] %></td>
-            <td><%= number_to_currency(value["1000"])%></td>
             <td><%= number_to_currency(value["2000"])%></td>
             <td><%= number_to_currency(value["3000"])%></td>
             <td><%= number_to_currency(value["4300"])%></td>

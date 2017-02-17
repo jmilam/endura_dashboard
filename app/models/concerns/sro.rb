@@ -20,7 +20,9 @@ class Sro
         when "failure_code"
           value["Total"].nil? ? 0 : return_data << [key, value["Total"].abs.round] unless key == "Total"
         when "customer"
-          value["Total"].nil? ? 0 : return_data << [key, value["Total"].abs.round]
+          unless key == "Grand Total"
+            value["Total"].nil? ? 0 : return_data << [key, value["Total"].abs.round]
+          end
         when "site_customer", "site_reason", "site_item"
           unless key.downcase == "total"
             return_data << [key, value[:total].abs.round]
@@ -56,7 +58,7 @@ class Sro
   end
 
   def self.build_data_for_google_combo(data)
-    return_data = [['Site'], ['1000'], ['2000'], ['3000'],['4300'], ['5000'], ['9000']]
+    return_data = [['Site'], ['2000'], ['3000'],['4300'], ['5000'], ['9000']]
 
     data.each do |key, value|
       value.keys.each do |customer|
@@ -73,8 +75,6 @@ class Sro
         unless customer.downcase == "total"
           array_loc = return_data[0].index(customer)
           case key
-          when '1000'
-            return_data[1][array_loc] = value[customer][:total]
           when '2000'
             return_data[2][array_loc] = value[customer][:total]
           when '3000'
@@ -184,7 +184,7 @@ class Sro
       #add to toals
       sro_by_failure_code[sros["sro-failure1"]][site] += sros["sro-line-total"]
     else
-      sro_by_failure_code[sros["sro-failure1"]] = {reason: sros["sro-desc"], "1000" => 0, "2000" => 0, "3000" => 0, "4300" => 0, "5000" => 0, "9000" => 0, "Total" => 0}
+      sro_by_failure_code[sros["sro-failure1"]] = {reason: sros["sro-desc"], "2000" => 0, "3000" => 0, "4300" => 0, "5000" => 0, "9000" => 0, "Total" => 0}
       sro_by_failure_code[sros["sro-failure1"]][site] = sros["sro-line-total"]
     end
     sro_by_failure_code[sros["sro-failure1"]]["Total"] += sros["sro-line-total"]
@@ -254,17 +254,15 @@ class Sro
   end
 
   def self.create_by_responsibility(description)
-    {"description" => ["#{description}"], "1000" => 0.00, "2000" => 0.00, "3000" => 0.00, "4300" => 0.00, "5000" => 0.00, "9000" => 0.00, "Total" => 0.00}
+    {"description" => ["#{description}"], "2000" => 0.00, "3000" => 0.00, "4300" => 0.00, "5000" => 0.00, "9000" => 0.00, "Total" => 0.00}
   end
 
   def self.create_by_customer
-    {"1000" => 0.00, "2000" => 0.00, "3000" => 0.00, "4300" => 0.00, "5000" => 0.00, "9000" => 0.00, "Total" => 0.00}
+    {"2000" => 0.00, "3000" => 0.00, "4300" => 0.00, "5000" => 0.00, "9000" => 0.00, "Total" => 0.00}
   end
 
   def self.add_values_by_responsibility(site, failure_code, hash_by_responsibility, line_total)
     case site
-    when "1000"
-      hash_by_responsibility[failure_code][site] += line_total
     when "2000"
       hash_by_responsibility[failure_code][site] += line_total
     when "3000"
@@ -281,8 +279,6 @@ class Sro
 
   def self.add_values_by_customer(site, customer, hash_by_customer, line_total)
     case site
-    when "1000"
-      hash_by_customer[customer][site] += line_total
     when "2000"
       hash_by_customer[customer][site] += line_total
     when "3000"
@@ -299,12 +295,10 @@ class Sro
   end
 
   def self.total_all_data_by_responsibility(hash_by_responsibility)
-    grand_total = {"description" => ["-"], "1000" => 0.00, "2000" => 0.00, "3000" => 0.00, "4300" => 0.00, "5000" => 0.00, "9000" => 0.00, "Total" => 0.00}
+    grand_total = {"description" => ["-"], "2000" => 0.00, "3000" => 0.00, "4300" => 0.00, "5000" => 0.00, "9000" => 0.00, "Total" => 0.00}
     hash_by_responsibility.each do |key, value|
       value.each do |site, total|
         case site
-        when "1000"
-          grand_total["1000"] += total
         when "2000"
           grand_total["2000"] += total
         when "3000"
@@ -329,9 +323,8 @@ class Sro
 
   def self.total_all_data_by_site(hash_by_site)
     if @totals_by_site.nil?
-      @totals_by_site = {"description" => ["-"], "1000" => 0.00, "2000" => 0.00, "3000" => 0.00, "4300" => 0.00, "5000" => 0.00, "9000" => 0.00, "Total" => 0.00}
+      @totals_by_site = {"description" => ["-"], "2000" => 0.00, "3000" => 0.00, "4300" => 0.00, "5000" => 0.00, "9000" => 0.00, "Total" => 0.00}
     end
-    @totals_by_site["1000"] += hash_by_site["1000"]
     @totals_by_site["2000"] += hash_by_site["2000"]
     @totals_by_site["3000"] += hash_by_site["3000"]
     @totals_by_site["4300"] += hash_by_site["4300"]
