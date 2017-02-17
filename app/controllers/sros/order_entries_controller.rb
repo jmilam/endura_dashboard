@@ -13,7 +13,7 @@ class Sros::OrderEntriesController < ApplicationController
 	  @manual_orders = ['Manual Orders']
 	  @auto_lines = ['Auto Lines']
 	  @manual_lines = ['Manual Lines']
-	  @user_exceptions = ['djorgens', 'mdavis', 'hmeitl', 'hbenson']
+	  @user_exceptions = ['djorgens', 'mdavis', 'hmeitl', 'hbenson', 'mdraughn', 'root', 'awatson', 'tbell']
 
 	  @start_date = params[:start_date].blank? ? (Date.today.beginning_of_week).strftime("%D") : params[:start_date]
 	  @end_date = params[:end_date].blank? ? (Date.today.end_of_week).strftime("%D") : params[:end_date]
@@ -38,45 +38,47 @@ class Sros::OrderEntriesController < ApplicationController
 	  @sro_type_by_month = json_response["srotype"]
 	  @user_unconfirmed = json_response["unconfirmed"]
 
-	  @user_unconfirmed = Sro.group_unconfirmed(json_response["unconfirmed"])
+	  @user_unconfirmed = Sro.group_unconfirmed(json_response["unconfirmed"], @user_exceptions)
 	  @user_unconfirmed_chart_data = @user_unconfirmed[1]
 	  @user_unconfirmed = @user_unconfirmed[0]
     
     #This cycles the returned JSON data from QAD and builds an Array for Google Chart Visualization for the Summary Data
 	  @sro_summary.each do |summary|
-	    if @current_year == summary["sro-ent-date"].to_date.year
-	      if @sro_overview.key?(summary["sro-taken"])
-					if @sro_overview[summary["sro-taken"]].key?(summary["sro-type"]) 
-					  if @sro_overview[summary["sro-taken"]][summary["sro-type"]]["current_ytd"].nil?
-					    @sro_overview[summary["sro-taken"]][summary["sro-type"]]["current_ytd"] = summary["sro-line-total"]
-					  else 
-					    @sro_overview[summary["sro-taken"]][summary["sro-type"]]["current_ytd"] += summary["sro-line-total"]
-					  end
-					else
-					  @sro_overview[summary["sro-taken"]][summary["sro-type"]] =  {"current_ytd" => summary["sro-line-total"]}
+	  	unless @user_exceptions.include?(summary["sro-taken"].downcase)
+		    if @current_year == summary["sro-ent-date"].to_date.year
+		      if @sro_overview.key?(summary["sro-taken"])
+						if @sro_overview[summary["sro-taken"]].key?(summary["sro-type"]) 
+						  if @sro_overview[summary["sro-taken"]][summary["sro-type"]]["current_ytd"].nil?
+						    @sro_overview[summary["sro-taken"]][summary["sro-type"]]["current_ytd"] = summary["sro-line-total"]
+						  else 
+						    @sro_overview[summary["sro-taken"]][summary["sro-type"]]["current_ytd"] += summary["sro-line-total"]
+						  end
+						else
+						  @sro_overview[summary["sro-taken"]][summary["sro-type"]] =  {"current_ytd" => summary["sro-line-total"]}
+		        end
+		      else
+						@sro_overview[summary["sro-taken"]] = summary["sro-taken"]
+						if summary["sro-ent-date"].to_date.month == Date.today.month
+						  @sro_overview[summary["sro-taken"]] = {summary["sro-type"] => {"current_ytd" => summary["sro-line-total"], "current_month" => summary["sro-line-total"]}}
+						else
+						  @sro_overview[summary["sro-taken"]] = {summary["sro-type"] => {"current_ytd" => summary["sro-line-total"]}}
+						end
+		      end
+		    else
+		      if @sro_overview.key?(summary["sro-taken"]) 
+						@sro_overview[summary["sro-taken"]].key?(summary["sro-type"]) ? @sro_overview[summary["sro-taken"]][summary["sro-type"]]["previous_year"].nil? ? @sro_overview[summary["sro-taken"]][summary["sro-type"]]["previous_year"] = summary["sro-line-total"] : @sro_overview[summary["sro-taken"]][summary["sro-type"]]["previous_year"] += summary["sro-line-total"] : @sro_overview[summary["sro-taken"]] = {summary["sro-type"] => {"previous_year" => summary["sro-line-total"]}} 
+	        else
+						@sro_overview[summary["sro-taken"]] = summary["sro-taken"]
+						@sro_overview[summary["sro-taken"]] = {summary["sro-type"] => {"previous_year" => summary["sro-line-total"]}}
 	        end
-	      else
-					@sro_overview[summary["sro-taken"]] = summary["sro-taken"]
-					if summary["sro-ent-date"].to_date.month == Date.today.month
-					  @sro_overview[summary["sro-taken"]] = {summary["sro-type"] => {"current_ytd" => summary["sro-line-total"], "current_month" => summary["sro-line-total"]}}
-					else
-					  @sro_overview[summary["sro-taken"]] = {summary["sro-type"] => {"current_ytd" => summary["sro-line-total"]}}
-					end
 	      end
-	    else
-	      if @sro_overview.key?(summary["sro-taken"]) 
-					@sro_overview[summary["sro-taken"]].key?(summary["sro-type"]) ? @sro_overview[summary["sro-taken"]][summary["sro-type"]]["previous_year"].nil? ? @sro_overview[summary["sro-taken"]][summary["sro-type"]]["previous_year"] = summary["sro-line-total"] : @sro_overview[summary["sro-taken"]][summary["sro-type"]]["previous_year"] += summary["sro-line-total"] : @sro_overview[summary["sro-taken"]] = {summary["sro-type"] => {"previous_year" => summary["sro-line-total"]}} 
-        else
-					@sro_overview[summary["sro-taken"]] = summary["sro-taken"]
-					@sro_overview[summary["sro-taken"]] = {summary["sro-type"] => {"previous_year" => summary["sro-line-total"]}}
-        end
-      end
 
-	    if @sro_by_customer.keys.include?(summary["sro-name"])
-        @sro_by_customer[summary["sro-name"]] = Sro.calculate_customer_ytd(@sro_by_customer[summary["sro-name"]], summary["sro-line-total"], summary["sro-ent-date"])
-      else
-        @sro_by_customer[summary["sro-name"]] = summary["sro-line-total"]
-      end unless summary["sro-name"].empty?
+		    if @sro_by_customer.keys.include?(summary["sro-name"])
+	        @sro_by_customer[summary["sro-name"]] = Sro.calculate_customer_ytd(@sro_by_customer[summary["sro-name"]], summary["sro-line-total"], summary["sro-ent-date"])
+	      else
+	        @sro_by_customer[summary["sro-name"]] = summary["sro-line-total"]
+	      end unless summary["sro-name"].empty?
+	    end
 	  end
 
 	  @sro_by_customer = @sro_by_customer.sort_by {|key, value| value }.reverse[0..19].to_h

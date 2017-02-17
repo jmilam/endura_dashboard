@@ -73,7 +73,7 @@
         window.location.href = "http://" + window.location.host + window.location.pathname + '?start_date=' + start + '&end_date=' + end
     });
     $( function() {
-      setInterval(function(){ changeTab(); }, 300000);
+      setInterval(function(){ changeTab(); }, 120000);
 
       $('#start_date, #end_date').datepicker();
     });
@@ -84,7 +84,6 @@
         next_id = next_active.children().attr('id')
         if (next_active.length == 0) {
             $('a[data-toggle="tab"]#' + first_id).trigger('click');
-            console.log(current_active.children().attr('id'))
         } else { 
             $('a[data-toggle="tab"]#' + next_id).trigger('click');
         }

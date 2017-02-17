@@ -341,14 +341,16 @@ class Sro
     @totals_by_site
   end
 
-  def self.group_unconfirmed(unconf_ords)
+  def self.group_unconfirmed(unconf_ords, exceptions)
     group_ords = Hash.new
     @unconf_chart_data = Array.new
     users = ['Year']
 
     unconf_ords.each do |unconf|
-      users.include?(unconf['ttunuserid']) ? next : users << unconf['ttunuserid']
-      group_ords.keys.include?(unconf['ttunuserid']) ? next : group_ords["#{unconf['ttunuserid']}"] = {'Monday' => 0, 'Tuesday' => 0, 'Wednesday' => 0, 'Thursday' => 0,'Friday' => 0, 'Saturday' => 0}
+      unless exceptions.include?(unconf['ttunuserid'].downcase)
+        users.include?(unconf['ttunuserid']) ? next : users << unconf['ttunuserid']
+        group_ords.keys.include?(unconf['ttunuserid']) ? next : group_ords["#{unconf['ttunuserid']}"] = {'Monday' => 0, 'Tuesday' => 0, 'Wednesday' => 0, 'Thursday' => 0,'Friday' => 0, 'Saturday' => 0}
+      end
     end
     group_ords["Total"] = {'Monday' => 0, 'Tuesday' => 0, 'Wednesday' => 0, 'Thursday' => 0,'Friday' => 0, 'Saturday' => 0}
 
@@ -356,10 +358,12 @@ class Sro
     self.buildGroupArrays(users.count-1).each {|data| @unconf_chart_data << data}
 
     unconf_ords.each do |unconf|
-      date = unconf["ttundate"].to_date.strftime("%u")
-      self.AppendData(@unconf_chart_data, @unconf_chart_data[0].index(unconf['ttunuserid']), unconf['ttuncnt'], date)
-      group_ords[unconf['ttunuserid']][unconf["ttundate"].to_date.strftime("%A")] += unconf['ttuncnt']
-      group_ords["Total"][unconf["ttundate"].to_date.strftime("%A")] += unconf['ttuncnt']
+      unless exceptions.include?(unconf['ttunuserid'].downcase)
+        date = unconf["ttundate"].to_date.strftime("%u")
+        self.AppendData(@unconf_chart_data, @unconf_chart_data[0].index(unconf['ttunuserid']), unconf['ttuncnt'], date)
+        group_ords[unconf['ttunuserid']][unconf["ttundate"].to_date.strftime("%A")] += unconf['ttuncnt']
+        group_ords["Total"][unconf["ttundate"].to_date.strftime("%A")] += unconf['ttuncnt']
+      end
     end
 
     [group_ords, @unconf_chart_data]
