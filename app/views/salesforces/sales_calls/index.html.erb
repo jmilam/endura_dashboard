@@ -32,7 +32,7 @@
     });
 	});
 </script>
-<div style="margin-top: 100px;" class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+<div style="margin-top: 60px;" class="">
 	<% if @sales_call_data.count == 0 %>
 	<div class="jumbotron">
 		<div class="text-center">
@@ -41,10 +41,10 @@
 		</div>
 	</div>
 	<% else %>
-		<table class="table table-hover">
+		<table class="table table-hover salesforceTable">
 		  <thead>
 		  	<tr class="bg-success">
-		  	  <th colspan=15 class="text-center"><h4>Total Sales Calls: <div class="text-success"><strong><%= @sales_call_data.count %></strong></div></h4></th>
+		  	  <th colspan=15 class="text-center"><h4>Total Sales Calls: <div class="text-success"><strong><div id="totalCount"><%= @sales_call_data.count %></div></strong></div></h4></th>
 		    <tr>
 			    <!-- <th>SF Id</th> -->
 			    <th>Business Plan</th>

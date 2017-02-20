@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -32,32 +33,25 @@
                 <ul class="nav navbar-nav navbar-right">
                     <div class="form-inline">
                         <div class="form-group" style="margin-top:8px;">
-                            <%# if current_page?(controller: 'alls', action: 'index') || current_page?('/') %>
                             <% if current_page?('/sros/alls') || current_page?('/') %>
                                 <div class="form-group">
                                     <li><%= select(:sro_criteria, :criteria_id, @criteria.map {|search| search.criteria },{}, {class: 'form-control text-center', id: 'Criteria'}) %></li>
                                 </div>
-                                 <div class="form-group">
-                                    <li><input type="text" class="form-control datepicker" id="start_date" placeholder="Start Date..." style="text-align:center;"></li>
-                                </div>
+                            <% elsif current_page?('/salesforces/sales_calls') %>
                                 <div class="form-group">
-                                    <li><input type="text" class="form-control datepicker" id="end_date" placeholder="End Date..." style="text-align:center;"></li>
-                                </div>
-                                <div class="form-group">
-                                    <button class="btn btn-success search">GO</button>
-                                </div>
-                                </div>
-                            <% else %>
-                                <div class="form-group">
-                                    <li><input type="text" class="form-control datepicker" id="start_date" placeholder="Start Date..." style="text-align:center;"></li>
-                                </div>
-                                <div class="form-group">
-                                    <li><input type="text" class="form-control datepicker" id="end_date" placeholder="End Date..." style="text-align:center;"></li>
-                                </div>
-                                <div class="form-group">
-                                    <button class="btn btn-success search">GO</button>
+                                    <li><%= select(:tsm, :tsm_id, @tsms.map {|tsm| tsm },{}, {class: 'form-control text-center', id: 'Tsm'}) %></li>
                                 </div>
                             <% end %>
+
+                            <div class="form-group">
+                                <li><input type="text" class="form-control datepicker" id="start_date" placeholder="Start Date..." style="text-align:center;"></li>
+                            </div>
+                            <div class="form-group">
+                                <li><input type="text" class="form-control datepicker" id="end_date" placeholder="End Date..." style="text-align:center;"></li>
+                            </div>
+                            <div class="form-group">
+                                <button class="btn btn-success search">GO</button>
+                            </div>
                         </div>
                     </div>
                 </ul>
@@ -127,5 +121,18 @@
             }
         }
     }
+
+    $('#Tsm').on('change', function () {
+        var search = $(this).val();
+        if (search == '-') {
+            $("tr").removeClass('hidden');
+            $('#totalCount').text($("tbody tr:contains(" + search + ")").size());
+        } else {
+          $("tbody td").parent('tr').removeClass('hidden')
+          $('tbody tr').addClass('hidden');
+          $("tbody tr:contains(" + search + ")").removeClass('hidden')
+          $('#totalCount').text($("tbody tr:contains(" + search + ")").size());               
+        }
+    });
   </script>
 </html>
