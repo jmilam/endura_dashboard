@@ -32,7 +32,8 @@
                 <ul class="nav navbar-nav navbar-right">
                     <div class="form-inline">
                         <div class="form-group" style="margin-top:8px;">
-                            <% if current_page?(controller: 'alls', action: 'index') || current_page?('/') %>
+                            <%# if current_page?(controller: 'alls', action: 'index') || current_page?('/') %>
+                            <% if current_page?('/sros/alls') || current_page?('/') %>
                                 <div class="form-group">
                                     <li><%= select(:sro_criteria, :criteria_id, @criteria.map {|search| search.criteria },{}, {class: 'form-control text-center', id: 'Criteria'}) %></li>
                                 </div>
@@ -65,13 +66,36 @@
     </div>
 
     <%= yield %>
+
+    <div class="modal fade" id="emailModal">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Email Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <input type="text" class="col-md-10 col-md-offset-1" id="toEmail" placeholder="Enter Email Sending Export to..">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary sendEmail">Send Email</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+      </div>
+    </div>
   </body>
   <script type="text/javascript">
     $('.search').on('click', function(){
-	var start = $('#start_date').val();
-	var end = $('#end_date').val();
-        window.location.href = "http://" + window.location.host + window.location.pathname + '?start_date=' + start + '&end_date=' + end
+    	var start = $('#start_date').val();
+    	var end = $('#end_date').val();
+      window.location.href = "http://" + window.location.host + window.location.pathname + '?start_date=' + start + '&end_date=' + end
     });
+
     $( function() {
       setInterval(function(){ changeTab(); }, 120000);
 
@@ -90,5 +114,18 @@
         
     }
 
+    function GetURLParameter(sParam)
+    {
+        var sPageURL = window.location.search.substring(1);
+        var sURLVariables = sPageURL.split('&');
+        for (var i = 0; i < sURLVariables.length; i++)
+        {
+            var sParameterName = sURLVariables[i].split('=');
+            if (sParameterName[0] == sParam)
+            {
+                return sParameterName[1];
+            }
+        }
+    }
   </script>
 </html>

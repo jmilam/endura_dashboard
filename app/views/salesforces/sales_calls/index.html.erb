@@ -1,32 +1,81 @@
-<%#= @sales_call_data %>
-<div style="margin-top: 100px;">
-	<table class="table table-hover">
-	  <thead>
-	    <th>SF Id</th>
-	    <th>Business Plan</th>
-	    <th>Milestone</th>
-	    <th>TSM</th>
-	    <th>Territory/Rep</th>
-	    <th>Customer</th>
-	    <th>Call Purpose</th>
-	    <th>Items Discussed</th>
-	    <th>Account</th>
-	    <th>Contact</th>
-	    <th>Lead</th>
-	    <th>Follow Up By</th>
-	    <th>Follow Up Points</th>
-	    <th>Status</th>
-	  </thead>
-	  <tbody>
-	  <tr><%= @sales_call_data.count %></tr>
-			<% @sales_call_data.each do |data| %>
+<script type="text/javascript">
+	$(window).load(function(){
+		$('span#export').on('click', function(){
+			$('#emailModal').modal('show');
+	  });
 
-				<tr>
-					<% data["dataCells"].each do |details| %>
-						<td><%= details["label"] %></td>
-					<% end %>
-				</tr>
-			<% end %>
-		</tbody>
-	</table>
+	  $('.sendEmail').on('click', function(){
+	  	email = $('#toEmail').val();
+  	  if (window.location.search == "") {
+		  	start_date = "";
+		  	end_date = "";
+		  } else {
+			  start_date = GetURLParameter('start_date');
+	      end_date = GetURLParameter('end_date');	      	
+		  }
+
+      $.ajax({
+          url: '/salesforces/data_export',
+          type: 'post',
+          datatype: 'json',
+          data: {start_date: start_date, end_date: end_date, email: email},
+          success: function (data) {
+          		$('#emailModal').modal('hide');
+              if (data["success"] == true){
+                alert("Email is on it's way");
+              } else {
+                alert("There was an error when exporting. Please try again");
+              }
+          }
+          
+      });
+    });
+	});
+</script>
+<div style="margin-top: 100px;" class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1">
+	<% if @sales_call_data.count == 0 %>
+	<div class="jumbotron">
+		<div class="text-center">
+		  <h2>No Sales Calls Found.</h2>
+		  <p>There was no sales call data found with the specified search criteria. Please refine your search and try again.</p>
+		</div>
+	</div>
+	<% else %>
+		<table class="table table-hover">
+		  <thead>
+		  	<tr class="bg-success">
+		  	  <th colspan=15 class="text-center"><h4>Total Sales Calls: <div class="text-success"><strong><%= @sales_call_data.count %></strong></div></h4></th>
+		    <tr>
+			    <!-- <th>SF Id</th> -->
+			    <th>Business Plan</th>
+			    <th>Milestone</th>
+			    <th>TSM</th>
+			    <th>Territory/Rep</th>
+			    <th>Customer</th>
+			    <th>Call Purpose</th>
+			    <th>Items Discussed</th>
+			    <th>Account</th>
+			    <th>Contact</th>
+			    <th>Lead</th>
+			    <th>Follow Up By</th>
+			    <th>Follow Up Points</th>
+			    <th>Status</th>
+			    <th>Report Date</th>
+			    <th><span class="glyphicon glyphicon glyphicon-envelope" aria-hidden="true" id="export"></span></th>
+			  </tr>
+		  </thead>
+		  <tbody>
+				<% @sales_call_data.each do |data| %>
+					<tr>
+						<% data["dataCells"].each_with_index do |details, idx| %>
+							<% unless idx == 0 %>
+								<td><%= details["label"] %></td>
+							<% end %>
+						<% end %>
+						<td></td>
+					</tr>
+				<% end %>
+			</tbody>
+		</table>
+	<% end %>
 </div>

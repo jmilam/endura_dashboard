@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   namespace :salesforces do
   	#namespace :reports do
   		resources :sales_calls
+      resources :data_export
   	#end
   end
   root to: "sros/alls#index"
