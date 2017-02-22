@@ -32,7 +32,90 @@
     });
 	});
 </script>
-<div style="margin-top: 60px;" class="">
+<div style="margin-top: 60px;">
+
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>Sales Call Report Summary - <%= Date.today.strftime("%Y") %>
+		</tr>
+		<tr>
+			<th>TSM</th>
+			<th><%= @Q1 %></th>
+			<th><%= @Q2 %></th>
+			<th><%= @Q3 %></th>
+			<th><%= @Q4 %></th>
+		</tr>
+		<tr>
+			<th></th>
+			<th>
+				<table style="width:100%;">
+						<tbody>
+							<tr>
+								<td>Bus Plan</td>
+								<td>Non BP</td>
+								<td>Total</td>
+							</tr>
+						</tbody>
+					</table>
+			</th>
+			<th>
+				<table style="width:100%;">
+						<tbody>
+							<tr>
+								<td>Bus Plan</td>
+								<td>Non BP</td>
+								<td>Total</td>
+							</tr>
+						</tbody>
+					</table>
+			</th>
+			<th>
+				<table style="width:100%;">
+						<tbody>
+							<tr>
+								<td>Bus Plan</td>
+								<td>Non BP</td>
+								<td>Total</td>
+							</tr>
+						</tbody>
+					</table>
+			</th>
+			<th>
+				<table style="width:100%;">
+						<tbody>
+							<tr>
+								<td>Bus Plan</td>
+								<td>Non BP</td>
+								<td>Total</td>
+							</tr>
+						</tbody>
+					</table>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @tsm_sales_call_details.each do |key, value| %>
+			<tr>
+				<td><%= key %></td>
+				<td><%= value[:bus_plan] %>
+				</td>
+				<td><%= value[:non_bus_plan] %>
+				</td>
+				<td>
+				</td>
+				<td>
+				</td>
+			</tr>
+		<% end %>
+	</tbody>
+</table>
+
+
+
+
+
+
 	<% if @sales_call_data.count == 0 %>
 	<div class="jumbotron">
 		<div class="text-center">
@@ -46,6 +129,7 @@
 		  	<tr class="bg-success">
 		  	  <th colspan=15 class="text-center"><h4>Total Sales Calls: <div class="text-success"><strong><div id="totalCount"><%= @sales_call_data.count %></div></strong></div></h4></th>
 		    <tr>
+	
 			    <!-- <th>SF Id</th> -->
 			    <th>Business Plan</th>
 			    <th>Milestone</th>

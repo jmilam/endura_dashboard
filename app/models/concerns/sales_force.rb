@@ -35,4 +35,51 @@ class SalesForce
 
 		@token = JSON.parse(response.body)["access_token"]
 	end
+
+	def self.part_of_business_plan?(bus_plan, data_hash)
+		if bus_plan == "Yes"
+			data_hash[:bus_plan] += 1
+		else 
+			data_hash[:non_bus_plan] += 1
+		end
+		data_hash
+	end
+
+	def self.addToQuarter(date)
+		if SalesForce.Q1(date)
+			p "Q1"
+		elsif SalesForce.Q2(date)
+			p "Q2"
+		elsif SalesForce.Q3(date)
+			p "Q3"
+		elsif SalesForce.Q4(date)
+			p "Q4"
+		else
+			p "Not Any"
+		end
+	end
+
+	def self.Q1(date)
+		q_begin = Date.today.beginning_of_year
+		q_end = (Date.today.beginning_of_year + 2.months).end_of_month
+		Date.parse(date) >= q_begin && Date.parse(date) <= q_end
+	end
+
+	def self.Q2(date)
+		q_begin = (Date.today.beginning_of_year + 3.months)
+		q_end = (Date.today.beginning_of_year + 5.months).end_of_month
+		Date.parse(date) >= q_begin && Date.parse(date) <= q_end
+	end
+
+	def self.Q3(date)
+		q_begin = (Date.today.beginning_of_year + 6.months)
+		q_end = (Date.today.beginning_of_year + 8.months).end_of_month
+		Date.parse(date) >= q_begin && Date.parse(date) <= q_end
+	end
+
+	def self.Q4(date)
+		q_begin = (Date.today.beginning_of_year + 9.months)
+		q_end = (Date.today.beginning_of_year + 11.months).end_of_month
+		Date.parse(date) >= q_begin && Date.parse(date) <= q_end
+	end
 end
