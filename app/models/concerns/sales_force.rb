@@ -36,6 +36,19 @@ class SalesForce
 		@token = JSON.parse(response.body)["access_token"]
 	end
 
+	def Q1(begin_date, end_date)
+		"#{begin_date.beginning_of_year.strftime("%m/%d/%y")} - #{(end_date.beginning_of_year + 2.months).end_of_month.strftime("%m/%d/%y")}"
+	end
+	def Q2(begin_date, end_date)
+		"#{(begin_date.beginning_of_year + 3.months).strftime("%m/%d/%y")} - #{(end_date.beginning_of_year + 5.months).end_of_month.strftime("%m/%d/%y")}"
+	end
+	def Q3(begin_date, end_date)
+		"#{(begin_date.beginning_of_year + 6.months).strftime("%m/%d/%y")} - #{(end_date.beginning_of_year + 8.months).end_of_month.strftime("%m/%d/%y")}"
+	end
+	def Q4(begin_date, end_date)
+		"#{(begin_date.beginning_of_year + 9.months).strftime("%m/%d/%y")} - #{(end_date.beginning_of_year + 11.months).end_of_month.strftime("%m/%d/%y")}"
+	end
+
 	def self.part_of_business_plan?(bus_plan, data_hash, quarter)
 		if bus_plan == "Yes"
 			data_hash[quarter][:bus_plan] += 1
@@ -47,38 +60,38 @@ class SalesForce
 	end
 
 	def self.addToQuarter(date)
-		if SalesForce.Q1(date)
+		if SalesForce.isQ1?(date)
 			"Q1"
-		elsif SalesForce.Q2(date)
+		elsif SalesForce.isQ2?(date)
 			"Q2"
-		elsif SalesForce.Q3(date)
+		elsif SalesForce.isQ3?(date)
 			"Q3"
-		elsif SalesForce.Q4(date)
+		elsif SalesForce.isQ4?(date)
 			"Q4"
 		else
 			"Not Any"
 		end
 	end
 
-	def self.Q1(date)
+	def self.isQ1?(date)
 		q_begin = Date.parse(date).beginning_of_year
 		q_end = (Date.parse(date).beginning_of_year + 2.months).end_of_month
 		Date.parse(date) >= q_begin && Date.parse(date) <= q_end
 	end
 
-	def self.Q2(date)
+	def self.isQ2?(date)
 		q_begin = (Date.parse(date).beginning_of_year + 3.months)
 		q_end = (Date.parse(date).beginning_of_year + 5.months).end_of_month
 		Date.parse(date) >= q_begin && Date.parse(date) <= q_end
 	end
 
-	def self.Q3(date)
+	def self.isQ3?(date)
 		q_begin = (Date.parse(date).beginning_of_year + 6.months)
 		q_end = (Date.parse(date).beginning_of_year + 8.months).end_of_month
 		Date.parse(date) >= q_begin && Date.parse(date) <= q_end
 	end
 
-	def self.Q4(date)
+	def self.isQ4?(date)
 		q_begin = (Date.parse(date).beginning_of_year + 9.months)
 		q_end = (Date.parse(date).beginning_of_year + 11.months).end_of_month
 		Date.parse(date) >= q_begin && Date.parse(date) <= q_end
@@ -105,7 +118,7 @@ class SalesForce
 	
 		value
 	end
-	
+
 	def self.convert_to_perc(total, n)
 		if total == 0
 	  	0
