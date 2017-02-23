@@ -1,14 +1,16 @@
 class Salesforces::SalesCallsController < ApplicationController
 	def index
-		@Q1 =  "#{Date.today.beginning_of_year.strftime("%m/%d/%y")} - #{(Date.today.beginning_of_year + 2.months).end_of_month.strftime("%m/%d/%y")}"
-		@Q2 = "#{(Date.today.beginning_of_year + 3.months).strftime("%m/%d/%y")} - #{(Date.today.beginning_of_year + 5.months).end_of_month.strftime("%m/%d/%y")}"
-		@Q3 = "#{(Date.today.beginning_of_year + 6.months).strftime("%m/%d/%y")} - #{(Date.today.beginning_of_year + 8.months).end_of_month.strftime("%m/%d/%y")}"
-		@Q4 = "#{(Date.today.beginning_of_year + 9.months).strftime("%m/%d/%y")} - #{(Date.today.beginning_of_year + 11.months).end_of_month.strftime("%m/%d/%y")}"
+		begin_date = params[:start_date].blank? ? Date.today : Date.strptime(params[:end_date], "%m/%d/%Y")
+		end_date = params[:end_date].blank? ? Date.today : Date.strptime(params[:end_date], "%m/%d/%Y")
+		@Q1 =  "#{begin_date.beginning_of_year.strftime("%m/%d/%y")} - #{(end_date.beginning_of_year + 2.months).end_of_month.strftime("%m/%d/%y")}"
+		@Q2 = "#{(begin_date.beginning_of_year + 3.months).strftime("%m/%d/%y")} - #{(end_date.beginning_of_year + 5.months).end_of_month.strftime("%m/%d/%y")}"
+		@Q3 = "#{(begin_date.beginning_of_year + 6.months).strftime("%m/%d/%y")} - #{(end_date.beginning_of_year + 8.months).end_of_month.strftime("%m/%d/%y")}"
+		@Q4 = "#{(begin_date.beginning_of_year + 9.months).strftime("%m/%d/%y")} - #{(end_date.beginning_of_year + 11.months).end_of_month.strftime("%m/%d/%y")}"
 		@tsm_sales_call_details = Hash.new
+		@tsm_sales_call_details[:all_calls] =  {all_calls: {Q1: {bus_plan: 0, non_bus_plan: 0, total: 0}, Q2: {bus_plan: 0, non_bus_plan: 0, total: 0}, Q3: {bus_plan: 0, non_bus_plan: 0, total: 0}, Q4: {bus_plan: 0, non_bus_plan: 0, total: 0}}}
 		@bus_plan = 0
 		@non_bus_plan = 0
 
-		@tsms = Array.new
 		start_date = params[:start_date].blank? ? (Date.today.beginning_of_year).strftime('%Y-%m-%d') : Date.strptime(params[:start_date], "%m/%d/%Y").strftime('%Y-%m-%d')
 		end_date = params[:end_date].blank? ? (Date.today.end_of_year).strftime('%Y-%m-%d') : Date.strptime(params[:end_date], "%m/%d/%Y").strftime('%Y-%m-%d')
 		
@@ -29,17 +31,25 @@ class Salesforces::SalesCallsController < ApplicationController
 		@sales_call_data = @response_data["factMap"]["T!T"]["rows"]
 		
 		@sales_call_data.each do |value|
-			if @tsm_sales_call_details[value["dataCells"][3]["label"]].nil?
-				@tsm_sales_call_details[value["dataCells"][3]["label"]] = {bus_plan: 0, non_bus_plan: 0}
-				@tsm_sales_call_details[value["dataCells"][3]["label"]] = SalesForce.part_of_business_plan?(value["dataCells"][1]["label"], @tsm_sales_call_details[value["dataCells"][3]["label"]])
-			else
-				@tsm_sales_call_details[value["dataCells"][3]["label"]] = SalesForce.part_of_business_plan?(value["dataCells"][1]["label"], @tsm_sales_call_details[value["dataCells"][3]["label"]])
-			end
-			
-			@tsms.push(value["dataCells"][3]["label"]) unless @tsms.include?(value["dataCells"][3]["label"])
-		end
-		@tsms.sort!
+			quarter = SalesForce.addToQuarter(value["dataCells"].last["value"])
 
-		p @tsm_sales_call_details
+			if @tsm_sales_call_details[value["dataCells"][3]["label"]].nil?
+				@tsm_sales_call_details[value["dataCells"][3]["label"]] = {value["dataCells"][4]["label"] => {Q1: {bus_plan: 0, non_bus_plan: 0, total: 0}, Q2: {bus_plan: 0, non_bus_plan: 0, total: 0}, Q3: {bus_plan: 0, non_bus_plan: 0, total: 0}, Q4: {bus_plan: 0, non_bus_plan: 0, total: 0}}, Total: {Q1: {bus_plan: 0, non_bus_plan: 0, total: 0}, Q2: {bus_plan: 0, non_bus_plan: 0, total: 0}, Q3: {bus_plan: 0, non_bus_plan: 0, total: 0}, Q4: {bus_plan: 0, non_bus_plan: 0, total: 0}}}
+				@tsm_sales_call_details[value["dataCells"][3]["label"]][value["dataCells"][4]["label"]] = SalesForce.part_of_business_plan?(value["dataCells"][1]["label"], @tsm_sales_call_details[value["dataCells"][3]["label"]][value["dataCells"][4]["label"]], quarter.to_sym)
+				@tsm_sales_call_details[value["dataCells"][3]["label"]][value["dataCells"][4]["label"]][:Total] = SalesForce.part_of_business_plan?(value["dataCells"][1]["label"], @tsm_sales_call_details[value["dataCells"][3]["label"]][:Total], quarter.to_sym)
+				@tsm_sales_call_details[:all_calls][:all_calls] = SalesForce.part_of_business_plan?(value["dataCells"][1]["label"], @tsm_sales_call_details[:all_calls][:all_calls], quarter.to_sym)
+			else
+				if @tsm_sales_call_details[value["dataCells"][3]["label"]][value["dataCells"][4]["label"]].nil?
+					@tsm_sales_call_details[value["dataCells"][3]["label"]][value["dataCells"][4]["label"]] = {Q1: {bus_plan: 0, non_bus_plan: 0, total: 0}, Q2: {bus_plan: 0, non_bus_plan: 0, total: 0}, Q3: {bus_plan: 0, non_bus_plan: 0, total: 0}, Q4: {bus_plan: 0, non_bus_plan: 0, total: 0}, Total: {Q1: {bus_plan: 0, non_bus_plan: 0, total: 0}, Q2: {bus_plan: 0, non_bus_plan: 0, total: 0}, Q3: {bus_plan: 0, non_bus_plan: 0, total: 0}, Q4: {bus_plan: 0, non_bus_plan: 0, total: 0}}}
+				end
+				@tsm_sales_call_details[value["dataCells"][3]["label"]][value["dataCells"][4]["label"]] = SalesForce.part_of_business_plan?(value["dataCells"][1]["label"], @tsm_sales_call_details[value["dataCells"][3]["label"]][value["dataCells"][4]["label"]], quarter.to_sym)
+				@tsm_sales_call_details[value["dataCells"][3]["label"]][value["dataCells"][4]["label"]][:Total] = SalesForce.part_of_business_plan?(value["dataCells"][1]["label"], @tsm_sales_call_details[value["dataCells"][3]["label"]][:Total], quarter.to_sym)
+				@tsm_sales_call_details[:all_calls][:all_calls] = SalesForce.part_of_business_plan?(value["dataCells"][1]["label"], @tsm_sales_call_details[:all_calls][:all_calls], quarter.to_sym)
+			end
+		end
+
+
+		@tsm_sales_call_perc_detail = SalesForce.calculate_perc(@tsm_sales_call_details.deep_dup)
+
 	end
 end

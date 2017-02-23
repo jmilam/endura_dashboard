@@ -39,7 +39,6 @@
                                 </div>
                             <% elsif current_page?('/salesforces/sales_calls') %>
                                 <div class="form-group">
-                                    <li><%= select(:tsm, :tsm_id, @tsms.map {|tsm| tsm },{}, {class: 'form-control text-center', id: 'Tsm'}) %></li>
                                 </div>
                             <% end %>
 
@@ -84,6 +83,11 @@
     </div>
   </body>
   <script type="text/javascript">
+    $(window).load(function(){
+      (GetURLParameter('start_date') == 'undefined') ? $('#start_date').val() : $('#start_date').val(GetURLParameter('start_date'));
+      (GetURLParameter('end_date') == 'undefined') ? $('#end_date').val() : $('#end_date').val(GetURLParameter('end_date'));
+    });
+
     $('.search').on('click', function(){
     	var start = $('#start_date').val();
     	var end = $('#end_date').val();

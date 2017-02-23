@@ -32,134 +32,212 @@
     });
 	});
 </script>
-<div style="margin-top: 60px;">
 
-<table class="table table-striped">
-	<thead>
-		<tr>
-			<th>Sales Call Report Summary - <%= Date.today.strftime("%Y") %>
-		</tr>
-		<tr>
-			<th>TSM</th>
-			<th><%= @Q1 %></th>
-			<th><%= @Q2 %></th>
-			<th><%= @Q3 %></th>
-			<th><%= @Q4 %></th>
-		</tr>
-		<tr>
-			<th></th>
-			<th>
-				<table style="width:100%;">
-						<tbody>
-							<tr>
-								<td>Bus Plan</td>
-								<td>Non BP</td>
-								<td>Total</td>
-							</tr>
-						</tbody>
-					</table>
-			</th>
-			<th>
-				<table style="width:100%;">
-						<tbody>
-							<tr>
-								<td>Bus Plan</td>
-								<td>Non BP</td>
-								<td>Total</td>
-							</tr>
-						</tbody>
-					</table>
-			</th>
-			<th>
-				<table style="width:100%;">
-						<tbody>
-							<tr>
-								<td>Bus Plan</td>
-								<td>Non BP</td>
-								<td>Total</td>
-							</tr>
-						</tbody>
-					</table>
-			</th>
-			<th>
-				<table style="width:100%;">
-						<tbody>
-							<tr>
-								<td>Bus Plan</td>
-								<td>Non BP</td>
-								<td>Total</td>
-							</tr>
-						</tbody>
-					</table>
-			</th>
-		</tr>
-	</thead>
-	<tbody>
-		<% @tsm_sales_call_details.each do |key, value| %>
-			<tr>
-				<td><%= key %></td>
-				<td><%= value[:bus_plan] %>
-				</td>
-				<td><%= value[:non_bus_plan] %>
-				</td>
-				<td>
-				</td>
-				<td>
-				</td>
-			</tr>
-		<% end %>
-	</tbody>
-</table>
+<div class="container" style="margin-top: 60px;">
+	<ul class="nav nav-pills nav-justified">
+	  <li role="presentation" class="active"><a href="#sales_call_total"  aria-controls="home" role="tab" data-toggle="tab">Sales Call Total</a></li>
+	  <li role="presentation"><a href="#sales_call_percent"  aria-controls="home" role="tab" data-toggle="tab">Sales Call Percent</a></li>
+	</ul>
 
-
-
-
-
-
-	<% if @sales_call_data.count == 0 %>
-	<div class="jumbotron">
-		<div class="text-center">
-		  <h2>No Sales Calls Found.</h2>
-		  <p>There was no sales call data found with the specified search criteria. Please refine your search and try again.</p>
-		</div>
-	</div>
-	<% else %>
-		<table class="table table-hover salesforceTable">
-		  <thead>
-		  	<tr class="bg-success">
-		  	  <th colspan=15 class="text-center"><h4>Total Sales Calls: <div class="text-success"><strong><div id="totalCount"><%= @sales_call_data.count %></div></strong></div></h4></th>
-		    <tr>
-	
-			    <!-- <th>SF Id</th> -->
-			    <th>Business Plan</th>
-			    <th>Milestone</th>
-			    <th>TSM</th>
-			    <th>Territory/Rep</th>
-			    <th>Customer</th>
-			    <th>Call Purpose</th>
-			    <th>Items Discussed</th>
-			    <th>Account</th>
-			    <th>Contact</th>
-			    <th>Lead</th>
-			    <th>Follow Up By</th>
-			    <th>Follow Up Points</th>
-			    <th>Status</th>
-			    <th>Report Date</th>
-			    <th><span class="glyphicon glyphicon glyphicon-envelope text-danger" aria-hidden="true" id="export"></span></th>
-			  </tr>
-		  </thead>
-		  <tbody>
-				<% @sales_call_data.each do |data| %>
-					<tr>
-						<% data["dataCells"].each_with_index do |details, idx| %>
-							<% unless idx == 0 %>
-								<td><%= details["label"] %></td>
-							<% end %>
-						<% end %>
-						<td></td>
+	 <div class="tab-content">
+    <div role="tabpanel" class="tab-pane fade in active" id="sales_call_total">
+    	<table class="table table" id="salesCallTotalTable">
+				<thead>
+					<tr class="bg-primary">
+						<th colspan=5 class="text-center">Sales Call Report Totals - <%= Date.today.strftime("%Y") %>
 					</tr>
-				<% end %>
-			</tbody>
-		</table>
-	<% end %>
+					<tr class="active">
+						<th>TSM</th>
+						<th class="text-center"><%= @Q1 %></th>
+						<th class="text-center"><%= @Q2 %></th>
+						<th class="text-center"><%= @Q3 %></th>
+						<th class="text-center"><%= @Q4 %></th>
+					</tr>
+					<tr>
+						<th></th>
+						<% 1.upto(4) do %>
+							<th>
+								<table style="width:100%;">
+										<tbody>
+											<tr>
+												<td>Bus Plan</td>
+												<td>Non BP</td>
+												<td>Total</td>
+											</tr>
+										</tbody>
+									</table>
+							</th>
+						<% end %>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="borderedTD">
+							<table class="table table">
+								<tbody>
+									<% @tsm_sales_call_details.keys.each do |tsm| %>
+										<% unless tsm == :all_calls %>
+											<% @tsm_sales_call_details[tsm].each do |rep, value| %>
+											  <% unless rep == :Total%>
+											  	<tr>
+														<td><%= rep %></td>
+													</tr>
+											  <% end %> 
+											<% end %>
+											<tr style="background-color:lightgrey;">
+										  	<td style="white-space: nowrap;"><%= tsm %> - Team Totals </td>
+										  </tr>
+										<% end %>
+									<% end %>
+								</tbody>
+							</table>
+						</td>
+
+						<%= render partial: 'tsm_call_details_table', locals: {quarter: "Q1"}, assigns: {tsm_sales_call_details: @tsm_sales_call_details}  %>
+						<%= render partial: 'tsm_call_details_table', locals: {quarter: "Q2"}, assigns: {tsm_sales_call_details: @tsm_sales_call_details}  %>
+						<%= render partial: 'tsm_call_details_table', locals: {quarter: "Q3"}, assigns: {tsm_sales_call_details: @tsm_sales_call_details}  %>
+						<%= render partial: 'tsm_call_details_table', locals: {quarter: "Q4"}, assigns: {tsm_sales_call_details: @tsm_sales_call_details}  %>
+					</tr>
+
+					<tr class="info">
+						<td class="borderedTD" style="vertical-align: middle;text-align: center;">Total All</td>
+						<td class="borderedTD">
+							<table class="table table">
+								<tbody>
+									<% @tsm_sales_call_details.each do |key, reps| %>
+										<% if key == :all_calls %>
+											<% reps.each do |key, value| %>
+												<% if key == :all_calls%>
+													<tr class="info">
+														<td class="centerTD"><%= value[:Q1][:bus_plan] %></td>
+														<td class="centerTD"><%= value[:Q1][:non_bus_plan] %></td>
+														<td class="centerTD"><%= value[:Q1][:total] %></td>
+													</tr>
+												<% end %>
+											<% end %>
+										<% end %>
+									<% end %>
+								</tbody>
+							</table>
+						</td>
+						<td class="borderedTD">
+							<table class="table table">
+								<tbody>
+									<% @tsm_sales_call_details.each do |key, reps| %>
+										<% if key == :all_calls %>
+											<% reps.each do |key, value| %>
+												<% if key == :all_calls%>
+													<tr class="info">
+														<td class="centerTD"><%= value[:Q2][:bus_plan] %></td>
+														<td class="centerTD"><%= value[:Q2][:non_bus_plan] %></td>
+														<td class="centerTD"><%= value[:Q2][:total] %></td>
+													</tr>
+												<% end %>
+											<% end %>
+										<% end %>
+									<% end %>
+								</tbody>
+							</table>
+						</td>
+						<td class="borderedTD">
+							<table class="table table">
+								<tbody>
+									<% @tsm_sales_call_details.each do |key, reps| %>
+										<% if key == :all_calls %>
+											<% reps.each do |key, value| %>
+												<% if key == :all_calls%>
+													<tr class="info">
+														<td class="centerTD"><%= value[:Q3][:bus_plan] %></td>
+														<td class="centerTD"><%= value[:Q3][:non_bus_plan] %></td>
+														<td class="centerTD"><%= value[:Q3][:total] %></td>
+													</tr>
+												<% end %>
+											<% end %>
+										<% end %>
+									<% end %>
+								</tbody>
+							</table>
+						</td>
+						<td class="borderedTD">
+							<table class="table table">
+								<tbody>
+									<% @tsm_sales_call_details.each do |key, reps| %>
+										<% if key == :all_calls %>
+											<% reps.each do |key, value| %>
+												<% if key == :all_calls%>
+													<tr class="info">
+														<td class="centerTD"><%= value[:Q4][:bus_plan] %></td>
+														<td class="centerTD"><%= value[:Q4][:non_bus_plan] %></td>
+														<td class="centerTD"><%= value[:Q4][:total] %></td>
+													</tr>
+												<% end %>
+											<% end %>
+										<% end %>
+									<% end %>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+    </div>
+    <div role="tabpanel" class="tab-pane fade" id="sales_call_percent">
+    	<table class="table table" id="salesCallPercentTable">
+				<thead>
+					<tr class="bg-primary">
+						<th colspan=5 class="text-center">Sales Call Report Percent - <%= Date.today.strftime("%Y") %>
+					</tr>
+					<tr class="active">
+						<th>TSM</th>
+						<th class="text-center"><%= @Q1 %></th>
+						<th class="text-center"><%= @Q2 %></th>
+						<th class="text-center"><%= @Q3 %></th>
+						<th class="text-center"><%= @Q4 %></th>
+					</tr>
+					<tr>
+						<th></th>
+						<% 1.upto(4) do %>
+							<th>
+								<table style="width:100%;">
+										<tr>
+												<td class="centerTD">Bus Plan</td>
+												<td class="centerTD">Non BP</td>
+												<td class="centerTD">Total</td>
+											</tr>
+									</table>
+							</th>
+						<% end %>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="borderedTD">
+							<table class="table table">
+								<tbody>
+									<% @tsm_sales_call_details.keys.each do |tsm| %>
+										<% unless tsm == :all_calls %>
+											<% @tsm_sales_call_details[tsm].each do |rep, value| %>
+											  <% unless rep == :Total%>
+											  	<tr>
+														<td><%= rep %></td>
+													</tr>
+											  <% end %> 
+											<% end %>
+											<tr style="background-color:lightgrey;">
+										  	<td style="white-space: nowrap;"><%= tsm %> - Team Totals </td>
+										  </tr>
+										<% end %>
+									<% end %>
+								</tbody>
+							</table>
+						</td>
+						<%= render partial: 'tsm_call_perc_table', locals: {quarter: "Q1"}, assigns: {tsm_sales_call_perc_details: @tsm_sales_call_perc_detail}  %>
+						<%= render partial: 'tsm_call_perc_table', locals: {quarter: "Q2"}, assigns: {tsm_sales_call_perc_details: @tsm_sales_call_perc_detail}  %>
+						<%= render partial: 'tsm_call_perc_table', locals: {quarter: "Q3"}, assigns: {tsm_sales_call_perc_details: @tsm_sales_call_perc_detail}  %>
+						<%= render partial: 'tsm_call_perc_table', locals: {quarter: "Q4"}, assigns: {tsm_sales_call_perc_details: @tsm_sales_call_perc_detail}  %>
+					</tr>
+				</tbody>
+			</table>
+    </div>
+  </div>
 </div>

@@ -45,3 +45,20 @@
     width: 500px;
 }
 */
+
+#salesCallTotalTable, #salesCallPercentTable {
+  margin-top: 20px;
+}
+
+#salesCallTotalTable td, #salesCallPercentTable td {
+  padding-right: 0px;
+  padding-left: 0px;
+}
+
+.borderedTD {
+  border-right: 1px solid black;
+}
+
+.centerTD {
+  text-align: center;
+}

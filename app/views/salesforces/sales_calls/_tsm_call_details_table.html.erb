@@ -1,0 +1,24 @@
+<td class="borderedTD">
+	<table class="table table">
+		<tbody>
+			<% @tsm_sales_call_details.each do |key, reps| %>
+				<% unless key == :all_calls %>
+					<% reps.each do |key, value| %>
+						<% unless key == :Total%>
+							<tr>
+								<td class="centerTD"><%= value[quarter.to_sym][:bus_plan] %></td>
+								<td class="centerTD"><%= value[quarter.to_sym][:non_bus_plan] %></td>
+								<td class="centerTD"><%= value[quarter.to_sym][:total] %></td>
+							</tr>
+						<% end %>
+					<% end %>
+					<tr style="background-color:lightgrey;">
+						<td class="centerTD"><%= reps[:Total][quarter.to_sym][:bus_plan] %></td>
+						<td class="centerTD"><%= reps[:Total][quarter.to_sym][:non_bus_plan] %></td>
+						<td class="centerTD"><%= reps[:Total][quarter.to_sym][:total] %></td>
+					</tr>
+				<% end %>
+			<% end %>
+		</tbody>
+	</table>
+</td>

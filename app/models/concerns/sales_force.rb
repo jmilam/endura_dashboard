@@ -36,50 +36,81 @@ class SalesForce
 		@token = JSON.parse(response.body)["access_token"]
 	end
 
-	def self.part_of_business_plan?(bus_plan, data_hash)
+	def self.part_of_business_plan?(bus_plan, data_hash, quarter)
 		if bus_plan == "Yes"
-			data_hash[:bus_plan] += 1
+			data_hash[quarter][:bus_plan] += 1
 		else 
-			data_hash[:non_bus_plan] += 1
+			data_hash[quarter][:non_bus_plan] += 1
 		end
+		data_hash[quarter][:total] += 1
 		data_hash
 	end
 
 	def self.addToQuarter(date)
 		if SalesForce.Q1(date)
-			p "Q1"
+			"Q1"
 		elsif SalesForce.Q2(date)
-			p "Q2"
+			"Q2"
 		elsif SalesForce.Q3(date)
-			p "Q3"
+			"Q3"
 		elsif SalesForce.Q4(date)
-			p "Q4"
+			"Q4"
 		else
-			p "Not Any"
+			"Not Any"
 		end
 	end
 
 	def self.Q1(date)
-		q_begin = Date.today.beginning_of_year
-		q_end = (Date.today.beginning_of_year + 2.months).end_of_month
+		q_begin = Date.parse(date).beginning_of_year
+		q_end = (Date.parse(date).beginning_of_year + 2.months).end_of_month
 		Date.parse(date) >= q_begin && Date.parse(date) <= q_end
 	end
 
 	def self.Q2(date)
-		q_begin = (Date.today.beginning_of_year + 3.months)
-		q_end = (Date.today.beginning_of_year + 5.months).end_of_month
+		q_begin = (Date.parse(date).beginning_of_year + 3.months)
+		q_end = (Date.parse(date).beginning_of_year + 5.months).end_of_month
 		Date.parse(date) >= q_begin && Date.parse(date) <= q_end
 	end
 
 	def self.Q3(date)
-		q_begin = (Date.today.beginning_of_year + 6.months)
-		q_end = (Date.today.beginning_of_year + 8.months).end_of_month
+		q_begin = (Date.parse(date).beginning_of_year + 6.months)
+		q_end = (Date.parse(date).beginning_of_year + 8.months).end_of_month
 		Date.parse(date) >= q_begin && Date.parse(date) <= q_end
 	end
 
 	def self.Q4(date)
-		q_begin = (Date.today.beginning_of_year + 9.months)
-		q_end = (Date.today.beginning_of_year + 11.months).end_of_month
+		q_begin = (Date.parse(date).beginning_of_year + 9.months)
+		q_end = (Date.parse(date).beginning_of_year + 11.months).end_of_month
 		Date.parse(date) >= q_begin && Date.parse(date) <= q_end
 	end
+
+	def self.calculate_perc(data_hash)
+		data_hash.each do |tsms, rep_hash|
+			rep_hash.each do |key, value|
+				value = self.calc_quarter("Q1", value)
+				value = self.calc_quarter("Q2", value)
+				value = self.calc_quarter("Q3", value)
+				value = self.calc_quarter("Q4", value)
+			end
+		end
+		data_hash
+	end
+
+	def self.calc_quarter(quarter, value)
+		bus_perc = self.convert_to_perc(value[quarter.to_sym][:total], value[quarter.to_sym][:bus_plan])
+		non_bus_perc = self.convert_to_perc(value[quarter.to_sym][:total], value[quarter.to_sym][:non_bus_plan])
+		value[quarter.to_sym][:bus_plan] = bus_perc
+		value[quarter.to_sym][:non_bus_plan] = non_bus_perc
+		value[quarter.to_sym][:total] = 0
+	
+		value
+	end
+	
+	def self.convert_to_perc(total, n)
+		if total == 0
+	  	0
+	  else 
+	  	((n.to_f / total) * 100).round(1)
+	  end
+	 end
 end
