@@ -11,4 +11,14 @@ class Formatter
   	end
   	return_array
   end
+
+  def self.format_errors(errors)
+    error_array = Array.new
+    errors.to_a.each do |message|           
+      message[1].each do |desc|                
+        error_array << "#{message[0].to_s.capitalize.gsub("_", " ")} #{desc}"
+      end
+    end
+    error_array
+  end
 end

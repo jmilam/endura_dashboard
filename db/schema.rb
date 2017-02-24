@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161219160851) do
+ActiveRecord::Schema.define(version: 20170224153920) do
 
   create_table "failure_codes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "responsibility_id"
@@ -27,6 +27,28 @@ ActiveRecord::Schema.define(version: 20161219160851) do
 
   create_table "responsibilities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "sales_reps", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "tsm_id"
+    t.string   "name"
+    t.integer  "personnel_count"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.index ["tsm_id"], name: "index_sales_reps_on_tsm_id", using: :btree
+  end
+
+  create_table "tsms", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "week_quarter_counts", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "quarter"
+    t.integer  "week_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
