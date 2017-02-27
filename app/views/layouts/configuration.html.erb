@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= @title || "Endura Dashboard" %></title>
+    <%= csrf_meta_tags %>
+    <%= favicon_link_tag %>
+    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= javascript_include_tag 'application' %>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript">
+
+      function editSingleFieldForm(fieldClass, btnValue, btnClass, pathName){
+          $('.edit_' + fieldClass).on('click', function(e){
+              e.preventDefault();
+              text = $(this).parents('tr').children('td:eq(0)').text();
+              row = $(this).parents('tr');
+              row.children('td:eq(0)').empty();
+              row.children('td:eq(0)').append("<input class=form-control value='" + text + "'></input>");
+              row.children('td:eq(1)').children('div').empty();
+              row.children('td:eq(1)').children('div').append("<input type=submit value= '" + btnValue +  "' class='btn btn-sm btn-warning " + btnClass +  "'>");
+              submitSingleFieldFormChanges(fieldClass, btnValue, btnClass, pathName);
+          });
+      }
+
+      function editDoubleFieldForm(fieldClass, btnValue, btnClass, pathName){
+          $('.edit_' + fieldClass).on('click', function(e){
+              e.preventDefault();
+              text = $(this).parents('tr').children('td:eq(0)').text();
+              row = $(this).parents('tr');
+              row.children('td:eq(0)').empty();
+              row.children('td:eq(0)').append("<input class=form-control value='" + text + "'></input>");
+              row.children('td:eq(2)').children('div').empty();
+              row.children('td:eq(2)').children('div').append("<input type=submit value= '" + btnValue +  "' class='btn btn-sm btn-warning " + btnClass +  "'>");
+              submitDoubleFieldFormChanges(fieldClass, btnValue, btnClass, pathName);
+          });
+      }
+
+      function submitSingleFieldFormChanges(fieldClass, btnValue, btnClass, pathName){
+        $('.' + btnClass).on('click', function(e){
+            e.preventDefault();
+            text = $(this).parents('tr').children('td:eq(0)').children().val();
+            row = $(this).parents('tr');
+            val_id = row.children('td:eq(2)').children('#' + fieldClass + '_id').val();
+
+            $.ajax({
+              url: '/configurations/'+ pathName + '/' + val_id,
+              type: 'put',
+              datatype: 'json',
+              data: {name: text},
+              success: function (data) {
+                  if (data["success"] == true){
+                    row.children('td:eq(0)').empty();
+                                    row.children('td:eq(0)').append(text);
+                                    row.children('td:eq(1)').children('div').empty();
+                                    row.children('td:eq(1)').children('div').append('<%= link_to "Edit", "#" %> | <%= link_to "Delete", "/configurations/", data: {confirm: "Are you sure you want to delete this responsibility?"}, method: :delete %>' );
+                                    row.children('td:eq(1)').children('div').children('a:first').attr('class', 'edit_' + fieldClass)
+                                    //This appends all necessary data to the href path to add delete functions for backend. :id, :path
+                                    row.children('td:eq(1)').children('div').children('a:last').attr('href', (row.children('td:eq(1)').children('div').children('a:last').attr('href') +  pathName + '/' + val_id));
+                                    editSingleFieldForm(fieldClass, btnValue, btnClass, pathName);
+                  } else {
+                    alert("There was an error when making changes. Please try again");
+                  }
+              }   
+            });
+        });
+      };
+
+      function submitDoubleFieldFormChanges(fieldClass, btnValue, btnClass, pathName){
+        $('.' + btnClass).on('click', function(e){
+            e.preventDefault();
+            text = $(this).parents('tr').children('td:eq(0)').children().val();
+            row = $(this).parents('tr');
+            val_id = row.children('td:eq(3)').children('#' + fieldClass + '_id').val();
+
+            $.ajax({
+              url: '/configurations/'+ pathName + '/' + val_id,
+              type: 'put',
+              datatype: 'json',
+              data: {name: text},
+              success: function (data) {
+                  if (data["success"] == true){
+                    row.children('td:eq(0)').empty();
+                                    row.children('td:eq(0)').append(text);
+                                    row.children('td:eq(2)').children('div').empty();
+                                    row.children('td:eq(2)').children('div').append('<%= link_to "Edit", "#" %> | <%= link_to "Delete", "/configurations/", data: {confirm: "Are you sure you want to delete this responsibility?"}, method: :delete %>' );
+                                    row.children('td:eq(2)').children('div').children('a:first').attr('class', 'edit_' + fieldClass)
+                                    //This appends all necessary data to the href path to add delete functions for backend. :id, :path
+                                    row.children('td:eq(2)').children('div').children('a:last').attr('href', (row.children('td:eq(2)').children('div').children('a:last').attr('href') +  pathName + '/' + val_id));
+                                    editDoubleFieldForm(fieldClass, btnValue, btnClass, pathName);
+                  } else {
+                    alert("There was an error when making changes. Please try again");
+                  }
+              }   
+            });
+        });
+      };
+
+    </script>
+  </head>
+
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand" >
+		   <span><%= image_tag("endura-check.svg", height:"20", data: {title: "Endura"}) %></span>
+		   Endura
+                </a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <div class="form-inline">
+                        <div class="form-group" style="margin-top:8px;">
+                        </div>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div style="margin-top: 60px;">
+        <div class="container">
+            <% if flash[:notice] %>
+              <div class="alert alert-success alert-dismissable">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Success!</strong> <%= flash[:notice] %>
+              </div>
+            <% elsif flash[:error] %>
+            <div class="alert alert-danger alert-dismissable">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Error!</strong> 
+                <ul>
+                  <% flash[:error].each do |error| %>
+                      <li><%= error %></li>
+                  <% end %>
+                </ul>
+              </div>
+            <% end %>
+        </div>
+        <%= yield %>
+    </div>
+  </body>
+
+</html>

@@ -1,0 +1,4 @@
+<%= form_for form_name, method: :create do |f| %>
+	<td><%= f.text_field :name, class: "form-control", placeholder: form_placeholder %></td>
+	<td><div class="pull-right"><%= f.submit btn_text, class: "btn btn-sm btn-success" %></div></td>
+<% end %>

@@ -1,3 +1,9 @@
+<script type="text/javascript">
+	$(document).ready(function(){
+			$('#failure_code_name').focus();
+			editDoubleFieldForm("quarter", "Edit Quarter Data", "quarterEditBtn", "annual_quarter")
+		});
+</script>
 <div class="container">
 	<table class="table table" id="quarterTable">
 		<thead>
@@ -8,27 +14,23 @@
 				<th class="text-center active" colspan=5><%= @header %></th>
 			</tr>
 			<tr>
-				<th>Quarter</th>
 				<th># of Weeks in Quarter</th>
+				<th>Quarter</th>
 				<th colspan=2></th>
 			</tr>
 		</thead>
 		<tbody>
 			<% @quarter_weeks.each do |quarter| %>
 				<tr>
-					<td>Q<%= quarter.quarter %></td>
 					<td><%= quarter.week_count %></td>
+					<td>Q<%= quarter.quarter %></td>
 					<td><div class="pull-right"><%= link_to "Edit", "#", class: "edit_quarter" %> | <%= link_to "Delete", configurations_annual_quarter_path(id: quarter.id), data: {confirm: 'Are you sure you want to delete this tsm?'}, method: :delete %></div></td>
 					<td><%= hidden_field_tag :quarter_id, quarter.id %></td>
 				</tr>
 			<% end %>
+
 			<tr>
-				<%= form_for :week_quarter_counts, method: :create do |f| %>
-					<td><%= select :quarter, :quarter_id, @quarters, {prompt: "Select Quarter.."}, {class: "form-control"} %></td>
-					<td><%= f.text_field :week_count, class: "form-control", placeholder: "Enter Number of Weeks in Quarter.." %></td>				
-					<td><%= f.submit "Add Quarter", class: "btn btn-sm btn-success pull-right" %></td>
-					<td/>
-				<% end %>
+				<%= render partial: 'configurations/form_partials/new_double_form', locals: {form_name: :week_quarter_counts, btn_text: "Add Quarter", form_placeholder: "Enter Number of Weeks in Quarter..", field_id: :quarter_id, field_name: :quarter}, assigns: {select_box_data: @select_box_data, select_placeholder: @select_placeholder} %>
 			</tr>
 		</tbody>
 	</table>

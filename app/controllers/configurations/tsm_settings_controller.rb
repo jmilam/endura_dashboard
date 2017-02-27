@@ -1,4 +1,5 @@
 class Configurations::TsmSettingsController < ApplicationController
+	layout 'configuration'
 	def index
 		@tsms = Tsm.all
 		@header = "TSM Management"

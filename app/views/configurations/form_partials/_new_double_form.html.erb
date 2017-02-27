@@ -1,0 +1,6 @@
+<%= form_for form_name, method: :create do |f| %>
+	<td><%= select field_name, field_id, @select_box_data, {prompt: @select_placeholder}, {class: "form-control"} %></td>
+	<td><%= f.text_field :name, class: "form-control", placeholder: form_placeholder %></td>				
+	<td><%= f.submit btn_text, class: "btn btn-sm btn-success pull-right" %></td>
+	<td/>
+<% end %>

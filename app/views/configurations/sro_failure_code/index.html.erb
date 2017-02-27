@@ -1,21 +1,36 @@
+<script type="text/javascript">
+	$(document).ready(function(){
+			$('#failure_code_name').focus();
+			editDoubleFieldForm("failure_code", "Edit Failure Code", "failureCodeEditBtn", "sro_failure_code")
+		});
+</script>
 <div class="container">
-
 	<table class="table table" id="tsmTable">
 		<thead>
 			<tr>
-				<th colspan=5><%= link_to "<< Back", configurations_management_overview_index_path %></th>
+				<th colspan=4><%= link_to "<< Back", configurations_management_overview_index_path %></th>
 			</tr>
 			<tr>
-				<th class="text-center active" colspan=5><%= @header %></th>
+				<th class="text-center active" colspan=4><%= @header %></th>
+			</tr>
+			<tr>
+				<th>Failure Code</th>
+				<th>Responsibility</th>
+				<th colspan="2"></th>
 			</tr>
 		</thead>
 		<tbody>
 			<% @failure_codes.each do |fc| %>
 				<tr>
-					<td colspan=4><%= fc.name %></td>
-					<td><div class="pull-right"><%= link_to "Edit", "#", class: "edit_failure_code" %> | <%= link_to "Delete",configurations_sro_failure_code_index_path(id: fc.id), data: {confirm: 'Are you sure you want to delete this failure code?'}, method: :delete %></div></td>
+					<td><%= fc.name %></td>
+					<td><%= fc.responsibility.name %></td>
+					<td><div class="pull-right"><%= link_to "Edit", "#", class: "edit_failure_code" %> | <%= link_to "Delete",configurations_sro_failure_code_path(id: fc.id), data: {confirm: 'Are you sure you want to delete this failure code?'}, method: :delete %></div></td>
+					<td><%= hidden_field_tag :failure_code_id, fc.id %></td>
 				</tr>
 			<% end %>
+			<tr>
+				<%= render partial: 'configurations/form_partials/new_double_form', locals: {form_name: :failure_code, btn_text: "Add Failure Code", form_placeholder: "Enter Failure Code", field_id: :responsibility_id, field_name: :responsibility}, assigns: {select_box_data: @select_box_data, select_placeholder: @select_placeholder} %>
+			</tr>
 		</tbody>
 	</table>
 </div>
