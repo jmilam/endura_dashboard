@@ -167,10 +167,10 @@ class Sro
   end
 
   def self.build_by_site_item(sros, sro_by_site_item)
-    if sro_by_site_item[sros["xxsro-so-site"]].keys.include?(sros["srod-part"])
-      sro_by_site_item[sros["xxsro-so-site"]][sros["srod-part"]][:total] += sros["sro-line-total"]
+    if sro_by_site_item[sros["xxsro-so-site"]].keys.include?(sros["srod-group"])
+      sro_by_site_item[sros["xxsro-so-site"]][sros["srod-group"]][:total] += sros["sro-line-total"]
     else
-      sro_by_site_item[sros["xxsro-so-site"]][sros["srod-part"]] = {reason: sros["sro-desc"], total: sros["sro-line-total"]}
+      sro_by_site_item[sros["xxsro-so-site"]][sros["srod-group"]] = {reason: sros["sro-desc"], total: sros["sro-line-total"]}
     end
     sro_by_site_item[sros["xxsro-so-site"]]["Total"][:total] += sros["sro-line-total"]
     sro_by_site_item["Total"]["Total"][:total] += sros["sro-line-total"]

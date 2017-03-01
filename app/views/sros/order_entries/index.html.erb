@@ -152,23 +152,23 @@
         <thead>
           <tr>
             <th>Type</th>
-            <th>Current YTD $</th>
-            <th>Previous Year $</th>
-            <th>Current Month $</th>
+            <th class="text-center">Current YTD $</th>
+            <th class="text-center">Previous YTD $</th>
+            <th class="text-center">Current Month $</th>
           </tr>
         </thead>
         <tbody>
           <% @sro_overview.each do |key, value| %>
             <tr>
-              <td colspan="4" class="text-center bg-success"><%= key %></td>
+              <td colspan="4" class="text-center bg-success"><i><%= key %></i></td>
 	          </tr>
       	    <tr>
       	      <% value.each do |type, value| %>
       	        <tr rowspan="4">
       	          <td><%= type %></td>
-                  <td><%= value["current_ytd"].nil? ? "0.00" : value["current_ytd"].round(2) %></td>
-      	          <td><%= value["previous_year"].nil? ? "0.00" : value["previous_year"].round(2) %></td>
-      	          <td><%= value["current_month"].nil? ? "0.00" : value["current_month"].round(2) %></td>
+                  <td class="text-center">$<%= value["current_ytd"].nil? ? "0.00" : value["current_ytd"].round(2) %></td>
+      	          <td class="text-center">$<%= value["previous_year"].nil? ? "0.00" : value["previous_year"].round(2) %></td>
+      	          <td class="text-center">$<%= value["current_month"].nil? ? "0.00" : value["current_month"].round(2) %></td>
       	        </tr>	      
       	      <% end %>
             </tr>

@@ -97,25 +97,67 @@ class SalesForce
 		Date.parse(date) >= q_begin && Date.parse(date) <= q_end
 	end
 
-	def self.calculate_perc(data_hash)
-		data_hash.each do |tsms, rep_hash|
+	def self.tsm_exist?(tsms, tsm_name)
+		return_val = Object.new
+
+		tsms.each do |tsm|
+			if tsm_name.match(tsm.name).nil? 
+				next
+			else
+				return_val = tsm_name.match(tsm.name)[0] 
+				break
+			end
+		end
+
+		return_val
+	end
+
+	def self.calculate_perc(data_hash, sales_reps)
+		tsms =  Tsm.all.includes(:sales_reps)
+		data_hash.each do |tsm, rep_hash|
 			rep_hash.each do |key, value|
-				value = self.calc_quarter("Q1", value)
-				value = self.calc_quarter("Q2", value)
-				value = self.calc_quarter("Q3", value)
-				value = self.calc_quarter("Q4", value)
+				if key.to_sym == :Total
+					tsm_name = self.tsm_exist?(tsms, tsm)
+					if tsm_name.class == String 
+						tsm_reps = Tsm.find_by_name(tsm_name).sales_reps
+						unless tsm_reps.empty?
+							rep_count = tsm_reps.inject(0) {|sum, rep| sum += rep.personnel_count}
+							rep = {"tsm_total": {personnel_count: rep_count}}
+						end
+					end
+				else
+					rep = sales_reps.find_by_name(key)
+				end
+				
+				value = self.calc_quarter("Q1", value, rep)
+				value = self.calc_quarter("Q2", value, rep)
+				value = self.calc_quarter("Q3", value, rep)
+				value = self.calc_quarter("Q4", value, rep)
 			end
 		end
 		data_hash
 	end
 
-	def self.calc_quarter(quarter, value)
+	def self.calc_quarter(quarter, value, rep)
+		quarters = WeekQuarterCount.all
+		
 		bus_perc = self.convert_to_perc(value[quarter.to_sym][:total], value[quarter.to_sym][:bus_plan])
 		non_bus_perc = self.convert_to_perc(value[quarter.to_sym][:total], value[quarter.to_sym][:non_bus_plan])
 		value[quarter.to_sym][:bus_plan] = bus_perc
 		value[quarter.to_sym][:non_bus_plan] = non_bus_perc
-		value[quarter.to_sym][:total] = 0
-	
+
+		if rep.nil?
+			value[quarter.to_sym][:total] = 0.to_f
+		else
+			if rep[:tsm_total].nil?
+				quarter_query = quarters.find_by_quarter(quarter.match(/\d/)[0].to_i)
+				value[quarter.to_sym][:total] = ((value[quarter.to_sym][:total] / rep.personnel_count.to_f) / quarter_query.week_count).round(2) unless quarter_query.nil?
+			else
+				quarter_query = quarters.find_by_quarter(quarter.match(/\d/)[0].to_i)
+				value[quarter.to_sym][:total] = ((value[quarter.to_sym][:total] / rep[:tsm_total][:personnel_count].to_f) / quarter_query.week_count).round(2) unless quarter_query.nil?
+			end
+		end
+
 		value
 	end
 

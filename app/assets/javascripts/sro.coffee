@@ -29,7 +29,7 @@ $(document).on 'ready', ->
   	    $('#BySiteCustomer').css 'display', 'block'
   	  when 'Site & Reason'
   	    $('#BySiteReason').css 'display', 'block'
-      when 'Site & Item'
+      when 'Site & Item Group'
         $('#BySiteItem').css 'display', 'block'
       when 'Failure Code'
         $('#ByFailureCode').css 'display', 'block'

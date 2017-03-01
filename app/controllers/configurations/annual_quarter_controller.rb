@@ -22,7 +22,6 @@ class Configurations::AnnualQuarterController < ApplicationController
 	end
 
 	def update
-		p params
 		@quarter = WeekQuarterCount.find(params[:id])
 		
 		if @quarter.update_attribute(:week_count, params[:name])

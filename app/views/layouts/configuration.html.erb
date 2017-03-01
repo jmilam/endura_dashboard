@@ -51,7 +51,7 @@
               datatype: 'json',
               data: {name: text},
               success: function (data) {
-                  if (data["success"] == true){
+                  if (data["success"] == true || data["success"] == false){
                     row.children('td:eq(0)').empty();
                                     row.children('td:eq(0)').append(text);
                                     row.children('td:eq(1)').children('div').empty();
@@ -61,6 +61,7 @@
                                     row.children('td:eq(1)').children('div').children('a:last').attr('href', (row.children('td:eq(1)').children('div').children('a:last').attr('href') +  pathName + '/' + val_id));
                                     editSingleFieldForm(fieldClass, btnValue, btnClass, pathName);
                   } else {
+
                     alert("There was an error when making changes. Please try again");
                   }
               }   
@@ -81,7 +82,7 @@
               datatype: 'json',
               data: {name: text},
               success: function (data) {
-                  if (data["success"] == true){
+                  if (data["success"] == true || data["success"] == false){
                     row.children('td:eq(0)').empty();
                                     row.children('td:eq(0)').append(text);
                                     row.children('td:eq(2)').children('div').empty();

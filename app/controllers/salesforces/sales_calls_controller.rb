@@ -1,7 +1,8 @@
 class Salesforces::SalesCallsController < ApplicationController
 	def index
 		@salesforce_request = SalesForce.new
-
+		
+		@sales_reps = SalesRep.all.includes(:tsm)
 		begin_date = params[:start_date].blank? ? Date.today : Date.strptime(params[:end_date], "%m/%d/%Y")
 		end_date = params[:end_date].blank? ? Date.today : Date.strptime(params[:end_date], "%m/%d/%Y")
 		@Q1 = @salesforce_request.Q1(begin_date, end_date)
@@ -50,7 +51,7 @@ class Salesforces::SalesCallsController < ApplicationController
 			end
 		end
 
-		@tsm_sales_call_perc_detail = SalesForce.calculate_perc(@tsm_sales_call_details.deep_dup)
+		@tsm_sales_call_perc_detail = SalesForce.calculate_perc(@tsm_sales_call_details.deep_dup, @sales_reps)
 
 	end
 end
