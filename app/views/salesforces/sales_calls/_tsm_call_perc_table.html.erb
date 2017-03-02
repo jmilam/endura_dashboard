@@ -6,16 +6,16 @@
 					<% reps.each do |key, value| %>
 						<% unless key == :Total%>
 							<tr>
-								<td class="centerTD"><%= value[quarter.to_sym][:bus_plan] %>%</td>
-								<td class="centerTD"><%= value[quarter.to_sym][:non_bus_plan] %>%</td>
-								<td class="centerTD"><%= value[quarter.to_sym][:total] %></td>
+								<td class="centerTD <%= SalesForce.cell_color(value[quarter.to_sym][:bus_plan], "perc") %>"><%= value[quarter.to_sym][:bus_plan] %>%</td>
+								<td class="centerTD <%= SalesForce.cell_color(value[quarter.to_sym][:non_bus_plan], "perc") %>"><%= value[quarter.to_sym][:non_bus_plan] %>%</td>
+								<td class="centerTD <%= SalesForce.cell_color(value[quarter.to_sym][:total], "decimal") %>"><%= value[quarter.to_sym][:total] %></td>
 							</tr>
 						<% end %>
 					<% end %>
 					<tr style="background-color:lightgrey;">
-						<td class="centerTD"><%= reps[:Total][quarter.to_sym][:bus_plan] %>%</td>
-						<td class="centerTD"><%= reps[:Total][quarter.to_sym][:non_bus_plan] %>%</td>
-						<td class="centerTD"><%= reps[:Total][quarter.to_sym][:total] %></td>
+						<td class="centerTD <%= SalesForce.cell_color(reps[:Total][quarter.to_sym][:bus_plan], "perc") %>"><%= reps[:Total][quarter.to_sym][:bus_plan] %>%</td>
+						<td class="centerTD <%= SalesForce.cell_color(reps[:Total][quarter.to_sym][:non_bus_plan], "perc") %>"><%= reps[:Total][quarter.to_sym][:non_bus_plan] %>%</td>
+						<td class="centerTD <%= SalesForce.cell_color(reps[:Total][quarter.to_sym][:total], "decimal") %>"><%= reps[:Total][quarter.to_sym][:total] %></td>
 					</tr>
 				<% end %>
 			<% end %>

@@ -44,7 +44,7 @@
     	<table class="table table" id="salesCallTotalTable">
 				<thead>
 					<tr class="bg-primary">
-						<th colspan=5 class="text-center">Sales Call Report Totals - <%= Date.today.strftime("%Y") %>
+						<th colspan=6 class="text-center">Sales Call Report Totals - <%= Date.today.strftime("%Y") %>
 					</tr>
 					<tr class="active">
 						<th>TSM</th>
@@ -52,10 +52,11 @@
 						<th class="text-center"><%= @Q2 %></th>
 						<th class="text-center"><%= @Q3 %></th>
 						<th class="text-center"><%= @Q4 %></th>
+						<th class="text-center">Year To Date</th>
 					</tr>
 					<tr>
 						<th></th>
-						<% 1.upto(4) do %>
+						<% 1.upto(5) do %>
 							<th>
 								<table style="width:100%;">
 										<tbody>
@@ -97,6 +98,7 @@
 						<%= render partial: 'tsm_call_details_table', locals: {quarter: "Q2"}, assigns: {tsm_sales_call_details: @tsm_sales_call_details}  %>
 						<%= render partial: 'tsm_call_details_table', locals: {quarter: "Q3"}, assigns: {tsm_sales_call_details: @tsm_sales_call_details}  %>
 						<%= render partial: 'tsm_call_details_table', locals: {quarter: "Q4"}, assigns: {tsm_sales_call_details: @tsm_sales_call_details}  %>
+						<%= render partial: 'tsm_call_details_table', locals: {quarter: "YTD"}, assigns: {tsm_sales_call_details: @tsm_sales_call_details}  %>
 					</tr>
 
 					<tr class="info">
@@ -177,15 +179,35 @@
 								</tbody>
 							</table>
 						</td>
+						<td class="borderedTD">
+							<table class="table table">
+								<tbody>
+									<% @tsm_sales_call_details.each do |key, reps| %>
+										<% if key == :all_calls %>
+											<% reps.each do |key, value| %>
+												<% if key == :all_calls%>
+													<tr class="info">
+														<td class="centerTD"><%= value[:YTD][:bus_plan] %></td>
+														<td class="centerTD"><%= value[:YTD][:non_bus_plan] %></td>
+														<td class="centerTD"><%= value[:YTD][:total] %></td>
+													</tr>
+												<% end %>
+											<% end %>
+										<% end %>
+									<% end %>
+								</tbody>
+							</table>
+						</td>
 					</tr>
 				</tbody>
 			</table>
     </div>
+
     <div role="tabpanel" class="tab-pane fade" id="sales_call_percent">
     	<table class="table table" id="salesCallPercentTable">
 				<thead>
 					<tr class="bg-primary">
-						<th colspan=5 class="text-center">Sales Call Report Percent - <%= Date.today.strftime("%Y") %>
+						<th colspan=6 class="text-center">Sales Call Report Percent - <%= Date.today.strftime("%Y") %>
 					</tr>
 					<tr class="active">
 						<th>TSM</th>
@@ -193,10 +215,11 @@
 						<th class="text-center"><%= @Q2 %></th>
 						<th class="text-center"><%= @Q3 %></th>
 						<th class="text-center"><%= @Q4 %></th>
+						<th class="text-center">Year To Date</th>
 					</tr>
 					<tr>
 						<th></th>
-						<% 1.upto(4) do %>
+						<% 1.upto(5) do %>
 							<th>
 								<table style="width:100%;">
 										<tr>
@@ -235,6 +258,7 @@
 						<%= render partial: 'tsm_call_perc_table', locals: {quarter: "Q2"}, assigns: {tsm_sales_call_perc_details: @tsm_sales_call_perc_detail}  %>
 						<%= render partial: 'tsm_call_perc_table', locals: {quarter: "Q3"}, assigns: {tsm_sales_call_perc_details: @tsm_sales_call_perc_detail}  %>
 						<%= render partial: 'tsm_call_perc_table', locals: {quarter: "Q4"}, assigns: {tsm_sales_call_perc_details: @tsm_sales_call_perc_detail}  %>
+						<%= render partial: 'tsm_call_perc_table', locals: {quarter: "YTD"}, assigns: {tsm_sales_call_perc_details: @tsm_sales_call_perc_detail}  %>
 					</tr>
 				</tbody>
 			</table>

@@ -52,10 +52,13 @@ class SalesForce
 	def self.part_of_business_plan?(bus_plan, data_hash, quarter)
 		if bus_plan == "Yes"
 			data_hash[quarter][:bus_plan] += 1
+			data_hash[:YTD][:bus_plan] += 1
 		else 
 			data_hash[quarter][:non_bus_plan] += 1
+			data_hash[:YTD][:non_bus_plan] += 1
 		end
 		data_hash[quarter][:total] += 1
+		data_hash[:YTD][:total] += 1
 		data_hash
 	end
 
@@ -133,6 +136,7 @@ class SalesForce
 				value = self.calc_quarter("Q2", value, rep)
 				value = self.calc_quarter("Q3", value, rep)
 				value = self.calc_quarter("Q4", value, rep)
+				value = self.calc_quarter("YTD", value, rep)
 			end
 		end
 		data_hash
@@ -150,11 +154,21 @@ class SalesForce
 			value[quarter.to_sym][:total] = 0.to_f
 		else
 			if rep[:tsm_total].nil?
-				quarter_query = quarters.find_by_quarter(quarter.match(/\d/)[0].to_i)
-				value[quarter.to_sym][:total] = ((value[quarter.to_sym][:total] / rep.personnel_count.to_f) / quarter_query.week_count).round(2) unless quarter_query.nil?
+				quarter_query = quarter == "YTD" ? Date.today.strftime("%U").to_i : quarters.find_by_quarter(quarter.match(/\d/)[0].to_i)
+				if quarter_query.class == Fixnum
+					value[quarter.to_sym][:total] = ((value[quarter.to_sym][:total] / rep.personnel_count.to_f) / quarter_query).round(2) unless quarter_query.nil?
+				else
+					value[quarter.to_sym][:total] = ((value[quarter.to_sym][:total] / rep.personnel_count.to_f) / quarter_query.week_count).round(2) unless quarter_query.nil?
+				end
+				#value[:YTD][:total] = ((value[:YTD][:total] / rep.personnel_count.to_f) / quarters.inject(0) {|sum, n| sum += n.week_count}).round(2) 
 			else
-				quarter_query = quarters.find_by_quarter(quarter.match(/\d/)[0].to_i)
-				value[quarter.to_sym][:total] = ((value[quarter.to_sym][:total] / rep[:tsm_total][:personnel_count].to_f) / quarter_query.week_count).round(2) unless quarter_query.nil?
+				quarter_query = quarter == "YTD" ? Date.today.strftime("%U").to_i : quarters.find_by_quarter(quarter.match(/\d/)[0].to_i)
+				if quarter_query.class == Fixnum
+					value[quarter.to_sym][:total] = ((value[quarter.to_sym][:total] / rep[:tsm_total][:personnel_count].to_f) / quarter_query).round(2) unless quarter_query.nil?
+				else
+					value[quarter.to_sym][:total] = ((value[quarter.to_sym][:total] / rep[:tsm_total][:personnel_count].to_f) / quarter_query.week_count).round(2) unless quarter_query.nil?
+				end
+				#value[:YTD][:total] = ((value[:YTD][:total] / rep[:tsm_total][:personnel_count].to_f) / quarters.inject(0) {|sum, n| sum += n.week_count}).round(2) 
 			end
 		end
 
@@ -167,5 +181,43 @@ class SalesForce
 	  else 
 	  	((n.to_f / total) * 100).round(1)
 	  end
-	 end
+	end
+
+	def self.cell_color(value, type)
+		dec = value / 100
+		case type
+		when "perc"
+			if dec >= 0.7
+				"success"
+			elsif dec >= 0.5 && dec <= 0.69
+				"warning"
+			elsif dec < 0.5
+				"danger"
+			else
+			end
+		when "decimal"
+			
+			if value > 3.99
+				"success"
+			elsif value < 3 || value < 4 || value < 2
+				"danger"
+			elsif value > 3 && value < 5
+				"warning"
+			end
+
+			if value > 3.99
+				if (3..6).include?(value)
+				  "warning"
+				else 
+					"success"
+				end
+			elsif value < 3.99
+				if (2..5).include?(value)
+				  "warning"
+				else 
+					"danger"
+				end
+			end
+		end
+	end
 end
