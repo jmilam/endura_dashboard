@@ -19,6 +19,9 @@ class Sros::OrderEntriesController < ApplicationController
 	  @end_date = params[:end_date].blank? ? (Date.today.end_of_week).strftime("%D") : params[:end_date]
     @total_edi_orders = 0
 	  @total_manual_orders = 0
+	  @total_man_lag = 0
+	  @total_edi_lag = 0
+	  @total_scn_lag = 0
 	  @total_scn_orders = 0
 	  @total_edi_lines = 0
 	  @total_manual_lines = 0
@@ -114,9 +117,12 @@ class Sros::OrderEntriesController < ApplicationController
 		    @total_scn_sros += stats["t_scn_sro"]
 	 	    @total_manual_sros += stats["t_man_sro"]
 	 	    @total_customers += stats["t_custcount"]
+	 	    @total_man_lag += stats["t_man_lag"]
+	 	    @total_scn_lag += stats["t_scn_lag"]
+	 	    @total_edi_lag += stats["t_edi_lag"]
 	 	  end
 	  end
-    @user_stats << {"t_userid":"Total", "t_edi_sro": @total_edi_sros, "t_scn_sro": @total_scn_sros, "t_man_sro": @total_manual_sros,"t_edi_ord": @total_edi_orders, "t_scn_ord":@total_scn_orders, "t_man_ord":@total_manual_orders, "t_edi_line":@total_edi_lines, "t_scn_line":@total_scn_lines, "t_man_line":@total_manual_lines, "order_percent":"100%", "line_percent":"100%", "t_cust": @total_customers, "export": false}.stringify_keys	  
+    @user_stats << {"t_userid":"Total", "t_edi_sro": @total_edi_sros, "t_scn_sro": @total_scn_sros, "t_man_lag": @total_man_lag, "t_scn_lag": @total_scn_lag, "t_edi_lag": @total_edi_lag, "t_man_sro": @total_manual_sros,"t_edi_ord": @total_edi_orders, "t_scn_ord":@total_scn_orders, "t_man_ord":@total_manual_orders, "t_edi_line":@total_edi_lines, "t_scn_line":@total_scn_lines, "t_man_line":@total_manual_lines, "order_percent":"100%", "line_percent":"100%", "t_cust": @total_customers, "export": false}.stringify_keys	  
 
     @performance_data << @user_names
 	  @performance_data << @auto_orders

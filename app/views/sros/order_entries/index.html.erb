@@ -106,7 +106,9 @@
             <th>Name</th>
             <th>Total Orders</th>
             <th>Manual Orders</th>
+            <th>Manual Lag Time (Days)</th>
             <th>Auto Orders</th>
+            <th>Auto Lag Time (Days)</th>
             <th>Orders Complete(%)</th>
             <th>Total Lines</th>
             <th>Manual Lines</th>
@@ -125,7 +127,9 @@
                 <td><%= user_stat["t_userid"] %></td>
                 <td><%= user_stat["t_edi_ord"] + user_stat["t_scn_ord"] + user_stat["t_man_ord"] %></td>
                 <td><%= user_stat["t_man_ord"] %></td>
+                <td class="text-center"><%= user_stat["t_man_lag"] == 0 ? 0 : user_stat["t_man_ord"] / user_stat["t_man_lag"]%></td>
                 <td><%= user_stat["t_edi_ord"] + user_stat["t_scn_ord"] %></td>
+                <td class="text-center"><%= user_stat["t_edi_lag"] + user_stat["t_scn_lag"]  == 0 ? 0 : (user_stat["t_edi_ord"] + user_stat["t_scn_ord"]) / (user_stat["t_edi_lag"] + user_stat["t_scn_lag"])%></td>
                 <td class="text-center"><%= user_stat["order_percent"] %></td>
                 <td><%= user_stat["t_edi_line"] + user_stat["t_scn_line"] + user_stat["t_man_line"] %></td>
                 <td><%= user_stat["t_man_line"] %></td>
