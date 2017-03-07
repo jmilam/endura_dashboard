@@ -107,12 +107,12 @@
             <th>Total Orders</th>
             <th>Manual Orders</th>
             <th>Manual Lag Time (Days)</th>
-            <th>Auto Orders</th>
-            <th>Auto Lag Time (Days)</th>
+            <th>Scanned Orders</th>
+            <th>Scanned Lag Time (Days)</th>
             <th>Orders Complete(%)</th>
             <th>Total Lines</th>
             <th>Manual Lines</th>
-            <th>Auto Lines</th>
+            <th>Scanned Lines</th>
             <th>Lines Complete(%)</th>
             <th>Customer Count</th>
             <th>SROs</th>
@@ -158,7 +158,6 @@
             <th>Type</th>
             <th class="text-center">Current YTD $</th>
             <th class="text-center">Previous YTD $</th>
-            <th class="text-center">Current Month $</th>
           </tr>
         </thead>
         <tbody>
@@ -168,11 +167,10 @@
 	          </tr>
       	    <tr>
       	      <% value.each do |type, value| %>
-      	        <tr rowspan="4">
+      	        <tr rowspan="3">
       	          <td><%= type %></td>
                   <td class="text-center">$<%= value["current_ytd"].nil? ? "0.00" : value["current_ytd"].round(2) %></td>
       	          <td class="text-center">$<%= value["previous_year"].nil? ? "0.00" : value["previous_year"].round(2) %></td>
-      	          <td class="text-center">$<%= value["current_month"].nil? ? "0.00" : value["current_month"].round(2) %></td>
       	        </tr>	      
       	      <% end %>
             </tr>

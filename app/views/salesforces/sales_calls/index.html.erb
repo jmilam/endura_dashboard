@@ -37,6 +37,7 @@
 	<ul class="nav nav-pills nav-justified">
 	  <li role="presentation" class="active"><a href="#sales_call_total"  aria-controls="home" role="tab" data-toggle="tab">Sales Call Total</a></li>
 	  <li role="presentation"><a href="#sales_call_percent"  aria-controls="home" role="tab" data-toggle="tab">Sales Call Percent</a></li>
+	  <li role="presentation"><a href="#projections"  aria-controls="home" role="tab" data-toggle="tab">vs. % <%= (Date.today - 1.year).strftime("%Y") %> Projected</a></li>
 	</ul>
 
 	 <div class="tab-content">
@@ -259,6 +260,25 @@
 						<%= render partial: 'tsm_call_perc_table', locals: {quarter: "Q3"}, assigns: {tsm_sales_call_perc_details: @tsm_sales_call_perc_detail}  %>
 						<%= render partial: 'tsm_call_perc_table', locals: {quarter: "Q4"}, assigns: {tsm_sales_call_perc_details: @tsm_sales_call_perc_detail}  %>
 						<%= render partial: 'tsm_call_perc_table', locals: {quarter: "YTD"}, assigns: {tsm_sales_call_perc_details: @tsm_sales_call_perc_detail}  %>
+					</tr>
+				</tbody>
+			</table>
+    </div>
+
+    <div role="tabpanel" class="tab-pane fade" id="projections">
+    	<table class="table table" id="projectedTable">
+				<thead>
+					<tr class="bg-primary">
+						<th colspan=3 class="text-center">vs. % <%= Date.today.strftime("%Y") %> Projected</th>
+					</tr>
+					<tr class="active">
+						<th>Overall</th>
+						<th>Key Categories</th>
+						<th>Total BP Calls per Person</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
 					</tr>
 				</tbody>
 			</table>

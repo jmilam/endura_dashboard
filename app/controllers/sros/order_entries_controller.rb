@@ -35,12 +35,14 @@ class Sros::OrderEntriesController < ApplicationController
 	  uri = URI(self.api_url + "/sro/order_entry?start=#{@start_date}&end=#{@end_date}")
 
 	  response = Net::HTTP.get(uri)
+
 	  json_response =  JSON.parse(response)
 	  @user_stats = json_response["userstats"]
 	  @sro_summary = json_response["sros"]
 	  @sro_prev = json_response["srosPrevYtd"]
 	  @sro_type_by_month = json_response["srotype"]
 	  @user_unconfirmed = json_response["unconfirmed"]
+	  @sro_curr_ytd = json_response["srosCurrYtd"]
 
 	  @user_unconfirmed = Sro.group_unconfirmed(json_response["unconfirmed"], @user_exceptions)
 	  @user_unconfirmed_chart_data = @user_unconfirmed[1]
@@ -69,23 +71,20 @@ class Sros::OrderEntriesController < ApplicationController
 						end
 		      end
 		    end
-
-		    if @sro_by_customer.keys.include?(summary["sro-name"])
-	        @sro_by_customer[summary["sro-name"]] = Sro.calculate_customer_ytd(@sro_by_customer[summary["sro-name"]], summary["sro-line-total"], summary["sro-ent-date"])
-	      else
-	        @sro_by_customer[summary["sro-name"]] = summary["sro-line-total"]
-	      end unless summary["sro-name"].empty?
 	    end
+	  end
+
+	  @sro_curr_ytd.each do |summary|
+	  	if @sro_by_customer.keys.include?(summary["sro-name"])
+        @sro_by_customer[summary["sro-name"]] = Sro.calculate_customer_ytd(@sro_by_customer[summary["sro-name"]], summary["sro-line-total"], summary["sro-ent-date"])
+      else
+        @sro_by_customer[summary["sro-name"]] = summary["sro-line-total"]
+      end unless summary["sro-name"].empty?
 	  end
 
 	  @sro_prev.each do |summary|
       if @sro_overview.key?(summary["sro-taken"])
-      	p @sro_overview[summary["sro-taken"]]
       	@sro_overview[summary["sro-taken"]].key?(summary["sro-type"]) ? @sro_overview[summary["sro-taken"]][summary["sro-type"]]["previous_year"].nil? ? @sro_overview[summary["sro-taken"]][summary["sro-type"]]["previous_year"] = summary["sro-line-total"] : @sro_overview[summary["sro-taken"]][summary["sro-type"]]["previous_year"] += summary["sro-line-total"] : next
-				# @sro_overview[summary["sro-taken"]].key?(summary["sro-type"]) ? @sro_overview[summary["sro-taken"]][summary["sro-type"]]["previous_year"].nil? ? @sro_overview[summary["sro-taken"]][summary["sro-type"]]["previous_year"] = summary["sro-line-total"] : @sro_overview[summary["sro-taken"]][summary["sro-type"]]["previous_year"] += summary["sro-line-total"] : @sro_overview[summary["sro-taken"]] = {summary["sro-type"] => {"previous_year" => summary["sro-line-total"]}} 
-    #   else
-				# @sro_overview[summary["sro-taken"]] = summary["sro-taken"]
-				# @sro_overview[summary["sro-taken"]] = {summary["sro-type"] => {"previous_year" => summary["sro-line-total"]}}
       end
 	  end
 
@@ -155,5 +154,6 @@ class Sros::OrderEntriesController < ApplicationController
 	    end
 	    @year_overview << working_array
 	  end
+
 	end
 end

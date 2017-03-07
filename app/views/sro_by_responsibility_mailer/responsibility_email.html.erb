@@ -1,0 +1,97 @@
+<script type="text/javascript">
+
+  google.charts.load('current', {'packages':['corechart']});
+  drawVisualization();
+
+  function drawVisualization(){
+    var options1 = {
+      pieHole: 0.4,
+      title: "Totals By Responsibility"
+    };
+
+    var data1 = google.visualization.arrayToDataTable(<%= raw @sro_responsibiilty_pie %>);
+    var chart1 = new google.visualization.PieChart(document.getElementById('responsibility_pie'));
+    chart1.draw(data1, options1);
+
+    var options2 = {
+      pieHole: 0.4,
+      title: "Totals By Site"
+    };
+    var data2 = google.visualization.arrayToDataTable(<%= raw @sro_responsibility_sites_pie %>);
+    var chart2 = new google.visualization.PieChart(document.getElementById('responsibility_site_pie'));
+    chart2.draw(data2, options2);
+  }
+
+</script>
+<div style="margin-top:100px;">
+</div>
+<div class="container">
+  <div id="ByResponsibility">
+    <div class="row">
+      <div class="col-md-6"><div id="responsibility_pie" style="height: 350px;"></div></div>
+      <div class="col-md-6"><div id="responsibility_site_pie" style="height: 350px;"></div></div>
+    </div>
+    <table class="table table">
+      <thead>
+        <tr>
+          <th>Responsibility</th>
+          <th>Failure Code</th>
+          <th class="text-center">Reasons</th>
+          <th style="width:100px;text-align: center;">2000</th>
+          <th style="width:100px;text-align: center">3000</th>
+          <th style="width:100px;text-align: center">4300</th>
+          <th style="width:100px;text-align: center">5000</th>
+          <th style="width:100px;text-align: left">9000</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @sro_by_responsibility.each do |key, codes| %>
+          <tr>
+            <td><%= key %></td>
+            <td style="padding-left: 0;padding-right:0;">
+              <table class="table table-striped" style="width:100%">
+                <% codes.keys.each do |code| %>
+                  <% unless codes[code].empty? %>
+                    <tr class="inside_table">
+                      <td><%= code %></td>
+                    </tr>
+                  <% end %>
+                <% end %>
+              </table>
+            </td>
+            <td style="padding-left: 0;padding-right:0;">
+              <table  class="table table-striped" style="width:100%">            
+                <% codes.each do |key, value| %>
+                  <% unless value.class == Array %>
+                    <tr class="inside_table">
+                      <% value["description"].each do |desc| %>
+                        <td><%= desc %></td>
+                      <% end %>
+                    </tr>
+                  <% end %>
+                <% end %>
+              </table>
+            </td>
+            <td colspan="7" style="padding-left:0;padding-right:0;">
+              <table class="table table-striped" style="width:100%">
+                <% codes.each do |key, value|%>
+                  <% unless value.class == Array %>
+                    <tr class="inside_table" style="border-right:none;">
+                      <td style="width:100px; text-align:right;"><%= number_to_currency(value["2000"]) %></td>
+                      <td style="width:100px; text-align:right;"><%= number_to_currency(value["3000"]) %></td>
+                      <td style="width:100px; text-align:right;"><%= number_to_currency(value["4300"]) %></td>
+                      <td style="width:100px; text-align:right;"><%= number_to_currency(value["5000"]) %></td>
+                      <td style="width:100px; text-align:right;"><%= number_to_currency(value["9000"]) %></td>
+                      <td style="width:100px; text-align:right;"><%= number_to_currency(value["Total"]) %></td>
+                    </tr>
+                  <% end %>
+                <% end %>
+              </table>
+            </td>
+          </tr>
+        <% end %> 
+      </tbody>
+    </table>
+  </div>
+</div>

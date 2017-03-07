@@ -46,6 +46,16 @@
                                 <div class="form-group">
                                     <button class="btn btn-success search">GO</button>
                                 </div>
+                            <% elsif current_page?('/sros/order_entries') %>
+                                <div class="form-group">
+                                    <li><input type="text" class="form-control datepicker" id="start_date" placeholder="Start Date..." style="text-align:center;"></li>
+                                </div>
+                                <div class="form-group">
+                                    <li><input type="text" class="form-control datepicker" id="end_date" placeholder="End Date..." style="text-align:center;"></li>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-success search">GO</button>
+                                </div>
                             <% elsif current_page?('/salesforces/sales_calls') %>
                                 <div class="form-group">
                                     <li><input type="text" class="form-control datepicker" id="start_date" placeholder="Start Date..." style="text-align:center;"></li>

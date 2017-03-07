@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= @title || "Endura Dashboard" %></title>
+    <%= csrf_meta_tags %>
+    <%= favicon_link_tag %>
+    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= javascript_include_tag 'application' %>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript">
+    
+    </script>
+  </head>
+
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+		   <span><%= image_tag("endura-check.svg", height:"20", data: {title: "Endura"}) %></span>
+		   Endura
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <div class="form-inline">
+                        <div class="form-group" style="margin-top:8px;">
+                            
+                        </div>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div style="margin-top: 60px;">
+        <%= yield %>
+    </div>
+
+</html>
