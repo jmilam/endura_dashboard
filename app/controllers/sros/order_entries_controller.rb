@@ -30,6 +30,9 @@ class Sros::OrderEntriesController < ApplicationController
 	  @total_edi_sros = 0
 	  @total_manual_sros = 0
 	  @total_customers = 0
+	  @total_man_dollar = 0
+		@total_edi_dollar = 0
+		@total_scn_dollar = 0
 
 	  #URI call to QAD API to receive JSON data
 	  uri = URI(self.api_url + "/sro/order_entry?start=#{@start_date}&end=#{@end_date}")
@@ -119,9 +122,12 @@ class Sros::OrderEntriesController < ApplicationController
 	 	    @total_man_lag += stats["t_man_lag"]
 	 	    @total_scn_lag += stats["t_scn_lag"]
 	 	    @total_edi_lag += stats["t_edi_lag"]
+	 	    @total_man_dollar += stats["t_man_dol"]
+	 	    @total_edi_dollar += stats["t_edi_dol"]
+	 	    @total_scn_dollar += stats["t_scn_dol"]
 	 	  end
 	  end
-    @user_stats << {"t_userid":"Total", "t_edi_sro": @total_edi_sros, "t_scn_sro": @total_scn_sros, "t_man_lag": @total_man_lag, "t_scn_lag": @total_scn_lag, "t_edi_lag": @total_edi_lag, "t_man_sro": @total_manual_sros,"t_edi_ord": @total_edi_orders, "t_scn_ord":@total_scn_orders, "t_man_ord":@total_manual_orders, "t_edi_line":@total_edi_lines, "t_scn_line":@total_scn_lines, "t_man_line":@total_manual_lines, "order_percent":"100%", "line_percent":"100%", "t_cust": @total_customers, "export": false}.stringify_keys	  
+    @user_stats << {"t_userid":"Total","t_man_dol": @total_man_dollar, "t_edi_dol": @total_edi_dollar, "t_scn_dol": @total_scn_dollar, "t_edi_sro": @total_edi_sros, "t_scn_sro": @total_scn_sros, "t_man_lag": @total_man_lag, "t_scn_lag": @total_scn_lag, "t_edi_lag": @total_edi_lag, "t_man_sro": @total_manual_sros,"t_edi_ord": @total_edi_orders, "t_scn_ord":@total_scn_orders, "t_man_ord":@total_manual_orders, "t_edi_line":@total_edi_lines, "t_scn_line":@total_scn_lines, "t_man_line":@total_manual_lines, "order_percent":"100%", "line_percent":"100%", "t_cust": @total_customers, "export": false}.stringify_keys	  
 
     @performance_data << @user_names
 	  @performance_data << @auto_orders

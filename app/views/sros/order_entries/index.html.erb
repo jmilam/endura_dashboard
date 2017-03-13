@@ -1,3 +1,4 @@
+
 <script type="text/javascript">
   
   $(window).load(function(){
@@ -88,6 +89,14 @@
     });
 
   }
+
+  $( function() {
+    date = new Date();
+    minutes = date.getMinutes();
+    refreshIn = (60 - minutes) * 60000
+    setTimeout(function(){location.reload();}, refreshIn);
+
+  });
 </script>
 
 <div class="container" style="margin-top:65px;">
@@ -115,6 +124,7 @@
             <th>Scanned Lines</th>
             <th>Lines Complete(%)</th>
             <th>Customer Count</th>
+            <th>Total Order $</th>
             <th>SROs</th>
             <th>Stats Month</th>
             <th><span class="glyphicon glyphicon-save-file report-card"></span></th>
@@ -136,6 +146,7 @@
                 <td><%= user_stat["t_edi_line"] + user_stat["t_scn_line"] %></td>
                 <td class="text-center"><%= user_stat["line_percent"] %></td>
                 <td class="text-center"><%= user_stat["t_custcount"] %></td>
+                <td class="text-center"><%= number_to_currency(user_stat["t_man_dol"] + user_stat["t_edi_dol"] + user_stat["t_scn_dol"]) %></td>
                 <td><%= user_stat["t_edi_sro"] + user_stat["t_scn_sro"] + user_stat["t_man_sro"] %></td>
                 <td><%= Date.parse(user_stat["t_month"]).strftime("%b '%y") unless user_stat["t_month"].nil? %></td>
                 <% if  user_stat["export"] == false %>
@@ -161,19 +172,25 @@
           </tr>
         </thead>
         <tbody>
-          <% @sro_overview.each do |key, value| %>
-            <tr>
-              <td colspan="4" class="text-center bg-success"><i><%= key %></i></td>
-	          </tr>
-      	    <tr>
-      	      <% value.each do |type, value| %>
-      	        <tr rowspan="3">
-      	          <td><%= type %></td>
-                  <td class="text-center">$<%= value["current_ytd"].nil? ? "0.00" : value["current_ytd"].round(2) %></td>
-      	          <td class="text-center">$<%= value["previous_year"].nil? ? "0.00" : value["previous_year"].round(2) %></td>
-      	        </tr>	      
-      	      <% end %>
-            </tr>
+          <% if @sro_overview.count == 0 %>
+            <div class="jumbotron">
+              <p class="text-center">No SRO's at this time.</p>
+            </div>
+          <% else %>
+            <% @sro_overview.each do |key, value| %>
+              <tr>
+                <td colspan="4" class="text-center bg-success"><i><%= key %></i></td>
+  	          </tr>
+        	    <tr>
+        	      <% value.each do |type, value| %>
+        	        <tr rowspan="3">
+        	          <td><%= type %></td>
+                    <td class="text-center">$<%= value["current_ytd"].nil? ? "0.00" : value["current_ytd"].round(2) %></td>
+        	          <td class="text-center">$<%= value["previous_year"].nil? ? "0.00" : value["previous_year"].round(2) %></td>
+        	        </tr>	      
+        	      <% end %>
+              </tr>
+            <% end %>
           <% end %>
         </tbody>
       </table>
@@ -197,34 +214,39 @@
     </div>
 
     <div class="tab-pane fade" id="unconfirmed_overview">
-
-      <div id="unconfirmed_order_chart" style="height:350px;"></div>
-      <table class="table table-condensed">
-        <thead>
-          <tr>
-            <th>User</th>
-            <th>Monday</th>
-            <th>Tuesday</th>
-            <th>Wednesday</th>
-            <th>Thursday</th>
-            <th>Friday</th>
-            <th>Saturday</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @user_unconfirmed.each do |key, values| %>
+      <% if @user_unconfirmed.count > 1 %>
+        <div id="unconfirmed_order_chart" style="height:350px;"></div>
+        <table class="table table-condensed">
+          <thead>
             <tr>
-              <td><%= key %></td>
-              <td><%=values["Monday"] %></td>
-              <td><%=values["Tuesday"] %></td>
-              <td><%=values["Wednesday"] %></td>
-              <td><%=values["Thursday"] %></td>
-              <td><%=values["Friday"] %></td>
-              <td><%=values["Saturday"] %></td>
+              <th>User</th>
+              <th>Monday</th>
+              <th>Tuesday</th>
+              <th>Wednesday</th>
+              <th>Thursday</th>
+              <th>Friday</th>
+              <th>Saturday</th>
             </tr>
-          <% end %>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <% @user_unconfirmed.each do |key, values| %>
+              <tr>
+                <td><%= key %></td>
+                <td><%=values["Monday"] %></td>
+                <td><%=values["Tuesday"] %></td>
+                <td><%=values["Wednesday"] %></td>
+                <td><%=values["Thursday"] %></td>
+                <td><%=values["Friday"] %></td>
+                <td><%=values["Saturday"] %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% else %>
+        <div class="jumbotron">
+          <p class="text-center">No unconfirmed data at this time.</p>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>

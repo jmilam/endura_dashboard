@@ -7,6 +7,7 @@
     <%= favicon_link_tag %>
     <%= stylesheet_link_tag    'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
+    
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -55,6 +56,9 @@
                                 </div>
                                 <div class="form-group">
                                     <button class="btn btn-success search">GO</button>
+                                </div>
+                                <div class="form-group">
+                                    <li><%= check_box 'stop', 'start', id: 'stop_cycle' %> <label style="color:#428bca;">Auto Cycle: ON</label></li>
                                 </div>
                             <% elsif current_page?('/salesforces/sales_calls') %>
                                 <div class="form-group">
@@ -130,9 +134,20 @@
     });
 
     $( function() {
-      setInterval(function(){ changeTab(); }, 120000);
-
+      var interval = setInterval(function(){ changeTab(); }, 120000);
       $('#start_date, #end_date').datepicker();
+
+      $('#stop_cycle').on('click', function(){
+        if (this.checked == true){
+            clearInterval(interval);
+            $(this).siblings().last().text('Auto Cycle: OFF');
+            $(this).siblings().last().css('color', '#d9534f');
+        } else {
+            interval = setInterval(function(){ changeTab(); }, 120000);
+            $(this).siblings().last().text('Auto Cycle: ON');
+            $(this).siblings().last().css('color', '#428bca');
+        }
+      });
     });
 
     function changeTab(){
