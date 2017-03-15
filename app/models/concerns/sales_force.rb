@@ -218,6 +218,15 @@ class SalesForce
 					"danger"
 				end
 			end
+		when "xls"
+			if dec >= 0.7
+				"success"
+			elsif dec >= 0.5 && dec <= 0.69
+				"warning"
+			elsif dec < 0.5
+				"danger"
+			else
+			end
 		end
 	end
 end
