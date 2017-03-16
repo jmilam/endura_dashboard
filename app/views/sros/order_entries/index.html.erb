@@ -192,6 +192,11 @@
               </tr>
             <% end %>
           <% end %>
+          <tr>
+            <td>Total SRO's</td>
+            <td class="text-center"><%= number_to_currency(@total_sro_curr_ytd) %></td>
+            <td class="text-center"><%= number_to_currency(@total_sro_prev_ytd) %></td>
+          </tr>
         </tbody>
       </table>
       <table class="table table-condensed">

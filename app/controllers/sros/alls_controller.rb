@@ -13,8 +13,7 @@ class Sros::AllsController < ApplicationController
     @sro_by_failure_code = {"Total" => {reason: "", "2000" => 0, "3000" => 0, "4300" => 0, "5000" => 0, "9000" => 0, "Total" => 0}}
     @start_date = params[:start_date].blank? ? (Date.today.beginning_of_week - 1.week).strftime("%D"): params[:start_date]
     @end_date = params[:end_date].blank? ? (Date.today.end_of_week - 1.week).strftime("%D") : params[:end_date]
-    @sro_start = params[:start_date].blank? ? (Date.today.beginning_of_month).strftime("%D"): params[:start_date]
-    @sro_end = params[:end_date].blank? ? (Date.today.end_of_month).strftime("%D") : params[:end_date]
+
     @criteria = ReportCriteria.all
 
     #Pulls data from Mysql Table and builds created responsibilities
@@ -27,10 +26,9 @@ class Sros::AllsController < ApplicationController
     #Pulls Data from QAD through API call.
     uri = URI(self.api_url + "/sro/order_entry?start=#{@start_date}&end=#{@end_date}")
     response = Net::HTTP.get(uri)
-
-
+    @sros = JSON.parse(response)["sros"]
     #Cycles through returned data and builds Hash of totals to display
-    JSON.parse(response)["sros"].each do |sros|
+    @sros.each do |sros|
       #Builds data based on Responsibility Specifications
       @sro_by_responsibility = Sro.build_by_responsibility(sros, @sro_by_responsibility)
       @sro_by_customer = Sro.build_by_customer(sros, @sro_by_customer)

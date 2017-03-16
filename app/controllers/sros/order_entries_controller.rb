@@ -33,6 +33,8 @@ class Sros::OrderEntriesController < ApplicationController
 	  @total_man_dollar = 0
 		@total_edi_dollar = 0
 		@total_scn_dollar = 0
+		@total_sro_prev_ytd = 0
+		@total_sro_curr_ytd = 0
 
 	  #URI call to QAD API to receive JSON data
 	  uri = URI(self.api_url + "/sro/order_entry?start=#{@start_date}&end=#{@end_date}")
@@ -46,7 +48,6 @@ class Sros::OrderEntriesController < ApplicationController
 	  @sro_type_by_month = json_response["srotype"]
 	  @user_unconfirmed = json_response["unconfirmed"]
 	  @sro_curr_ytd = json_response["srosCurrYtd"]
-
 	  @user_unconfirmed = Sro.group_unconfirmed(json_response["unconfirmed"], @user_exceptions)
 	  @user_unconfirmed_chart_data = @user_unconfirmed[1]
 	  @user_unconfirmed = @user_unconfirmed[0]
@@ -83,14 +84,15 @@ class Sros::OrderEntriesController < ApplicationController
       else
         @sro_by_customer[summary["sro-name"]] = summary["sro-line-total"]
       end unless summary["sro-name"].empty?
+      @total_sro_curr_ytd += summary["sro-line-total"]
 	  end
 
 	  @sro_prev.each do |summary|
       if @sro_overview.key?(summary["sro-taken"])
       	@sro_overview[summary["sro-taken"]].key?(summary["sro-type"]) ? @sro_overview[summary["sro-taken"]][summary["sro-type"]]["previous_year"].nil? ? @sro_overview[summary["sro-taken"]][summary["sro-type"]]["previous_year"] = summary["sro-line-total"] : @sro_overview[summary["sro-taken"]][summary["sro-type"]]["previous_year"] += summary["sro-line-total"] : next
       end
+      @total_sro_prev_ytd += summary["sro-line-total"]
 	  end
-
 	  @sro_by_customer = @sro_by_customer.sort_by {|key, value| value }.reverse[0..19].to_h
 
 	  #This cycles the returned JSON data from QAD and builds an Array for Google Chart Visualization for the Performance Snapshot
