@@ -37,7 +37,7 @@ class Sros::OrderEntriesController < ApplicationController
 		@total_sro_curr_ytd = 0
 
 	  #URI call to QAD API to receive JSON data
-	  uri = URI(self.api_url + "/sro/order_entry?start=#{@start_date}&end=#{@end_date}")
+	  uri = URI(self.api_url + "/sro/order_entry?start=#{@start_date}&end=#{@end_date}&dept=ORD")
 
 	  response = Net::HTTP.get(uri)
 

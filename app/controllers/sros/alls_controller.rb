@@ -24,7 +24,7 @@ class Sros::AllsController < ApplicationController
     end
 
     #Pulls Data from QAD through API call.
-    uri = URI(self.api_url + "/sro/order_entry?start=#{@start_date}&end=#{@end_date}")
+    uri = URI(self.api_url + "/sro/order_entry?start=#{@start_date}&end=#{@end_date}&dept=All")
     response = Net::HTTP.get(uri)
     @sros = JSON.parse(response)["sros"]
     #Cycles through returned data and builds Hash of totals to display

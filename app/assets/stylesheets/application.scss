@@ -69,3 +69,12 @@
   font-size: 30px;
   padding-left:   10px;
 }
+
+.chart_row {
+  white-space: nowrap;
+  overflow-x:scroll;
+  overflow-y:hidden;
+  height:380px;
+  width:100%;
+  padding: 0 15px;
+}
