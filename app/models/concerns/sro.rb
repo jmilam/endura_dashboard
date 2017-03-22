@@ -371,4 +371,20 @@ class Sro
   def self.AppendData(data_group, idx, count, array_location)
     data_group[array_location.to_i][idx] = count
   end
+
+  def self.group_unconfirmed_status(data_group)
+    unconfirmed_group = Hash.new
+    return_data = [["Key", "Value"]]
+    data_group.each do |group|
+      if unconfirmed_group[group["ttdetstat"]].nil?
+        unconfirmed_group[group["ttdetstat"]] = group["ttdettot"]
+      else
+        unconfirmed_group[group["ttdetstat"]] += group["ttdettot"]
+      end
+    end
+    unconfirmed_group.each do |key, value|
+      return_data << [key, value]
+    end
+    return_data
+  end
 end

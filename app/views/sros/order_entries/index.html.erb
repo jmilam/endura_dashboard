@@ -4,7 +4,7 @@
   $(window).load(function(){
    
     
-    $('table tr:last').css('background-color','#428bca');
+    $('#unconfirmed_table tr:last').css('background-color','#428bca');
 
     //This will export data to Sros::ReportCard to create xls file on the backend and download it
     $('.report-card').on('click', function(e){
@@ -53,26 +53,20 @@
   google.charts.setOnLoadCallback(drawVisualization);
 
   function drawVisualization(){
-    var data = google.visualization.arrayToDataTable(<%= raw @performance_data %>);
-    
+    var order_data = google.visualization.arrayToDataTable(<%= raw @performance_data[:orders] %>);
+    var line_data = google.visualization.arrayToDataTable(<%= raw @performance_data[:lines] %>);
+
     var options1 = {
     	vAxis: {title: 'Total Count'},
     	hAxis: {title: 'Entry  Method'},
     	seriesType: 'bars'
     };
 
-    var chart = new google.visualization.ComboChart(document.getElementById('performance_chart'));
-    chart.draw(data, options1);
+    var chart = new google.visualization.ComboChart(document.getElementById('performance_orders_chart'));
+    chart.draw(order_data, options1);
 
-    // var options2 = {
-    //   vAxis: {title: '$ SRO Amt.'},
-    //   hAxis: {title: 'Month'},
-    //   seriesType: 'bars'
-    // };
-
-    // var data2 = google.visualization.arrayToDataTable(<%= raw @year_overview %>);    
-    // var chart2 = new google.visualization.ComboChart(document.getElementById('sro_overview_chart'));
-    // chart2.draw(data2, options2);
+    var chart2 = new google.visualization.ComboChart(document.getElementById('performance_lines_chart'));
+    chart2.draw(line_data, options1);
 
     var data3 = google.visualization.arrayToDataTable(<%= raw @user_unconfirmed_chart_data %>)
     var options3 = {
@@ -81,11 +75,23 @@
       };
 
     var chart3 = new google.visualization.LineChart(document.getElementById('unconfirmed_order_chart'));
-    chart3.draw(data3, options3);
+    //chart3.draw(data3, options3);
+
+    var data4 = google.visualization.arrayToDataTable(<%= raw @unconfirmed_det_chart %>)
+    var options4 = {
+      pieHole: 0.4,
+      title: "Totals By Status"
+    };
+
+    var chart4 = new google.visualization.PieChart(document.getElementById('unconfirmed_status_pie'));
+    //chart4.draw(data4, options1);
+
 
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-      chart.draw(data, options1)
+      chart.draw(order_data, options1);
+      chart2.draw(line_data, options1);
       chart3.draw(data3,options3);
+      chart4.draw(data4, options4);
     });
 
   }
@@ -93,22 +99,31 @@
   $( function() {
     date = new Date();
     minutes = date.getMinutes();
-    refreshIn = (60 - minutes) * 60000
+    if (minutes <= 30){
+      refreshIn = (30 - minutes) * 60000
+    }
+    else{
+      refreshIn = (60 - minutes) * 60000
+    }
+
     setTimeout(function(){location.reload();}, refreshIn);
 
   });
 </script>
 
-<div class="container" style="margin-top:65px;">
+<div class="container">
+  <div class="text-center well well-lg">Data Range Displaying: <%= @start_date %> - <%=@end_date %></div>
   <ul class="nav nav-pills nav-justified" id="test">
-    <li class="active"><a href="#current_snap" data-toggle="tab", id="snapTab">Performance Snapshot - <%= @sro_month %></a></li>
-    <li><a href="#sro_summary" data-toggle="tab" id="sroTab">SRO Summary</a></li>
-    <li><a href="#unconfirmed_overview" data-toggle="tab" id="unconfirmedTab">Unconfirmed Overview</a></li>
+    <li class="active"><a href="#current_snap" data-toggle="tab", id="snapTab">OE - Performance Snapshot - <%= @sro_month %></a></li>
+    <li><a href="#sro_summary" data-toggle="tab" id="sroTab">OE - SRO Summary</a></li>
+    <li><a href="#unconfirmed_overview" data-toggle="tab" id="unconfirmedTab">OE - Unconfirmed Overview</a></li>
+    <li><a href="#unconfirmed_detail" data-toggle="tab" id="unconfirmedDetTab">OE - Unconfirmed Detail</a></li>
   </ul>
 
   <div class="tab-content" style="margin-top:20px;">
     <div class="tab-pane fade in active" id="current_snap">
-      <div id="performance_chart" style="height:350px;"></div>
+      <div class="col-sm-12 col-md-6"><div id="performance_lines_chart" style="height:350px;"></div></div>
+      <div class="col-sm-12 col-md-6"><div id="performance_orders_chart" style="height:350px;"></div></div>
       <table class="table table-striped">
         <thead>
           <tr>
@@ -167,7 +182,7 @@
         <thead>
           <tr>
             <th>Type</th>
-            <th class="text-center">Current YTD $</th>
+            <th class="text-center">Current Data Range $</th>
             <th class="text-center">Previous YTD $</th>
           </tr>
         </thead>
@@ -192,16 +207,28 @@
               </tr>
             <% end %>
           <% end %>
-          <tr>
-            <td>Total SRO's</td>
-            <td class="text-center"><%= number_to_currency(@total_sro_curr_ytd) %></td>
-            <td class="text-center"><%= number_to_currency(@total_sro_prev_ytd) %></td>
-          </tr>
         </tbody>
       </table>
       <table class="table table-condensed">
+      <thead>
+        <tr>
+          <th colspan=2 class="text-center header_row">Total SRO's $</th>
+        </tr>
+        <tr>
+          <th class="text-center">Current YTD $</th>
+          <th class="text-center">Previous YTD $</th>
+        </tr>
+      </thead>
+      <tbody>
+         <tr>
+            <td class="text-center"><%= number_to_currency(@total_sro_curr_ytd) %></td>
+            <td class="text-center"><%= number_to_currency(@total_sro_prev_ytd) %></td>
+          </tr>
+      </tbody>
+      </table>
+      <table class="table table-condensed">
         <thead>
-	        <tr><td colspan="2" class="text-center header_row" bg-danger>Top 20 Customers by SRO $</td></tr>
+	        <tr><td colspan="2" class="text-center header_row">Top 20 Customers by SRO $</td></tr>
           <tr>
             <th>Customer</th>
             <th>YTD SRO $</th>
@@ -221,7 +248,7 @@
     <div class="tab-pane fade" id="unconfirmed_overview">
       <% if @user_unconfirmed.count > 1 %>
         <div id="unconfirmed_order_chart" style="height:350px;"></div>
-        <table class="table table-condensed">
+        <table class="table table-condensed" id="unconfirmed_table">
           <thead>
             <tr>
               <th>User</th>
@@ -251,6 +278,47 @@
         <div class="jumbotron">
           <p class="text-center">No unconfirmed data at this time.</p>
         </div>
+      <% end %>
+    </div>
+
+    <div class="tab-pane fade" id="unconfirmed_detail">
+      <% if @unconfirmed_detail.count == 0 %>
+        <div class="jumbotron">
+          <p class="text-center">No Unconfirmed Details at this time for <%= @start_date %> - <%= @end_date %>.</p>
+        </div>
+      <% else %>
+        <% if @value_status  %>
+          <div class="col-sm-12 col-md-12 text-center"><div id="unconfirmed_status_pie" style="height:350px;"></div></div>
+        <% else %>
+          <div class="col-sm-12 col-md-12 text-center"><div id="unconfirmed_status_pie" class="hide" style="height:350px;"></div></div>
+          <div class="jumbotron">
+            <p class="text-center">No Unconfirmed Details Totals avaialble at this time for <%= @start_date %> - <%= @end_date %>.</p>
+          </div>
+        <% end %>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Customer</th>
+              <th>Status Code</th>
+              <th>Order Total</th>
+              <th>Site</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <% @unconfirmed_detail.each do |detail| %>
+            <tbody>
+              <tr>
+                <td><%= detail["ttdetuserid"] %></td>
+                <td><%= detail["ttdetname"] %></td>
+                <td><%= detail["ttdetstat"] %></td>
+                <td><%= detail["ttdettot"] %></td>
+                <td><%= detail["ttdetsite"] %></td>
+                <td><%= detail["ttdetdate"] %></td>
+              </tr>
+            </tbody>
+          <% end %>
+        </table>
       <% end %>
     </div>
   </div>

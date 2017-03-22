@@ -6,7 +6,7 @@ class Sros::OrderEntriesController < ApplicationController
 	  @sro_by_customer = Hash.new
 	  @current_year = Date.today.year
 	  @previous_year = Date.today.last_year.year
-	  @performance_data = Array.new
+	  @performance_data = {orders: Array.new, lines: Array.new}
 	  @overview_data = Array.new
 	  @user_names = ['User Name']
 	  @auto_orders = ['Auto Orders']
@@ -51,6 +51,10 @@ class Sros::OrderEntriesController < ApplicationController
 	  @user_unconfirmed = Sro.group_unconfirmed(json_response["unconfirmed"], @user_exceptions)
 	  @user_unconfirmed_chart_data = @user_unconfirmed[1]
 	  @user_unconfirmed = @user_unconfirmed[0]
+	  @unconfirmed_detail = json_response["unconfdetail"]
+	  @unconfirmed_det_chart = Sro.group_unconfirmed_status(@unconfirmed_detail)
+	  @value_status = false
+	  @unconfirmed_det_chart.each {|key, value| @value_status = true if value.to_f > 0}
     
     #This cycles the returned JSON data from QAD and builds an Array for Google Chart Visualization for the Summary Data
 	  @sro_summary.each do |summary|
@@ -131,11 +135,12 @@ class Sros::OrderEntriesController < ApplicationController
 	  end
     @user_stats << {"t_userid":"Total","t_man_dol": @total_man_dollar, "t_edi_dol": @total_edi_dollar, "t_scn_dol": @total_scn_dollar, "t_edi_sro": @total_edi_sros, "t_scn_sro": @total_scn_sros, "t_man_lag": @total_man_lag, "t_scn_lag": @total_scn_lag, "t_edi_lag": @total_edi_lag, "t_man_sro": @total_manual_sros,"t_edi_ord": @total_edi_orders, "t_scn_ord":@total_scn_orders, "t_man_ord":@total_manual_orders, "t_edi_line":@total_edi_lines, "t_scn_line":@total_scn_lines, "t_man_line":@total_manual_lines, "order_percent":"100%", "line_percent":"100%", "t_cust": @total_customers, "export": false}.stringify_keys	  
 
-    @performance_data << @user_names
-	  @performance_data << @auto_orders
-	  @performance_data << @manual_orders
-	  @performance_data << @auto_lines
-	  @performance_data << @manual_lines
+    @performance_data[:orders] << @user_names
+    @performance_data[:lines] << @user_names
+	  @performance_data[:orders] << @auto_orders
+	  @performance_data[:orders] << @manual_orders
+	  @performance_data[:lines] << @auto_lines
+	  @performance_data[:lines] << @manual_lines
 
 	  @sro_chart_data = Hash.new
 	  @year_overview = [["Month", "CR", "DF", "RT"]]
