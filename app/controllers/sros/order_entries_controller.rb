@@ -51,7 +51,7 @@ class Sros::OrderEntriesController < ApplicationController
 	  @user_unconfirmed = Sro.group_unconfirmed(json_response["unconfirmed"], @user_exceptions)
 	  @user_unconfirmed_chart_data = @user_unconfirmed[1]
 	  @user_unconfirmed = @user_unconfirmed[0]
-	  @unconfirmed_detail = json_response["unconfdetail"]
+	  @unconfirmed_detail = json_response["unconfdetail"].sort_by {|data| [data["ttdetuserid"], data["ttdetdate"]]}
 	  @unconfirmed_det_chart = Sro.group_unconfirmed_status(@unconfirmed_detail)
 	  @value_status = false
 	  @unconfirmed_det_chart.each {|key, value| @value_status = true if value.to_f > 0}
@@ -106,7 +106,7 @@ class Sros::OrderEntriesController < ApplicationController
 
     # This builds calculations for the snapshot chart
 	  @user_stats.each do |stats|
-	  	unless @user_exceptions.include?(stats["t_userid"])
+	  	unless @user_exceptions.include?(stats["t_userid"].downcase)
 		    @auto_orders << (stats["t_edi_ord"] + stats["t_scn_ord"])
 	      @manual_orders <<  stats["t_man_ord"]
 		    @auto_lines << (stats["t_edi_line"] + stats["t_scn_line"])

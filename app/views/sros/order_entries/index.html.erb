@@ -59,14 +59,21 @@
     var options1 = {
     	vAxis: {title: 'Total Count'},
     	hAxis: {title: 'Entry  Method'},
+      title: "Order Counts",
     	seriesType: 'bars'
     };
 
     var chart = new google.visualization.ComboChart(document.getElementById('performance_orders_chart'));
     chart.draw(order_data, options1);
 
+    var options2 = {
+      vAxis: {title: 'Total Count'},
+      hAxis: {title: 'Entry  Method'},
+      title: "Order Lines",
+      seriesType: 'bars'
+    };
     var chart2 = new google.visualization.ComboChart(document.getElementById('performance_lines_chart'));
-    chart2.draw(line_data, options1);
+    chart2.draw(line_data, options2);
 
     var data3 = google.visualization.arrayToDataTable(<%= raw @user_unconfirmed_chart_data %>)
     var options3 = {
@@ -89,7 +96,7 @@
 
     $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
       chart.draw(order_data, options1);
-      chart2.draw(line_data, options1);
+      chart2.draw(line_data, options2);
       chart3.draw(data3,options3);
       chart4.draw(data4, options4);
     });
@@ -147,7 +154,7 @@
         </thead>
         <tbody>
           <% @user_stats.each do |user_stat| %>
-            <% unless @user_exceptions.include?(user_stat["t_userid"]) %>
+            <% unless @user_exceptions.include?(user_stat["t_userid"].downcase) %>
               <tr>
                 <td><%= user_stat["t_userid"] %></td>
                 <td><%= user_stat["t_edi_ord"] + user_stat["t_scn_ord"] + user_stat["t_man_ord"] %></td>
