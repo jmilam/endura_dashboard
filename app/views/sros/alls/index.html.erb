@@ -149,6 +149,7 @@
 <div style="margin-top:100px;">
 </div>
 <div class="container">
+   <div class="text-center well well-lg">Data Range Displaying: <%= @start_date %> - <%=@end_date %></div>
   <% if @sros.count == 0 %>
     <div class="jumbotron">
       <p class="text-center">No SRO's at this time for <%= @start_date %> - <%= @end_date %>.</p>
@@ -206,12 +207,12 @@
                   <% codes.each do |key, value|%>
                     <% unless value.class == Array %>
                       <tr class="inside_table" style="border-right:none;">
-                        <td style="width:100px; text-align:right;"><%= number_to_currency(value["2000"]) %></td>
-                        <td style="width:100px; text-align:right;"><%= number_to_currency(value["3000"]) %></td>
-                        <td style="width:100px; text-align:right;"><%= number_to_currency(value["4300"]) %></td>
-                        <td style="width:100px; text-align:right;"><%= number_to_currency(value["5000"]) %></td>
-                        <td style="width:100px; text-align:right;"><%= number_to_currency(value["9000"]) %></td>
-                        <td style="width:100px; text-align:right;"><%= number_to_currency(value["Total"]) %></td>
+                        <td style="width:100px; text-align:right;">$<%= value["2000"].to_i %></td>
+                        <td style="width:100px; text-align:right;">$<%= value["3000"].to_i %></td>
+                        <td style="width:100px; text-align:right;">$<%= value["4300"].to_i %></td>
+                        <td style="width:100px; text-align:right;">$<%= value["5000"].to_i %></td>
+                        <td style="width:100px; text-align:right;">$<%= value["9000"].to_i %></td>
+                        <td style="width:100px; text-align:right;">$<%= value["Total"].to_i %></td>
                       </tr>
                     <% end %>
                   <% end %>
@@ -244,12 +245,12 @@
             <% unless key == "Grand Total" %>
               <tr>
                 <td><%= key %></td>
-                <td style="width:100px;text-align: center;"><%= number_to_currency(value["2000"]) %></td>
-                <td style="width:100px;text-align: center;"><%= number_to_currency(value["3000"]) %></td>
-                <td style="width:100px;"><%= number_to_currency(value["4300"]) %></td>
-                <td style="width:100px;"><%= number_to_currency(value["5000"]) %></td>
-                <td style="width:100px;text-align: center;"><%= number_to_currency(value["9000"]) %></td>
-                <td><%= number_to_currency(value["Total"]) %></td>
+                <td style="width:100px;text-align: center;">$<%= value["2000"].to_i %></td>
+                <td style="width:100px;text-align: center;">$<%= value["3000"].to_i %></td>
+                <td style="width:100px;">$<%= value["4300"].to_i %></td>
+                <td style="width:100px;">$<%= value["5000"].to_i %></td>
+                <td style="width:100px;text-align: center;">$<%= value["9000"].to_i %></td>
+                <td>$<%= value["Total"].to_i %></td>
               </tr>
             <% end %>
           <% end %>
@@ -291,7 +292,7 @@
                           <tbody>
                             <tr>
                               <td class="text-left"><%= values[:failure_code] %></td>
-                              <td class="text-right"><%= number_to_currency(values[:total]) %></td>
+                              <td class="text-right">$<%= values[:total].to_i %></td>
                             </tr>
                           </tbody>
                         </table>
@@ -341,7 +342,7 @@
                           <tbody>
                             <tr>
                               <td class="text-left"><%= values[:reason] %></td>
-                              <td class="text-right"><%= number_to_currency(values[:total]) %></td>
+                              <td class="text-right">$<%= values[:total].to_i %></td>
                             </tr>
                           </tbody>
                         </table>
@@ -385,7 +386,7 @@
                     <% value.each do |item, value| %>
                       <tr>
                         <td><%= item %></td>
-                        <td class="text-right"><%= number_to_currency(value[:total]) %></td>
+                        <td class="text-right">$<%= value[:total].to_i %></td>
                       </tr>
                     <% end %>
                   </tbody>
@@ -420,12 +421,12 @@
             <tr>
               <td><%= key %></td>
               <td><%= value[:reason] %></td>
-              <td><%= number_to_currency(value["2000"])%></td>
-              <td><%= number_to_currency(value["3000"])%></td>
-              <td><%= number_to_currency(value["4300"])%></td>
-              <td><%= number_to_currency(value["5000"])%></td>
-              <td><%= number_to_currency(value["9000"])%></td>
-              <td class="text-right"><%= number_to_currency(value["Total"]) %></td>
+              <td>$<%= value["2000"].to_i %></td>
+              <td>$<%= value["3000"].to_i %></td>
+              <td>$<%= value["4300"].to_i %></td>
+              <td>$<%= value["5000"].to_i %></td>
+              <td>$<%= value["9000"].to_i %></td>
+              <td class="text-right">$<%= value["Total"].to_i %></td>
             </tr>
           <% end %>
         </tbody>

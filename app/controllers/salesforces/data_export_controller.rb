@@ -57,6 +57,7 @@ class Salesforces::DataExportController < ApplicationController
 
 		@tsm_sales_call_perc_detail = SalesForce.calculate_perc(@tsm_sales_call_details.deep_dup, @sales_reps)
 
+		##The next group of code builds spreadsheet, and formats to export
 		total_background = Spreadsheet::Format.new :color=> :white, :pattern_fg_color => :grey, :pattern => 1
 		total_background_w_right_border = Spreadsheet::Format.new :color=> :white, :pattern_fg_color => :grey, :pattern => 1, right: :medium
 		total_background_w_left_border = Spreadsheet::Format.new :color=> :white, :pattern_fg_color => :grey, :pattern => 1, left: :medium
@@ -185,6 +186,7 @@ class Salesforces::DataExportController < ApplicationController
 		end
 
 		sheet1.column(0).width = 25
+		### Ends formatting
 		spreadsheet = StringIO.new
 		book.write spreadsheet
 		send_data spreadsheet.string, filename: 'salesforce.xls', type: "application/vnd.ms-excel"

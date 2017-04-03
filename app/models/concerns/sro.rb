@@ -34,21 +34,21 @@ class Sro
       when "responsibility"
         data["Grand Total"]["Grand Total"].each do |key, value|
             unless cycle_count == 0 || key.downcase == "total"
-              return_data << [key, value.round]
+              return_data << [key, value.abs.round]
             end
           cycle_count += 1
         end
       when "failure_code"
         data["Total"].each do |key, value|
           unless cycle_count == 0 || key.downcase == "total"
-            return_data << [key, value.round]
+            return_data << [key, value.abs.round]
           end
           cycle_count += 1
         end
       when "customer"
         data["Grand Total"].each do |key, value|
           unless cycle_count == 0 || key.downcase == "total"
-            return_data << [key, value.round]
+            return_data << [key, value.abs.round]
           end
           cycle_count += 1
         end
@@ -387,4 +387,11 @@ class Sro
     end
     return_data
   end
+
+  def self.sort_for_legend(data)
+    headers = data[0]
+    data = data[1..data.count].sort_by {|val| val[1].to_i} 
+    data.insert(0, headers)
+  end
+
 end
