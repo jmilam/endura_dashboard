@@ -52,6 +52,8 @@ class Sros::AllsController < ApplicationController
     @sro_by_customer_pie = Sro.sort_for_legend(Sro.build_data_for_google_pies(@sro_by_customer, "customer"))
     @sro_by_customer_sites_pie = Sro.sort_for_legend(Sro.build_data_for_google_pies(@sro_by_customer, "customer", "by_grand_total"))
     @sro_by_customer = @sro_by_customer.sort_by {|key, value| key}
+    @sro_by_customer.each_with_index {|data, index| @customer_grand_total_idx =  index unless data.find_index("Grand Total").nil?}
+
 
     @sro_by_site_customer.each do |site, data| 
       @sro_by_site_customer_pie[site] = Sro.sort_for_legend(Sro.build_data_for_google_pies(data, "site_customer"))

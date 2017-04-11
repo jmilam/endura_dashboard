@@ -18,7 +18,7 @@
 		<thead>
 			<tr>
 				<th>SRO Management Links</th>
-				<th> <%= link_to "Go To SRO's Company Wide", sros_alls_path %></th>
+				<th><%= link_to "Go To SRO's Company Wide", sros_alls_path %></th>
 				<th><%= link_to "Go To SRO's Order Entry", sros_order_entries_path %></th>
 			</tr>
 		</thead>
@@ -27,5 +27,22 @@
 			<tr><td colspan=3><%= link_to "Failure Code Management", configurations_sro_failure_code_index_path %></td></tr>
 			<tr><td colspan=3><%= link_to "Report Criteria Management", configurations_sro_report_criteria_path %></td></tr>
 		</tbody>
+	</table>
+
+	<table class="table table-hover">
+	<thead>
+		<tr>
+			<th>Endura Report Links</th>
+			<th><%= text_field_tag :date,nil, placeholder:"Report Date..." ,id: 'start_date' %></th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr><td colspan=2><%= link_to "Customer Order Performance Report", "http://qadreports.enduraproducts.com/mail/fillbydate?format=html&date=04/10/17"%></td></tr>
+		<tr><td colspan=2><%= link_to "Automated Billing Report", "http://qadreports/enduraproducts.com/mail/billingreportfromname?format=html&name=04_10_17_invexport.txt" %></td></tr>
+		<tr><td colspan=2><%= link_to "AR Metrics", "http://qadreports.enduraproducts.com/mail/armetrics?format=html&date=04/10/17" %></td></tr>
+		<tr><td colspan=2><%= link_to "Daily Orders By Product Line", "http://qadreports.enduraproducts.com/mail/dailysalesbypl?format=html&date=04/10/17" %></td></tr>
+		<tr><td colspan=2><%= link_to "SRO's Pending Approval", "#" %></td></tr>
+		<tr><td colspan=2><%= link_to "SRO Report", "#" %></td></tr>
+	</tbody>
 	</table>
 </div>

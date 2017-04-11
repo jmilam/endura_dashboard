@@ -390,7 +390,7 @@ class Sro
 
   def self.sort_for_legend(data)
     headers = data[0]
-    data = data[1..data.count].sort_by {|val| val[1].to_i} 
+    data = data[1..data.count].sort_by {|val| val[1].to_i}.reverse
     data.insert(0, headers)
   end
 
