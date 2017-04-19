@@ -1,3 +1,5 @@
+
+
 <div class="container">
 
 	<table class="table table-hover">
@@ -37,12 +39,12 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr><td colspan=2><%= link_to "Customer Order Performance Report", "http://qadreports.enduraproducts.com/mail/fillbydate?format=html&date=04/10/17"%></td></tr>
-		<tr><td colspan=2><%= link_to "Automated Billing Report", "http://qadreports/enduraproducts.com/mail/billingreportfromname?format=html&name=04_10_17_invexport.txt" %></td></tr>
-		<tr><td colspan=2><%= link_to "AR Metrics", "http://qadreports.enduraproducts.com/mail/armetrics?format=html&date=04/10/17" %></td></tr>
-		<tr><td colspan=2><%= link_to "Daily Orders By Product Line", "http://qadreports.enduraproducts.com/mail/dailysalesbypl?format=html&date=04/10/17" %></td></tr>
-		<tr><td colspan=2><%= link_to "SRO's Pending Approval", "#" %></td></tr>
-		<tr><td colspan=2><%= link_to "SRO Report", "#" %></td></tr>
+		<tr><td colspan=2><%= link_to "Customer Order Performance Report", "http://qadreports.enduraproducts.com/mail/fillbydate?format=html&date=4/10/17", remote: true, class: 'remote_report_link' %></td></tr>
+		<tr><td colspan=2><%= link_to "Automated Billing Report", "http://qadreports.enduraproducts.com/mail/billingreportfromname?format=html&name=04_10_17_invexport.txt", remote: true, class: 'remote_report_link' %></td></tr>
+		<tr><td colspan=2><%= link_to "AR Metrics", "http://qadreports.enduraproducts.com/mail/armetrics?format=html&date=04/10/17", remote: true, class: 'remote_report_link' %></td></tr>
+		<tr><td colspan=2><%= link_to "Daily Orders By Product Line", "http://qadreports.enduraproducts.com/mail/dailysalesbypl?format=html&date=04/10/17", remote: true, class: 'remote_report_link' %></td></tr>
+		<tr><td colspan=2><%= link_to "SRO's Pending Approval", "#", remote: true, class: 'remote_report_link' %></td></tr>
+		<tr><td colspan=2><%= link_to "SRO Report", "#", remote: true, class: 'remote_report_link' %></td></tr>
 	</tbody>
 	</table>
 </div>

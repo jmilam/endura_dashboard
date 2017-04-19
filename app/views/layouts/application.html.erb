@@ -191,5 +191,17 @@
           $('#totalCount').text($("tbody tr:contains(" + search + ")").size());               
         }
     });
+
+    $('.remote_report_link').on('click', function(e){
+        date = ($('#start_date').val() == "") ? new Date() : $('#start_date').val()
+
+        if (this.search.match(/_/g) == null){
+            date = ($.type(date) == "string") ? date : (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear().toString().substr(-2)
+            location.href = "http://" + this.hostname + this.pathname + this.search.match(/[\D]+/g)[0] + date
+        } else {
+            date = ($.type(date) == "string") ? date : (date.getMonth() + 1) + "_" + date.getDate() + "_" + date.getFullYear().toString().substr(-2) + "_invexport.txt"
+            location.href = "http://" + this.hostname + this.pathname + this.search.match(/[\D]+/g)[0] + date
+        }
+    });
   </script>
 </html>
