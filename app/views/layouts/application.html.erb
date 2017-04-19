@@ -199,7 +199,8 @@
             date = ($.type(date) == "string") ? date : (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear().toString().substr(-2)
             location.href = "http://" + this.hostname + this.pathname + this.search.match(/[\D]+/g)[0] + date
         } else {
-            date = ($.type(date) == "string") ? date : (date.getMonth() + 1) + "_" + date.getDate() + "_" + date.getFullYear().toString().substr(-2) + "_invexport.txt"
+            date = ($.type(date) == "string") ? new Date (date) : date
+            date = "0" + (date.getMonth() + 1) + "_" + date.getDate() + "_" + date.getFullYear().toString().substr(-2) + "_invexport.txt"
             location.href = "http://" + this.hostname + this.pathname + this.search.match(/[\D]+/g)[0] + date
         }
     });
