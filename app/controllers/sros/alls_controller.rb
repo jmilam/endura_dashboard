@@ -48,7 +48,7 @@ class Sros::AllsController < ApplicationController
     @sro_responsibiilty_pie = Sro.sort_for_legend(Sro.build_data_for_google_pies(@sro_by_responsibility, "responsibility"))
     @sro_responsibility_sites_pie = Sro.sort_for_legend(Sro.build_data_for_google_pies(@sro_by_responsibility, "responsibility", "by_grand_total"))
 
-    @sro_by_customer["Grand Total"] = Sro.totals_by_site
+    @sro_by_customer["Grand Total"] = Sro.total_data(@sro_by_customer)
     @sro_by_customer_pie = Sro.sort_for_legend(Sro.build_data_for_google_pies(@sro_by_customer, "customer"))
     @sro_by_customer_sites_pie = Sro.sort_for_legend(Sro.build_data_for_google_pies(@sro_by_customer, "customer", "by_grand_total"))
     @sro_by_customer = @sro_by_customer.sort_by {|key, value| key}
@@ -56,20 +56,32 @@ class Sros::AllsController < ApplicationController
 
 
     @sro_by_site_customer.each do |site, data| 
+      @sro_by_site_customer["#{site}"] = @sro_by_site_customer["#{site}"].sort_by {|key, value| key}.to_h
+      total = @sro_by_site_customer["#{site}"]["Total"]
+      @sro_by_site_customer["#{site}"].delete("Total")
+      @sro_by_site_customer["#{site}"]["Total"] = total
       @sro_by_site_customer_pie[site] = Sro.sort_for_legend(Sro.build_data_for_google_pies(data, "site_customer"))
     end
 
     @sro_by_site_reason.each do |site, data|
+      @sro_by_site_reason["#{site}"] = @sro_by_site_reason["#{site}"].sort_by {|key, value| key}.to_h
+      total = @sro_by_site_reason["#{site}"]["Total"]
+      @sro_by_site_reason["#{site}"].delete("Total")
+      @sro_by_site_reason["#{site}"]["Total"] = total
       @sro_by_site_reason_pie[site] = Sro.sort_for_legend(Sro.build_data_for_google_pies(data, "site_reason"))
     end
 
     @sro_by_site_item.each do |site, data|
+      @sro_by_site_item["#{site}"] = @sro_by_site_item["#{site}"].sort_by {|key, value| key}.to_h
+      total = @sro_by_site_item["#{site}"]["Total"]
+      @sro_by_site_item["#{site}"].delete("Total")
+      @sro_by_site_item["#{site}"]["Total"] = total
       @sro_by_site_item_pie[site] = Sro.sort_for_legend(Sro.build_data_for_google_pies(data, "site_item"))
     end
 
     @sro_by_failure_code_pie = Sro.sort_for_legend(Sro.build_data_for_google_pies(@sro_by_failure_code, "failure_code"))
     @sro_by_failure_code_sites_pie = Sro.sort_for_legend(Sro.build_data_for_google_pies(@sro_by_failure_code, "failure_code", "by_grand_total"))
-    @sro_by_failure_code = @sro_by_failure_code.sort_by {|key, value| value["Total"]}
+    @sro_by_failure_code = @sro_by_failure_code.sort_by {|key, value| key}
   end
 
   def show

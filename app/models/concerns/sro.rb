@@ -95,36 +95,37 @@ class Sro
 
   def self.build_by_responsibility(sros, sro_by_responsibility)
     if sro_by_responsibility.values[0].keys.include?(sros["sro-failure1"])
+      
       if sro_by_responsibility.values[0][sros["sro-failure1"]].empty?
-        sro_by_responsibility.values[0][sros["sro-failure1"]] = self.create_by_responsibility(sros["sro-desc"])
+        sro_by_responsibility.values[0][sros["sro-failure1"]] = self.create_by_responsibility(sros["sro-desc"], sros["xxsro-so-site"],sros["sro-failure1"],sros["sro-line-total"])
       else
-        #Add Totals
         sro_by_responsibility.values[0] = self.add_values_by_responsibility(sros["xxsro-so-site"], sros["sro-failure1"], sro_by_responsibility.values[0], sros["sro-line-total"])
       end
     elsif sro_by_responsibility.values[1].keys.include?(sros["sro-failure1"])
       if sro_by_responsibility.values[1][sros["sro-failure1"]].empty?
-        sro_by_responsibility.values[1][sros["sro-failure1"]] = self.create_by_responsibility(sros["sro-desc"])
+        sro_by_responsibility.values[1][sros["sro-failure1"]] = self.create_by_responsibility(sros["sro-desc"], sros["xxsro-so-site"],sros["sro-failure1"],sros["sro-line-total"])
       else
         sro_by_responsibility.values[1] = self.add_values_by_responsibility(sros["xxsro-so-site"], sros["sro-failure1"], sro_by_responsibility.values[1], sros["sro-line-total"])
       end
     elsif sro_by_responsibility.values[2].keys.include?(sros["sro-failure1"])
       if sro_by_responsibility.values[2][sros["sro-failure1"]].empty?
-        sro_by_responsibility.values[2][sros["sro-failure1"]] = self.create_by_responsibility(sros["sro-desc"])
+        sro_by_responsibility.values[2][sros["sro-failure1"]] = self.create_by_responsibility(sros["sro-desc"], sros["xxsro-so-site"],sros["sro-failure1"],sros["sro-line-total"])
       else
         sro_by_responsibility.values[2] = self.add_values_by_responsibility(sros["xxsro-so-site"], sros["sro-failure1"], sro_by_responsibility.values[2], sros["sro-line-total"])
       end
     elsif sro_by_responsibility.values[3].keys.include?(sros["sro-failure1"])
       if sro_by_responsibility.values[3][sros["sro-failure1"]].empty?
-        sro_by_responsibility.values[3][sros["sro-failure1"]] = self.create_by_responsibility(sros["sro-desc"])
+        sro_by_responsibility.values[3][sros["sro-failure1"]] = self.create_by_responsibility(sros["sro-desc"], sros["xxsro-so-site"],sros["sro-failure1"],sros["sro-line-total"])
       else
         sro_by_responsibility.values[3] = self.add_values_by_responsibility(sros["xxsro-so-site"], sros["sro-failure1"], sro_by_responsibility.values[3], sros["sro-line-total"])
       end
     elsif sro_by_responsibility.values[4].keys.include?(sros["sro-failure1"])
       if sro_by_responsibility.values[4][sros["sro-failure1"]].empty?
-        sro_by_responsibility.values[4][sros["sro-failure1"]] = self.create_by_responsibility(sros["sro-desc"])
+        sro_by_responsibility.values[4][sros["sro-failure1"]] = self.create_by_responsibility(sros["sro-desc"], sros["xxsro-so-site"],sros["sro-failure1"],sros["sro-line-total"])
       else
         sro_by_responsibility.values[4] = self.add_values_by_responsibility(sros["xxsro-so-site"], sros["sro-failure1"], sro_by_responsibility.values[4], sros["sro-line-total"])
       end
+    else
     end
     sro_by_responsibility
   end
@@ -133,7 +134,7 @@ class Sro
     if sro_by_customer.keys.include?(sros["sro-name"])
       sro_by_customer = self.add_values_by_customer(sros["xxsro-so-site"], sros["sro-name"], sro_by_customer, sros["sro-line-total"])
     else
-      sro_by_customer[sros["sro-name"]] = self.create_by_customer
+      sro_by_customer[sros["sro-name"]] = self.create_by_customer(sros["xxsro-so-site"],  sros["sro-line-total"])
     end
     sro_by_customer
   end
@@ -253,12 +254,17 @@ class Sro
     data
   end
 
-  def self.create_by_responsibility(description)
-    {"description" => ["#{description}"], "2000" => 0.00, "3000" => 0.00, "4300" => 0.00, "5000" => 0.00, "9000" => 0.00, "Total" => 0.00}
+  def self.create_by_responsibility(description, site, failure_code, line_total)
+    data = {"description" => ["#{description}"], "2000" => 0.00, "3000" => 0.00, "4300" => 0.00, "5000" => 0.00, "9000" => 0.00, "Total" => 0.00}
+    data["#{site}"] += line_total
+    data
   end
 
-  def self.create_by_customer
-    {"2000" => 0.00, "3000" => 0.00, "4300" => 0.00, "5000" => 0.00, "9000" => 0.00, "Total" => 0.00}
+  def self.create_by_customer(site, total)
+    value = {"2000" => 0.00, "3000" => 0.00, "4300" => 0.00, "5000" => 0.00, "9000" => 0.00, "Total" => 0.00}
+    value["#{site}"] += total
+    value["Total"] += total
+    value
   end
 
   def self.add_values_by_responsibility(site, failure_code, hash_by_responsibility, line_total)
@@ -289,6 +295,8 @@ class Sro
       hash_by_customer[customer][site] += line_total
     when "9000"
       hash_by_customer[customer][site] += line_total
+    else 
+      line_total
     end
     hash_by_customer[customer]["Total"] += line_total
     hash_by_customer
@@ -392,6 +400,19 @@ class Sro
     headers = data[0]
     data = data[1..data.count].sort_by {|val| val[1].to_i}.reverse
     data.insert(0, headers)
+  end
+
+  def self.total_data(data_hash)
+    total = {"2000"=>0.0, "3000"=>0.0, "4300"=>0.0, "5000"=>0.0, "9000"=>0.0, "Total"=>0.0}
+    data_hash.each do |key, value|
+      total["2000"] += value["2000"]
+      total["3000"] += value["3000"]
+      total["4300"] += value["4300"]
+      total["5000"] += value["5000"]
+      total["9000"] += value["9000"]
+      total["Total"] += value["Total"]
+    end
+    total
   end
 
 end
