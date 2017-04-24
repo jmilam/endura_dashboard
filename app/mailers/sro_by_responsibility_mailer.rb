@@ -2,7 +2,9 @@ class SroByResponsibilityMailer < ApplicationMailer
 	require 'net/http'
 	default from: 'alerts@enduraproducts.com.com'
  
-  def responsibility_email(url)
+  def responsibility_email(url, image_files)
+    @image_files = image_files
+
   	@start_date = (Date.today.beginning_of_week - 1.week).strftime("%D")
     @end_date = (Date.today.end_of_week - 1.week).strftime("%D")
     @sro_by_responsibility = Hash.new
@@ -31,7 +33,17 @@ class SroByResponsibilityMailer < ApplicationMailer
     @sro_by_responsibility["Grand Total"] = {"Grand Total" => Sro.totals_by_site}
     @sro_responsibiilty_pie = Sro.build_data_for_google_pies(@sro_by_responsibility, "responsibility")
     @sro_responsibility_sites_pie = Sro.build_data_for_google_pies(@sro_by_responsibility, "responsibility", "by_grand_total")
+    
+    @image_files.each do |image_url|
+      attachments.inline["#{image_url}"] = File.read("#{Rails.root}/app/assets/images/#{image_url}")
+      attachments.inline["#{image_url}"] = File.read("#{Rails.root}/app/assets/images/#{image_url}")
+    end
+
     mail(to: 'jmilam@enduraproducts.com', subject: 'Responsibilities snapshot')
+
+    @image_files.each do |image_url|
+      File.delete("#{Rails.root}/app/assets/images/#{image_url}")
+    end
   end
 
 

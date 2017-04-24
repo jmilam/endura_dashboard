@@ -113,10 +113,21 @@ class Sros::AllsController < ApplicationController
     @sro_by_responsibility["Grand Total"] = {"Grand Total" => Sro.totals_by_site}
     @sro_responsibiilty_pie = Sro.build_data_for_google_pies(@sro_by_responsibility, "responsibility")
     @sro_responsibility_sites_pie = Sro.build_data_for_google_pies(@sro_by_responsibility, "responsibility", "by_grand_total")
+    @images = []
+    @chart = ChartToImg.new
+    @chart.save_to_image(@sro_responsibiilty_pie)
+    @images << @chart.image_files
+    @chart = nil
+
+    @chart = ChartToImg.new
+    @chart.save_to_image(@sro_responsibility_sites_pie)
+    @images << @chart.image_files
+    @chart = nil
     
-  
-    SroByResponsibilityMailer.responsibility_email(self.api_url).deliver
-    
+    SroByResponsibilityMailer.responsibility_email(self.api_url, @images).deliver
+
+    flash[:notice] = "Email successfully sent."
+    redirect_to configurations_management_overview_index_path
   end
 end
 

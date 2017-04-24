@@ -1,4 +1,5 @@
 <div class="row">
-	<div class="col-md-6"><%= pie_chart @sro_responsibiilty_pie , donut: true%></div>
-	<div class="col-md-6"><%= pie_chart @sro_responsibility_sites_pie, donut: true %></div>
+	<% @images.each do |image| %>
+		<div class="col-md-6"><%= image_tag "#{image}" %></div>
+	<% end %>
 </div>

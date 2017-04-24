@@ -11,6 +11,7 @@
 
     var data1 = google.visualization.arrayToDataTable(<%= raw @sro_responsibiilty_pie %>);
     var chart1 = new google.visualization.PieChart(document.getElementById('responsibility_pie'));
+    console.log(data1);
     chart1.draw(data1, options1);
 
     var options2 = {
