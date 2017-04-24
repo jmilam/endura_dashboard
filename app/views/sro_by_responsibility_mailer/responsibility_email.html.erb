@@ -1,67 +1,64 @@
-
-<div style="margin-top:100px;">
-</div>
 <div class="container">
   <div id="ByResponsibility">
-    <div style="width:1200px;text-align: center;"><%= link_to "See Dashboard in Portal", "http://dashboard.enduraproducts.com/sros/alls" %></div>
-    <div class="row" style="width:1200px;">
+    <div style="width:1200px;height:60px;text-align: center;padding-top:35px;background-color: lightcoral;"><%= link_to "See Dashboard in Portal", "http://dashboard.enduraproducts.com/sros/alls" %></div>
+    <div class="row" style="width:1200px;margin-top:20px;margin-bottom:20px;">
       <% @image_files.each do |image| %>
         <span style="width:500px;margin-left:100px;"><%= image_tag attachments["#{image}"].url %></span>
       <% end %>
     </div>
-    <table class="table table" style="width:1200px;margin-top:50px;">
+    <table class="table table" style="width:1200px;margin-top:50px; border-collapse: collapse;">
       <thead>
         <tr>
-          <th>Responsibility</th>
-          <th>Failure Code</th>
-          <th class="text-center">Reasons</th>
-          <th style="width:100px;text-align: center;">2000</th>
-          <th style="width:100px;text-align: center">3000</th>
-          <th style="width:100px;text-align: center">4300</th>
-          <th style="width:100px;text-align: center">5000</th>
-          <th style="width:100px;text-align: left">9000</th>
-          <th>Total</th>
+          <th style="background-color: burlywood;height:50px;">Responsibility</th>
+          <th style="background-color: burlywood;height:50px;">Failure Code</th>
+          <th style="background-color: burlywood;height:50px;" class="text-center">Reasons</th>
+          <th style="background-color: burlywood;height:50px;text-align:right;" style="width:100px;text-align: center;">2000</th>
+          <th style="background-color: burlywood;height:50px;text-align:right;" style="width:100px;text-align: center">3000</th>
+          <th style="background-color: burlywood;height:50px;text-align:right;" style="width:100px;text-align: center">4300</th>
+          <th style="background-color: burlywood;height:50px;text-align:right;" style="width:100px;text-align: center">5000</th>
+          <th style="background-color: burlywood;height:50px;text-align:right;" style="width:100px;text-align: left">9000</th>
+          <th style="background-color: burlywood;height:50px;text-align:right;border-right:1px solid black;padding-right:10px;">Total</th>
         </tr>
       </thead>
       <tbody>
         <% @sro_by_responsibility.each do |key, codes| %>
           <tr>
-            <td style="border: 1px solid black"><%= key %></td>
-            <td style="padding-left: 0;padding-right:0;border: 1px solid black">
-              <table class="table table-striped" style="width:100%">
+            <td style="border-bottom:1px solid black;border-right:1px solid black;border-top:1px solid black;padding-left:10px;"><%= key %></td>
+            <td style="padding-left: 0;padding-right:0;border-bottom:1px solid black;border-right:1px solid black;border-top:1px solid black;">
+              <table class="table table-striped" style="width:100%;padding-left:10px;">
                 <% codes.keys.each do |code| %>
                   <% unless codes[code].empty? %>
                     <tr class="inside_table">
-                      <td><%= code %></td>
+                      <td style="height:50px;"><%= code %></td>
                     </tr>
                   <% end %>
                 <% end %>
               </table>
             </td>
-            <td style="padding-left: 0;padding-right:0;border: 1px solid black;">
+            <td style="padding-left: 0;padding-right:0;padding-left:10px;border-bottom:1px solid black;border-right:1px solid black;border-top:1px solid black;">
               <table  class="table table-striped" style="width:100%">            
                 <% codes.each do |key, value| %>
                   <% unless value.class == Array %>
                     <tr class="inside_table">
                       <% value["description"].each do |desc| %>
-                        <td><%= desc %></td>
+                        <td style="height:50px;"><%= desc %></td>
                       <% end %>
                     </tr>
                   <% end %>
                 <% end %>
               </table>
             </td>
-            <td colspan="7" style="padding-left:0;padding-right:0;border: 1px solid black">
+            <td colspan="7" style="padding-left:0;padding-right:0;border-bottom:1px solid black;border-right:1px solid black;border-top:1px solid black;">
               <table class="table table-striped" style="width:100%">
                 <% codes.each do |key, value|%>
                   <% unless value.class == Array %>
-                    <tr class="inside_table" style="border-right:none; ">
-                      <td style="width:100px; text-align:right;"><%= number_to_currency(value["2000"]) %></td>
-                      <td style="width:100px; text-align:right;"><%= number_to_currency(value["3000"]) %></td>
-                      <td style="width:100px; text-align:right;"><%= number_to_currency(value["4300"]) %></td>
-                      <td style="width:100px; text-align:right;"><%= number_to_currency(value["5000"]) %></td>
-                      <td style="width:100px; text-align:right;"><%= number_to_currency(value["9000"]) %></td>
-                      <td style="width:100px; text-align:right;"><%= number_to_currency(value["Total"]) %></td>
+                    <tr class="inside_table">
+                      <td style="width:100px; text-align:right;height:50px;"><%= number_to_currency(value["2000"]) %></td>
+                      <td style="width:100px; text-align:right;height:50px;"><%= number_to_currency(value["3000"]) %></td>
+                      <td style="width:100px; text-align:right;height:50px;"><%= number_to_currency(value["4300"]) %></td>
+                      <td style="width:100px; text-align:right;height:50px;"><%= number_to_currency(value["5000"]) %></td>
+                      <td style="width:100px; text-align:right;height:50px;"><%= number_to_currency(value["9000"]) %></td>
+                      <td style="width:100px; text-align:right;height:50px;"><%= number_to_currency(value["Total"]) %></td>
                     </tr>
                   <% end %>
                 <% end %>

@@ -40,6 +40,7 @@ class SroByResponsibilityMailer < ApplicationMailer
     end
 
     mail(to: 'jmilam@enduraproducts.com', subject: 'Responsibilities snapshot')
+    # mail(to: 'gpiersanti@enduraproducts.com,tbell@enduraproducts.com,jmilam@enduraproducts.com', subject: 'Responsibilities snapshot')
 
     @image_files.each do |image_url|
       File.delete("#{Rails.root}/app/assets/images/#{image_url}")
