@@ -13,7 +13,7 @@ class Sros::OrderEntriesController < ApplicationController
 	  @manual_orders = ['Manual Orders']
 	  @auto_lines = ['Auto Lines']
 	  @manual_lines = ['Manual Lines']
-	  @user_exceptions = ['djorgens', 'mdavis', 'hmeitl', 'hbenson', 'mdraughn', 'root', 'awatson', 'tbell']
+	  @user_exceptions = ['djorgens', 'mdavis', 'hmeitl', 'hbenson', 'mdraughn', 'root', 'awatson', 'tbell', 'rgill']
 
 	  @start_date = params[:start_date].blank? ? (Date.today.beginning_of_week).strftime("%D") : params[:start_date]
 	  @end_date = params[:end_date].blank? ? (Date.today.end_of_week).strftime("%D") : params[:end_date]
@@ -51,7 +51,7 @@ class Sros::OrderEntriesController < ApplicationController
 	  @user_unconfirmed = Sro.group_unconfirmed(json_response["unconfirmed"], @user_exceptions)
 	  @user_unconfirmed_chart_data = @user_unconfirmed[1]
 	  @user_unconfirmed = @user_unconfirmed[0]
-	  @unconfirmed_detail = json_response["unconfdetail"].sort_by {|data| [data["ttdetuserid"], data["ttdetdate"]]}
+	  @unconfirmed_detail = json_response["unconfdetail"].sort_by {|data| [data["ttdetuserid"], data["ttdetname"],data["ttdetdate"]]}
 	  @unconfirmed_det_chart = Sro.group_unconfirmed_status(@unconfirmed_detail)
 	  @value_status = false
 	  @unconfirmed_det_chart.each {|key, value| @value_status = true if value.to_f > 0}

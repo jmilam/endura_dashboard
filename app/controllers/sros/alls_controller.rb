@@ -115,12 +115,12 @@ class Sros::AllsController < ApplicationController
     @sro_responsibility_sites_pie = Sro.build_data_for_google_pies(@sro_by_responsibility, "responsibility", "by_grand_total")
     @images = []
     @chart = ChartToImg.new
-    @chart.save_to_image(@sro_responsibiilty_pie)
+    @chart.save_to_image(@sro_responsibiilty_pie, "SRO Totals By Responsibility")
     @images << @chart.image_files
     @chart = nil
 
     @chart = ChartToImg.new
-    @chart.save_to_image(@sro_responsibility_sites_pie)
+    @chart.save_to_image(@sro_responsibility_sites_pie, "SRO Totals By Site")
     @images << @chart.image_files
     @chart = nil
     

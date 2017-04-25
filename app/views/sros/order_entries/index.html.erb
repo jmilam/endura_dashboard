@@ -295,13 +295,30 @@
         </div>
       <% else %>
         <% if @value_status  %>
-          <div class="col-sm-12 col-md-12 text-center"><div id="unconfirmed_status_pie" style="height:350px;"></div></div>
+          <div class="col-sm-12 col-md-6 text-center"><div id="unconfirmed_status_pie" style="height:350px;"></div></div>
+          <div class="col-sm-12 col-md-6 text-center">
+            <table class="table table">
+              <thead>
+                <tr><th colspan=2 class="text-center">Legend for Status Codes</th></tr>
+              </thead>
+              <tbody>
+                <tr><td class="text-center">HD</td><td class="text-left">Credit Hold</td></tr>
+                <tr><td class="text-center">HI</td><td class="text-left">New Item number required</td></tr>
+                <tr><td class="text-center">HS</td><td class="text-left">New specs required</td></tr>
+                <tr><td class="text-center">OK</td><td class="text-left">Order ready to release</td></tr>
+                <tr><td class="text-center">RC</td><td class="text-left">Released from credit hold</td></tr><tr><td class="text-center">SS</td><td class="text-left">Spec sign off required</td></tr>
+                <tr><td class="text-center">SW</td><td class="text-left">Hold to ship with a stock order</td></tr>
+                <tr><td class="text-center">TB</td><td class="text-left">Pricing issues</td></tr>
+              </tbody>
+            </table>
+          </div>
         <% else %>
-          <div class="col-sm-12 col-md-12 text-center"><div id="unconfirmed_status_pie" class="hide" style="height:350px;"></div></div>
+          <div class="col-sm-12 col-md-6 text-center"><div id="unconfirmed_status_pie" class="hide" style="height:350px;"></div></div>
           <div class="jumbotron">
             <p class="text-center">No Unconfirmed Details Totals avaialble at this time for <%= @start_date %> - <%= @end_date %>.</p>
           </div>
         <% end %>
+
         <table class="table table-striped">
           <thead>
             <tr>
