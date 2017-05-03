@@ -1,6 +1,6 @@
 class SroByResponsibilityMailer < ApplicationMailer
 	require 'net/http'
-	default from: 'alerts@enduraproducts.com.com'
+	default from: 'alerts@enduraproducts.com'
  
   def responsibility_email(url, image_files)
     @image_files = image_files
@@ -39,8 +39,8 @@ class SroByResponsibilityMailer < ApplicationMailer
       attachments.inline["#{image_url}"] = File.read("#{Rails.root}/app/assets/images/#{image_url}")
     end
 
-    mail to: 'jmilam@enduraproducts.com, tbell@enduraproducts.com', subject: '(Any Better?) Weekly SROs By Responsibilities Snapshot'
-    #mail(to: 'gpiersanti@enduraproducts.com,tbell@enduraproducts.com,jmilam@enduraproducts.com', subject: 'Responsibilities snapshot')
+    #mail to: 'jmilam@enduraproducts.com, tbell@enduraproducts.com', subject: 'Weekly SROs By Responsibilities Snapshot'
+    mail(to: 'gpiersanti@enduraproducts.com,tbell@enduraproducts.com,jmilam@enduraproducts.com', subject: 'Weekly SROs By Responsibilities Snapshot')
 
     @image_files.each do |image_url|
       File.delete("#{Rails.root}/app/assets/images/#{image_url}")
