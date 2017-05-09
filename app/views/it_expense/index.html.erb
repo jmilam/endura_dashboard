@@ -1,3 +1,138 @@
-<div class="container">
-	<%= @response %>
+<%#= @data["Quarters"] %>
+<script type="text/javascript">
+	google.charts.load('current', {'packages':['corechart']});
+  google.charts.setOnLoadCallback(drawChart);
+
+  function drawChart() {
+    var data = google.visualization.arrayToDataTable(<%= raw @total_deb_cred %>);
+    var options = {'title':'Company Wide Credits & Debits',
+          					pieHole: 0.2};
+
+    var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+    chart.draw(data, options);
+
+    data = google.visualization.arrayToDataTable(<%= raw @deb_cred %>);
+    options = {
+    		'title':'Department Credits & Debits',
+        legend: { position: 'top', maxLines: 3 },
+        isStacked: true
+      };
+    chart = new google.visualization.BarChart(document.getElementById('bar_chart_div'));
+    chart.draw(data, options);
+
+    data = google.visualization.arrayToDataTable(<%= raw @qrt_deb_cred %>);
+    options = {
+    		'title':'Credits & Debits by Quarter',
+        legend: { position: 'top', maxLines: 3 },
+        isStacked: true
+      };
+    chart = new google.visualization.BarChart(document.getElementById('bar_chart_qrt_div'));
+    chart.draw(data, options);
+
+  }
+</script>
+
+<div style="margin-top:20px;"></div>
+<div class="col-sm-12 col-md-4"><div id="chart_div"></div></div>
+<div class="col-sm-12 col-md-4"><div id="bar_chart_div"></div></div>
+<div class="col-sm-12 col-md-4"><div id="bar_chart_qrt_div"></div></div>
+
+
+
+<div class="col-md-12" style="padding-left:20px;margin-right:20px;padding-top:20px;">
+	<ul class="nav nav-pills nav-justified" role="tablist">
+	  <li role="presentation" class="active"><a href="#dept" aria-controls="dept" role="tab" data-toggle="tab">Debits/Credits by Department</a></li>
+	  <li role="presentation"><a href="#budget" aria-controls="budget" role="tab" data-toggle="tab">Budget Details</a></li>
+	</ul>
+	<div class="tab-content">
+		<div role="tabpanel" class="tab-pane active" id="dept">
+			<table class="table table-hover departments">
+				<thead>
+					<tr>
+						<th>CC</th>
+						<th>CC Desc</th>
+						<th>GL</th>
+						<th>GL Desc</th>
+						<th>Post Date</th>
+						<th>Post Line Text</th>
+						<th>Post Text</th>
+						<th>Debit</th>
+						<th>Credit</th>
+						<th>Busrel</th>
+						<th>Project Code</th>
+						<th>Project Desc</th>
+						<th>Last Modified</th>
+						<th>User</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% @gl.each do |gl| %>
+						<tr>
+
+							<td><%= gl["ttcc"] %></td>
+							<td><%= gl["ttccdesc"] %></td>
+							<td><%= gl["ttgl"] %></td>
+							<td><%= gl["ttgldesc"] %></td>
+							<td><%= gl["ttpostdate"] %></td>
+							<td><%= gl["ttpostlinetext"] %></td>
+							<td><%= gl["ttposttext"] %></td>
+							<td><%= gl["ttdebit"] %></td>
+							<td><%= gl["ttcredit"] %></td>
+							<td><%= gl["ttbusrel"] %></td>
+							<td><%= gl["ttprojcode"] %></td>
+							<td><%= gl["ttprojdesc"] %></td>
+							<td><%= gl["ttlastmod"] %></td>
+							<td><%= gl["ttby"] %></td>
+							
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+		</div>
+		<div role="tabpanel" class="tab-pane" id="budget"> 
+			<table class="table table-hover">
+				<thead>
+					<tr>
+						<th>Budget Acct</th>
+						<th>Budget Desc</th>
+						<th>Dec</th>
+						<th>Jan</th>
+						<th>Feb</th>
+						<th>Mar</th>
+						<th>Apr</th>
+						<th>May</th>
+						<th>Jun</th>
+						<th>Jul</th>
+						<th>Aug</th>
+						<th>Sept</th>
+						<th>Oct</th>
+						<th>Nov</th>
+						<th>Total</th>
+					</tr>
+				</thead>
+				<tbody>
+					<% @budget.each do |budget| %>
+						<tr>
+
+							<td><%= budget["ttbudacct"] %></td>
+							<td><%= budget["ttbuddesc"] %></td>
+							<td><%= budget["ttbuddec"] %></td>
+							<td><%= budget["ttbudjan"] %></td>
+							<td><%= budget["ttbudfeb"] %></td>
+							<td><%= budget["ttbudmar"] %></td>
+							<td><%= budget["ttbudapr"] %></td>
+							<td><%= budget["ttbudmay"] %></td>
+							<td><%= budget["ttbudjun"] %></td>
+							<td><%= budget["ttbudjul"] %></td>
+							<td><%= budget["ttbudaug"] %></td>
+							<td><%= budget["ttbudsep"] %></td>
+							<td><%= budget["ttbudoct"] %></td>
+							<td><%= budget["ttbudnov"] %></td>
+							<td><%= budget["ttbudtotal"] %></td>
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>

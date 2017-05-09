@@ -73,6 +73,10 @@
                                 <div class="form-group">
                                     <li><%= link_to salesforces_data_export_index_path, method: :post  do %><span class="glyphicon glyphicon-cloud-download" title="Export to XLS" aria-hidden="false" id="export_xls"></span><% end %></li>
                                 </div>
+                            <% elsif current_page?('/it_expense/index') %>
+                                <div class="form-group">
+                                    <li><%= select(:sro_criteria, :criteria_id, @departments.map{|search| search },{include_blank: "Search By Site"}, {class: 'form-control text-center', id: 'DeptSearch', style: 'width:150%'}) %></li>
+                                </div>
                             <% end %>
                         </div>
                     </div>
