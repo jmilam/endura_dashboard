@@ -8,7 +8,14 @@
 
     //This will export data to Sros::ReportCard to create xls file on the backend and download it
     $('.report-card').on('click', function(e){
+       $('#emailModal').modal('show');
+    });
+
+    $('.sendEmail').on('click', function(e){
+      e.preventDefault();
+
       var emp_report_card = [];
+      emp_report_card.push({email: $('.toEmail').val()});
 
       //This cycles all checkboxes and selects which users to send back to the controller based off being checked
       $.each($('input[type=checkbox]'), function(){
@@ -17,17 +24,21 @@
           var emp = data_row.children('td:eq(0)').text()
           var total_order_count = data_row.children('td:eq(1)').text()
           var man_orders = data_row.children('td:eq(2)').text()
-          var auto_orders = data_row.children('td:eq(3)').text()
-          var order_perc = data_row.children('td:eq(4)').text()
-          var total_lines = data_row.children('td:eq(5)').text()
-          var man_lines = data_row.children('td:eq(6)').text()
-          var auto_lines = data_row.children('td:eq(7)').text()
-          var line_perc = data_row.children('td:eq(8)').text()
-          var cust_count = data_row.children('td:eq(9)').text()
-          var sro_total = data_row.children('td:eq(10)').text()
-          var stat_month = data_row.children('td:eq(11)').text()
+          var man_lag_time = data_row.children('td:eq(3)').text()
+          var auto_orders = data_row.children('td:eq(4)').text()
+          var scan_lag_time = data_row.children('td:eq(5)').text()
+          var order_perc = data_row.children('td:eq(6)').text()
+          var total_lines = data_row.children('td:eq(7)').text()
+          var man_lines = data_row.children('td:eq(8)').text()
+          var auto_lines = data_row.children('td:eq(9)').text()
+          var line_perc = data_row.children('td:eq(10)').text()
+          var cust_count = data_row.children('td:eq(11)').text()
+          var sro_dol_total = data_row.children('td:eq(12)').text()
+          var sro_total = data_row.children('td:eq(13)').text()
+          var stat_month = data_row.children('td:eq(14)').text()
+          var email = $('#toEmail').val();
 
-          emp_report_card.push({emp: emp, total_order_count: total_order_count, man_orders: man_orders, auto_orders: auto_orders, order_perc: order_perc, total_lines: total_lines, man_lines: man_lines, auto_lines: auto_lines, line_perc: line_perc, cust_count: cust_count, sro_total: sro_total, stat_month: stat_month});
+          emp_report_card.push({emp: emp, total_order_count: total_order_count, man_orders: man_orders, man_lag_time: man_lag_time, auto_orders: auto_orders, scan_lag_time: scan_lag_time, order_perc: order_perc, total_lines: total_lines, man_lines: man_lines, auto_lines: auto_lines, line_perc: line_perc, cust_count: cust_count, sro_dol_total: sro_dol_total, sro_total: sro_total, stat_month: stat_month, email: email});
         }
       });
 
@@ -45,6 +56,7 @@
           }
           
       });
+      $('#emailModal').modal('hide');
     });
 
   });
@@ -346,4 +358,26 @@
       <% end %>
     </div>
   </div>
+</div>
+
+ <div class="modal fade" id="emailModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Email Information</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <input type="text" class="form-control" id="toEmail" placeholder="Enter Email Sending Export to..">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary sendEmail">Send Email</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>
