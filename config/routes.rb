@@ -24,5 +24,10 @@ Rails.application.routes.draw do
       resources :data_export
   	#end
   end
+
+  namespace :reports do
+    resources :backlog
+  end
+
   root to: "configurations/management_overview#index"
 end
