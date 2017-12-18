@@ -4,8 +4,13 @@
 		<table class="table table-stripped">
 			<thead>
 				<tr class="bg-danger">
-					<% row.each do |column| %>
-						<td class="text-right"><%= column %></td>
+					<% row.each_with_index do |column, index| %>
+						<% if index == 0 %>
+							<td class="text-left">
+						<% else %>
+							<td class="text-right">
+						<% end %>
+						<%= column %></td>
 					<% end %>
 				</tr>
 			</thead>
@@ -13,8 +18,13 @@
 			<% @header = false %>
 	<% elsif !@header && @sub_header && row.count == 13 %>
 			<tr class="bg-danger">
-				<% row.each do |column| %>
-					<td class="text-right"><%= column %></td>
+				<% row.each_with_index do |column, index| %>
+					<% if index == 0 %>
+						<td class="text-left">
+					<% else %>
+						<td class="text-right">
+					<% end %>
+						<%= column %></td>
 				<% end %>
 			</tr>
 		</thead>
@@ -23,9 +33,14 @@
 		<% @sub_header = false %>
 	<% elsif !@header && row.count == 13 %>
 		<tr>
-			<% row.each do |column| %>
-				<%#= number_with_delimiter(@number, :delimiter => ',') %>
-				<td class="text-right" style="white-space:nowrap;"><%= column.match(/\d+/).nil? ? column : number_with_precision(column.to_i, precision: 2, :delimiter => ',') %></td>
+			<% row.each_with_index do |column, index| %>
+				<% if index == 0 %>
+					<td class="text-left" style="white-space:nowrap;">
+				<% else %>
+					<td class="text-right" >
+				<% end %>
+					<%= column.match(/\d+/).nil? ? column : number_with_precision(column.to_i, precision: 2, :delimiter => ',') %>
+					</td>
 			<% end %>
 		</tr>
 	<% elsif !@header && row.count == 5 %>
@@ -47,7 +62,7 @@
 		<table class="table table-stripped">
 			<thead>
 				<tr>
-					<td colspan="13" class="text-center bg-success"><%= row[1] %></td>
+					<td colspan="13" class="text-center bg-success">Division: <%= row[1] %></td>
 				</tr>
 
 		<% @sub_header = true %>
