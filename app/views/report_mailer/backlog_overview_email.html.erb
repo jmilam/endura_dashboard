@@ -1,9 +1,9 @@
 <% CSV.foreach "/media/tbell/xxsa0021_email.prn"  do |row| %>
 <%# CSV.foreach "/Users/jmilam/Desktop/xxsa0021_email.prn"  do |row| %>
 	<% if @header && row.count == 13 %>
-		<table class="table table-stripped">
+		<table>
 			<thead>
-				<tr style="background-color:#d9534f;border-bottom: 1px solid black;">
+				<tr style="background-color:#d9534f;border-bottom: 1pt solid black;">
 					<% row.each_with_index do |column, index| %>
 						<% if index == 0 %>
 							<td style="text-align:left;">
@@ -17,7 +17,7 @@
 			<tbody>
 			<% @header = false %>
 	<% elsif !@header && @sub_header && row.count == 13 %>
-			<tr style="background-color:#d9534f;border-bottom: 1px solid black;">
+			<tr style="background-color:#d9534f;border-bottom: 1pt solid black;">
 				<% row.each_with_index do |column, index| %>
 					<% if index == 0 %>
 						<td style="text-align:left;">
@@ -32,7 +32,7 @@
 
 		<% @sub_header = false %>
 	<% elsif !@header && row.count == 13 %>
-		<tr style="border-bottom: 1px solid black;">
+		<tr style="border-bottom: 1pt solid black;">
 			<% row.each_with_index do |column, index| %>
 				<% if index == 0 %>
 					<td style="white-space:nowrap;text-align: left;">
@@ -44,7 +44,7 @@
 			<% end %>
 		</tr>
 	<% elsif !@header && row.count == 5 %>
-				<tr style="background-color:#5bc0de;border-bottom: 1px solid black;">
+				<tr style="background-color:#5bc0de;border-bottom: 1pt solid black;">
 					<td style="text-align:right;"><%= row[0] %></td>
 					<td colspan="2"></td>
 					<td style="text-align:right;"><%= number_to_currency(row[1].to_i) %></td>
@@ -59,9 +59,9 @@
 		</table>
 		<% @header = true %>
 	<% elsif @header && row.count == 2 %>
-		<table class="table table-stripped">
+		<table>
 			<thead>
-				<tr style="border-bottom: 1px solid black;">
+				<tr style="border-bottom: 1pt solid black;">
 					<td colspan="13" style="background-color:#5cb85c;text-align:center;">Division: <%= row[1] %></td>
 				</tr>
 
@@ -70,9 +70,9 @@
 	<% elsif !@header && row.count == 2 %>
 			</tbody>
 		</table>
-		<table class="table table-stripped">
+		<table>
 			<thead>
-				<tr style="border-bottom: 1px solid black;">
+				<tr style="border-bottom: 1pt solid black;">
 					<td colspan="13" style="background-color:#5cb85c;text-align: center;">Division: <%= row[1] %></td>
 				</tr>
 			</thead>
