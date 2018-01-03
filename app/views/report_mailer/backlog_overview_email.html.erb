@@ -1,5 +1,5 @@
-<% CSV.foreach "/media/tbell/xxsa0021_email.prn"  do |row| %>
-<%# CSV.foreach "/Users/jmilam/Desktop/xxsa0021_email.prn"  do |row| %>
+<%# CSV.foreach "/media/tbell/xxsa0021_email.prn"  do |row| %>
+<% CSV.foreach "/Users/jmilam/Desktop/xxsa0021_email.prn"  do |row| %>
 	<% if @header && row.count == 13 %>
 		<table style="border-collapse: collapse;border-spacing: 0;">
 			<thead>
@@ -8,7 +8,7 @@
 						<% if index == 0 %>
 							<td style="text-align:left;border-bottom: 1px solid black;">
 						<% else %>
-							<td style="text-align:right;border-bottom: 1px solid black;" width="200">
+							<td style="text-align:right;border-bottom: 1px solid black;">
 						<% end %>
 						<%= column %></td>
 					<% end %>

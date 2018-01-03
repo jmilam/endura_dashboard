@@ -1,14 +1,14 @@
-<% CSV.foreach "/media/tbell/xxsa0021_email.prn"  do |row| %>
-<%# CSV.foreach "/Users/jmilam/Desktop/xxsa0021_email.prn"  do |row| %>
+<%# CSV.foreach "/media/tbell/xxsa0021_email.prn"  do |row| %>
+<% CSV.foreach "/Users/jmilam/Desktop/xxsa0021_email.prn"  do |row| %>
 	<% if @header && row.count == 13 %>
-		<table class="table table-stripped">
+		<table style="border-collapse: collapse;border-spacing: 0;">
 			<thead>
-				<tr class="bg-danger">
+				<tr style="background-color:#d9534f;border-bottom: 1px solid black;">
 					<% row.each_with_index do |column, index| %>
 						<% if index == 0 %>
-							<td class="text-left">
+							<td style="text-align:left;border-bottom: 1px solid black;">
 						<% else %>
-							<td class="text-right">
+							<td style="text-align:right;border-bottom: 1px solid black;padding-left:15px;" width="200">
 						<% end %>
 						<%= column %></td>
 					<% end %>
@@ -17,12 +17,12 @@
 			<tbody>
 			<% @header = false %>
 	<% elsif !@header && @sub_header && row.count == 13 %>
-			<tr class="bg-danger">
+			<tr style="background-color:#d9534f;border-bottom: 1px solid black;">
 				<% row.each_with_index do |column, index| %>
 					<% if index == 0 %>
-						<td class="text-left">
+						<td style="text-align:left;border-bottom: 1px solid black;" height="50">
 					<% else %>
-						<td class="text-right">
+						<td style="text-align:right;border-bottom: 1px solid black;" height="50" >
 					<% end %>
 						<%= column %></td>
 				<% end %>
@@ -32,37 +32,37 @@
 
 		<% @sub_header = false %>
 	<% elsif !@header && row.count == 13 %>
-		<tr>
+		<tr style="border-bottom: 1px solid black;">
 			<% row.each_with_index do |column, index| %>
 				<% if index == 0 %>
-					<td class="text-left" style="white-space:nowrap;">
+					<td style="white-space:nowrap;text-align: left;border-bottom: 1px solid black;" height="50" >
 				<% else %>
-					<td class="text-right" >
+					<td style="text-align:right;border-bottom: 1px solid black;" height="50">
 				<% end %>
 					<%= column.match(/\d+/).nil? ? column : number_with_precision(column.to_i, precision: 2, :delimiter => ',') %>
 					</td>
 			<% end %>
 		</tr>
 	<% elsif !@header && row.count == 5 %>
-				<tr class="bg-info">
-					<td class="text-right"><%= row[0] %></td>
-					<td colspan="2"></td>
-					<td class="text-right"><%= number_to_currency(row[1].to_i) %></td>
-					<td colspan="2"></td>
-					<td class="text-right"><%= number_to_currency(row[2].to_i) %></td>
-					<td colspan="2"></td>
-					<td class="text-right"><%= number_to_currency(row[3].to_i) %></td>
-					<td colspan="2"></td>
-					<td class="text-right"><%= number_to_currency(row[4].to_i) %></td>
+				<tr style="background-color:#5bc0de;border-bottom: 1px solid black;">
+					<td style="text-align:right;border-bottom: 1px solid black;" height="50"><%= row[0] %></td>
+					<td colspan="2" style="border-bottom: 1px solid black;" height="50"></td>
+					<td style="text-align:right;border-bottom: 1px solid black;" height="50"><%= number_to_currency(row[1].to_i) %></td>
+					<td colspan="2" style="border-bottom: 1px solid black;" height="50"></td>
+					<td style="text-align:right;border-bottom: 1px solid black;" height="50"><%= number_to_currency(row[2].to_i) %></td>
+					<td colspan="2" style="border-bottom: 1px solid black;" height="50"></td>
+					<td style="text-align:right;border-bottom: 1px solid black;" height="50"><%= number_to_currency(row[3].to_i) %></td>
+					<td colspan="2" style="border-bottom: 1px solid black;" height="50"></td>
+					<td style="text-align:right;border-bottom: 1px solid black;" height="50"><%= number_to_currency(row[4].to_i) %></td>
 				</tr>
 			</tbody>
 		</table>
 		<% @header = true %>
 	<% elsif @header && row.count == 2 %>
-		<table class="table table-stripped">
+		<table style="border-collapse: collapse;border-spacing: 0;">
 			<thead>
-				<tr>
-					<td colspan="13" class="text-center bg-success">Division: <%= row[1] %></td>
+				<tr style="border-bottom: 1px solid black;">
+					<td colspan="13" style="background-color:#5cb85c;text-align:center;border-bottom: 1px solid black;" height="50">Division: <%= row[1] %></td>
 				</tr>
 
 		<% @sub_header = true %>
@@ -70,10 +70,10 @@
 	<% elsif !@header && row.count == 2 %>
 			</tbody>
 		</table>
-		<table class="table table-stripped">
+		<table style="border-collapse: collapse;border-spacing: 0;">
 			<thead>
-				<tr>
-					<td colspan="13" class="text-center bg-success">Division: <%= row[1] %></td>
+				<tr style="border-bottom: 1px solid black;">
+					<td colspan="13" style="background-color:#5cb85c;text-align: center;border-bottom: 1px solid black;" height="50">Division: <%= row[1] %></td>
 				</tr>
 			</thead>
 			<tbody>
