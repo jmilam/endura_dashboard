@@ -3,7 +3,7 @@
 	<% if @header && row.count == 13 %>
 		<table class="table table-stripped">
 			<thead>
-				<tr class="bg-danger">
+				<tr style="background-color:#d9534f">
 					<% row.each_with_index do |column, index| %>
 						<% if index == 0 %>
 							<td class="text-left">
@@ -17,7 +17,7 @@
 			<tbody>
 			<% @header = false %>
 	<% elsif !@header && @sub_header && row.count == 13 %>
-			<tr class="bg-danger">
+			<tr style="background-color:#d9534f">
 				<% row.each_with_index do |column, index| %>
 					<% if index == 0 %>
 						<td class="text-left">
@@ -44,7 +44,7 @@
 			<% end %>
 		</tr>
 	<% elsif !@header && row.count == 5 %>
-				<tr class="bg-info">
+				<tr style="background-color:#5bc0de">
 					<td class="text-right"><%= row[0] %></td>
 					<td colspan="2"></td>
 					<td class="text-right"><%= number_to_currency(row[1].to_i) %></td>
@@ -62,7 +62,7 @@
 		<table class="table table-stripped">
 			<thead>
 				<tr>
-					<td colspan="13" class="text-center bg-success">Division: <%= row[1] %></td>
+					<td colspan="13" class="text-center" style="background-color:#5cb85c">Division: <%= row[1] %></td>
 				</tr>
 
 		<% @sub_header = true %>
@@ -73,7 +73,7 @@
 		<table class="table table-stripped">
 			<thead>
 				<tr>
-					<td colspan="13" class="text-center bg-success">Division: <%= row[1] %></td>
+					<td colspan="13" class="text-center" style="background-color:#5cb85c">Division: <%= row[1] %></td>
 				</tr>
 			</thead>
 			<tbody>
