@@ -20,9 +20,9 @@
 			<tr style="background-color:#d9534f;border-bottom: 1px solid black;">
 				<% row.each_with_index do |column, index| %>
 					<% if index == 0 %>
-						<td style="text-align:left;border-bottom: 1px solid black;" height="100">
+						<td style="text-align:left;border-bottom: 1px solid black;" height="50">
 					<% else %>
-						<td style="text-align:right;border-bottom: 1px solid black;" height="100" >
+						<td style="text-align:right;border-bottom: 1px solid black;" height="50" >
 					<% end %>
 						<%= column %></td>
 				<% end %>
@@ -35,9 +35,9 @@
 		<tr style="border-bottom: 1px solid black;">
 			<% row.each_with_index do |column, index| %>
 				<% if index == 0 %>
-					<td style="white-space:nowrap;text-align: left;border-bottom: 1px solid black;" height="100" >
+					<td style="white-space:nowrap;text-align: left;border-bottom: 1px solid black;" height="50" >
 				<% else %>
-					<td style="text-align:right;border-bottom: 1px solid black;" height="100">
+					<td style="text-align:right;border-bottom: 1px solid black;" height="50">
 				<% end %>
 					<%= column.match(/\d+/).nil? ? column : number_with_precision(column.to_i, precision: 2, :delimiter => ',') %>
 					</td>
@@ -45,15 +45,15 @@
 		</tr>
 	<% elsif !@header && row.count == 5 %>
 				<tr style="background-color:#5bc0de;border-bottom: 1px solid black;">
-					<td style="text-align:right;border-bottom: 1px solid black;" height="100"><%= row[0] %></td>
-					<td colspan="2" style="border-bottom: 1px solid black;" height="100"></td>
-					<td style="text-align:right;border-bottom: 1px solid black;" height="100"><%= number_to_currency(row[1].to_i) %></td>
-					<td colspan="2" style="border-bottom: 1px solid black;" height="100"></td>
-					<td style="text-align:right;border-bottom: 1px solid black;" height="100"><%= number_to_currency(row[2].to_i) %></td>
-					<td colspan="2" style="border-bottom: 1px solid black;" height="100"></td>
-					<td style="text-align:right;border-bottom: 1px solid black;" height="100"><%= number_to_currency(row[3].to_i) %></td>
-					<td colspan="2" style="border-bottom: 1px solid black;" height="100"></td>
-					<td style="text-align:right;border-bottom: 1px solid black;" height="100"><%= number_to_currency(row[4].to_i) %></td>
+					<td style="text-align:right;border-bottom: 1px solid black;" height="50"><%= row[0] %></td>
+					<td colspan="2" style="border-bottom: 1px solid black;" height="50"></td>
+					<td style="text-align:right;border-bottom: 1px solid black;" height="50"><%= number_to_currency(row[1].to_i) %></td>
+					<td colspan="2" style="border-bottom: 1px solid black;" height="50"></td>
+					<td style="text-align:right;border-bottom: 1px solid black;" height="50"><%= number_to_currency(row[2].to_i) %></td>
+					<td colspan="2" style="border-bottom: 1px solid black;" height="50"></td>
+					<td style="text-align:right;border-bottom: 1px solid black;" height="50"><%= number_to_currency(row[3].to_i) %></td>
+					<td colspan="2" style="border-bottom: 1px solid black;" height="50"></td>
+					<td style="text-align:right;border-bottom: 1px solid black;" height="50"><%= number_to_currency(row[4].to_i) %></td>
 				</tr>
 			</tbody>
 		</table>
@@ -62,7 +62,7 @@
 		<table style="border-collapse: collapse;border-spacing: 0;">
 			<thead>
 				<tr style="border-bottom: 1px solid black;">
-					<td colspan="13" style="background-color:#5cb85c;text-align:center;border-bottom: 1px solid black;" height="100">Division: <%= row[1] %></td>
+					<td colspan="13" style="background-color:#5cb85c;text-align:center;border-bottom: 1px solid black;" height="50">Division: <%= row[1] %></td>
 				</tr>
 
 		<% @sub_header = true %>
@@ -73,7 +73,7 @@
 		<table style="border-collapse: collapse;border-spacing: 0;">
 			<thead>
 				<tr style="border-bottom: 1px solid black;">
-					<td colspan="13" style="background-color:#5cb85c;text-align: center;border-bottom: 1px solid black;" height="100">Division: <%= row[1] %></td>
+					<td colspan="13" style="background-color:#5cb85c;text-align: center;border-bottom: 1px solid black;" height="50">Division: <%= row[1] %></td>
 				</tr>
 			</thead>
 			<tbody>
