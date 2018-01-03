@@ -9,7 +9,7 @@ class Reports::BacklogController < ApplicationController
 		@header_next = true
 		@new_table = false
 
-		ReportMailer.backlog_overview_email.deliver_now
+		# ReportMailer.backlog_overview_email.deliver_now
 	end
 
 end

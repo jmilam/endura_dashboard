@@ -1,7 +1,7 @@
 <% CSV.foreach "/media/tbell/xxsa0021_email.prn"  do |row| %>
 <%# CSV.foreach "/Users/jmilam/Desktop/xxsa0021_email.prn"  do |row| %>
 	<% if @header && row.count == 13 %>
-		<table>
+		<table style="border-collapse: collapse;border-spacing: 0;">
 			<thead>
 				<tr style="background-color:#d9534f;border-bottom: 1px solid black;">
 					<% row.each_with_index do |column, index| %>
@@ -59,7 +59,7 @@
 		</table>
 		<% @header = true %>
 	<% elsif @header && row.count == 2 %>
-		<table>
+		<table style="border-collapse: collapse;border-spacing: 0;">
 			<thead>
 				<tr style="border-bottom: 1px solid black;">
 					<td colspan="13" style="background-color:#5cb85c;text-align:center;border-bottom: 1px solid black;">Division: <%= row[1] %></td>
