@@ -3,7 +3,7 @@
 	<% if @header && row.count == 13 %>
 		<table style="border-collapse: collapse;border-spacing: 0;">
 			<thead>
-				<tr style="background-color:#d9534f;border-bottom: 1px solid black;">
+				<tr style="background-color:#E41B23;color:white;border-bottom: 1px solid black;">
 					<% row.each_with_index do |column, index| %>
 						<% if index == 0 %>
 							<td style="text-align:left;border-bottom: 1px solid black;">
@@ -17,7 +17,7 @@
 			<tbody>
 			<% @header = false %>
 	<% elsif !@header && @sub_header && row.count == 13 %>
-			<tr style="background-color:#d9534f;border-bottom: 1px solid black;">
+			<tr style="background-color:#E41B23;color:white;border-bottom: 1px solid black;">
 				<% row.each_with_index do |column, index| %>
 					<% if index == 0 %>
 						<td style="text-align:left;border-bottom: 1px solid black;" height="50">
@@ -62,7 +62,7 @@
 		<table style="border-collapse: collapse;border-spacing: 0;">
 			<thead>
 				<tr style="border-bottom: 1px solid black;">
-					<td colspan="13" style="background-color:#5cb85c;text-align:center;border-bottom: 1px solid black;" height="50">Division: <%= row[1] %></td>
+					<td colspan="13" style="background-color:#D39D61;text-align:center;border-bottom: 1px solid black;" height="50">Division: <%= row[1] %></td>
 				</tr>
 
 		<% @sub_header = true %>
@@ -73,7 +73,7 @@
 		<table style="border-collapse: collapse;border-spacing: 0;">
 			<thead>
 				<tr style="border-bottom: 1px solid black;">
-					<td colspan="13" style="background-color:#5cb85c;text-align: center;border-bottom: 1px solid black;" height="50">Division: <%= row[1] %></td>
+					<td colspan="13" style="background-color:#D39D61;text-align: center;border-bottom: 1px solid black;" height="50">Division: <%= row[1] %></td>
 				</tr>
 			</thead>
 			<tbody>
