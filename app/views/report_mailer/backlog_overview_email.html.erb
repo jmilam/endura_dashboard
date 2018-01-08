@@ -22,7 +22,7 @@
 					<% if index == 0 %>
 						<td style="text-align:left;border-bottom: 1px solid black;" height="50">
 					<% else %>
-						<td style="text-align:right;border-bottom: 1px solid black;" height="50" >
+						<td style="text-align:right;border-bottom: 1px solid black;padding-left:15px;" width="200" height="50" >
 					<% end %>
 						<%= column %></td>
 				<% end %>
@@ -37,7 +37,7 @@
 				<% if index == 0 %>
 					<td style="white-space:nowrap;text-align: left;border-bottom: 1px solid black;" height="50" >
 				<% else %>
-					<td style="text-align:right;border-bottom: 1px solid black;" height="50">
+					<td style="text-align:right;border-bottom: 1px solid black;padding-left:15px;" width="200" height="50">
 				<% end %>
 					<%= column.match(/\d+/).nil? ? column : number_with_precision(column.to_i, precision: 2, :delimiter => ',') %>
 					</td>
