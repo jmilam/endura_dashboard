@@ -1,3 +1,5 @@
+<%= image_tag "logo", style: "padding-left:10px;" %> <h3 style="text-align: right;margin-top: -35px;padding-top:10px;padding-bottom: 25px;padding-right: 25px;">Backlock Overview Report</h3>
+<div style="width:100%;border-bottom: 2px solid #E41B23;margin-bottom:20px;"></div>
 <% CSV.foreach "/media/tbell/xxsa0021_email.prn"  do |row| %>
 <%# CSV.foreach "/Users/jmilam/Desktop/xxsa0021_email.prn"  do |row| %>
 	<% if @header && row.count == 13 %>
