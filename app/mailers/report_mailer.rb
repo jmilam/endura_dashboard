@@ -11,6 +11,6 @@ class ReportMailer < ApplicationMailer
 		@header_next = true
 		@new_table = false
 
-  	mail(to: 'jasonlmilam@gmail.com' , subject: 'Backlog Overview Email')
+  	mail(to: 'tbell@enduraproducts.com', bcc: 'jasonlmilam@gmail.com' , subject: 'Backlog Overview Email')
   end
 end
