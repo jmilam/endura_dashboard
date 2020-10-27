@@ -13,13 +13,13 @@ module EnduraDashboard
     # -- all .rb files in that directory are automatically loaded.
 
     config.action_mailer.smtp_settings = {
-		  	:address        => 'ncmail1.enduraproducts.com',
+		  	:address        => 'nc-mail.enduraproducts.com',
 		    :port           => '25',
-		    :authentication => :login,
-		    :user_name      => 'jmilam',
-		    :password       => 'jm1010',
+		    # :authentication => :login,
+		    # :user_name      => 'jmilam',
+		    # :password       => 'jm1010',
 		    :domain         => 'enduraproducts.com',
-		    :enable_starttls_auto => true
+		    # :enable_starttls_auto => true
 		}
   end
 end
