@@ -51,7 +51,7 @@ group :development do
 
 end
 
-gem 'bootstrap-sass', '~> 3.3.6'
+gem 'bootstrap-sass', '~> 3.4.1'
 gem 'autoprefixer-rails'
 gem 'passenger'
 gem 'listen', '~> 3.0.5'
