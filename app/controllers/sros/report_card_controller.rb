@@ -27,7 +27,7 @@ class Sros::ReportCardController < ApplicationController
 		book.write file_loc
 
 	  req_params = {from: "oe_sro_dashboard@enduraproducts.com", to: "#{email}", subject: "OE Report Card", chart_data: {data: Formatter.from_oe_report_card(params[:emp_report_card])}}
-		uri = URI(self.api_url + "/email/order_entry/report_card")
+		uri = URI("http://webapidev.enduraproducts.com/api/endura/email/order_entry/report_card")
 
 	  File.open(file_loc) do |xls_file|
 	  	req_params[:file] = UploadIO.new(xls_file, "application/vnd.ms-excel", "test.xls")
